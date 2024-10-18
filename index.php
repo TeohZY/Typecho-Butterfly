@@ -140,8 +140,56 @@ if($this->options->coverPosition === 'cross'){
     $coverIndex++;
 }
  endwhile; ?>
-<nav id="pagination">
- <?php $this->pageNav('<i class="fas fa-chevron-left fa-fw"></i>', '<i class="fas fa-chevron-right fa-fw"></i>', 1, '...', array('wrapTag' => 'div', 'wrapClass' => 'pagination', 'itemTag' => '', 'prevClass' => 'extend prev', 'nextClass' => 'extend next', 'currentClass' => 'page-number current' )); ?>
+ <nav id="pagination">
+    <?php
+    // 获取 pageNav 渲染后的内容
+    ob_start(); // 开始输出缓冲
+    $this->pageNav(
+        '<i class="fas fa-chevron-left fa-fw"></i>', // 上一页图标
+        '<i class="fas fa-chevron-right fa-fw"></i>', // 下一页图标
+        1, // 分割范围，即显示当前页的前后页数
+        '...',  // 使用简单的三个点作为分割字符
+        array(
+            'wrapTag' => 'div',  // 包裹整个分页的标签
+            'wrapClass' => 'pagination',  // 包裹元素的类名
+            'itemTag' => '', 
+            'splitWord' => '...',  // 分割字符设为 '...'
+            'prevClass' => 'extend prev',  // 上一页按钮的类名
+            'nextClass' => 'extend next',  // 下一页按钮的类名
+            'currentClass' => 'page-number current',  // 当前页的类名
+            'linkFormat' => '<a href="{url}#content-inner" data-pjax-state="">{text}</a>',  // 普通分页链接格式
+            'currentFormat' => '<span class="page-number current">{text}</span>'  // 当前页的格式，使用 <span> 包裹页码
+        )
+    );
+    $pagination_html = ob_get_clean(); // 获取缓冲内容并结束缓冲
+
+    // 处理渲染后的 HTML
+    $pagination_html = preg_replace_callback(
+        // 正则匹配当前页的格式、普通链接的格式，以及 <span>...</span> 并将其替换为 <span class="space">...</span>
+        '/<a href="([^"]+)"(?: class="page-number current")?>(\d+)<\/a>|<span>\.\.\.<\/span>/',
+        function ($matches) {
+            // 处理当前页
+            if (!empty($matches[2])) {
+                if (strpos($matches[0], 'class="page-number current"') !== false) {
+                    // 渲染当前页为 <span class="page-number current">{text}</span>
+                    return '<span class="page-number current">' . $matches[2] . '</span>';
+                } else {
+                    // 渲染普通页码链接为 <a href="{url}#content-inner" data-pjax-state="">{text}</a>
+                    return '<a href="' . $matches[1] . '#content-inner" data-pjax-state="">' . $matches[2] . '</a>';
+                }
+            }
+            // 处理分隔符 <span>...</span>
+            if (strpos($matches[0], '<span>...</span>') !== false) {
+                // 将 <span>...</span> 替换为 <span class="space">...</span>
+                return '<span class="space">...</span>';
+            }
+        },
+        $pagination_html
+    );
+
+    // 输出修改后的 HTML
+    echo $pagination_html;
+    ?>
 </nav>
 </div>
 <?php $this->need('sidebar.php'); ?>
