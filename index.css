@@ -4546,8 +4546,8 @@ figure.highlight pre .javascript .function,figure.highlight pre .tag .attr {
 #article-container.post-content h1:before,#article-container.post-content h2:before,#article-container.post-content h3:before,#article-container.post-content h4:before,#article-container.post-content h5:before,#article-container.post-content h6:before {
     position: absolute;
     top: calc(50% - 7px);
-    color: #f47466;
-    content: '\f0c1';
+    color: #ff7849;
+    content: '\f863';
     left: 0;
     line-height: 1;
     -webkit-transition: all .2s ease-out;

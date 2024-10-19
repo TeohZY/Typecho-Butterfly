@@ -207,20 +207,6 @@
   <link rel="stylesheet" href="<?php $this->options->themeUrl('css/GrayMac.css'); ?>">
   <script type="text/javascript" src="<?php $this->options->themeUrl('js/prism.js?v1.5.3'); ?>"></script>
   <script type="text/javascript" src="<?php $this->options->themeUrl('js/clipboard.min.js'); ?>"></script>
-  <?php if (!empty($this->options->beautifyBlock) && in_array(
-    'showLineNumber',
-    $this->options->beautifyBlock
-  )) : ?>
-    <script type="text/javascript">
-      (function() {
-        var pres = document.querySelectorAll('pre');
-        var lineNumberClassName = 'line-numbers';
-        pres.forEach(function(item, index) {
-          item.className = item.className == '' ? lineNumberClassName : item.className + ' ' + lineNumberClassName;
-        });
-      })();
-    </script>
-  <?php endif; ?>
 </main>
 <!-- end #main-->
 <?php $this->need('footer.php'); ?>

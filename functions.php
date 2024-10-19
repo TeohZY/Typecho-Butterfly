@@ -505,18 +505,6 @@ function codeHightLight($text){
             // 返回自定义的 HTML 结构
             return '
             <figure class="highlight ' . $language . '">
-                <div class="highlight-tools ">
-                    <div class="macStyle">
-                        <div class="mac-close"></div>
-                        <div class="mac-minimize"></div>
-                        <div class="mac-maximize"></div>
-                    </div>
-                    <i class="fas fa-angle-down expand"></i>
-                    <div class="code-lang">' . $language . '</div>  <!-- 确保显示正确的语言或plaintext -->
-                    <div class="copy-notice"></div>
-                    <i class="fas fa-paste copy-button"></i>
-                    <i class="fa-solid fullpage-button fa-up-right-and-down-left-from-center"></i>
-                </div>
                 <table>
                     <tbody>
                         <tr>
@@ -552,6 +540,7 @@ function timeLine($text){
             }
 
             // 构建最终的HTML结构
+            $timeline_contents = preg_replace('/<br\s*\/?>/', '', $timeline_contents);
             $rendered_html = '<div class="custom-tags"><div class="timeline ' . $color_class . '"><div class="timeline-item headline"><div class="timeline-item-title"><div class="item-circle"><p>' . $year . '</p></div></div></div>' . $timeline_contents . '</div></div>';
 
             return $rendered_html;

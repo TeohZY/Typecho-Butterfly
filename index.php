@@ -43,7 +43,7 @@ if($sticky && $this->is('index') || $this->is('front')){
 ?>
 <?php  $this->need('header.php'); ?>
 <main class="layout" id="content-inner">
-<div class="recent-posts" id="recent-posts">
+<div class="recent-posts nc" id="recent-posts">
 <?php 
 if($this->options->googleadsense != ""):
 $i=1;
@@ -60,6 +60,7 @@ if($this->options->pageSize<=5)
 }
 endif;
 $coverIndex = 1; 
+$this->listPosts(10);
 while($this->next()): 
     if($this->options->googleadsense != ""):
     if($i==$k || $i==$m || $i==$g){

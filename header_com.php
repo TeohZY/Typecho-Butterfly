@@ -51,8 +51,6 @@
   <!--其余静态文件-->
   <link rel="stylesheet" href="<?php cdnBaseUrl() ?>/css/fancybox.css">
   <link rel="stylesheet" href="<?php cdnBaseUrl() ?>/css/OwO.min.css">
-  <link rel="stylesheet" href="<?php $this->options->themeUrl('/self/css/post.css') ?>">
-  <link rel="stylesheet" href="<?php $this->options->themeUrl('/self/css/custom.css') ?>">
   <?php if (!empty($this->options->beautifyBlock) && in_array('showSnackbar', $this->options->beautifyBlock)) : ?>
     <link rel="stylesheet" href="<?php $this->options->themeUrl('/css/snackbar.min.css') ?>" media="print" onload="this.media='all'">
     <script src="<?php $this->options->themeUrl('js/snackbar.min.js') ?>"></script>
@@ -114,9 +112,9 @@
       },
       noticeOutdate: void 0,
       highlight: {
-        plugin: "highlighjs",
-        highlightCopy: !0,
-        highlightLang: !0,
+        plugin: "highlight.js",
+        highlightCopy: true,
+        highlightLang: true,
         highlightHeightLimit: 400
       },
       copy: {
@@ -432,9 +430,13 @@
       }
     </style>
   <?php endif ?>
+  <link rel="stylesheet" href="<?php $this->options->themeUrl('/self/css/post.css') ?>">
+  <link rel="stylesheet" href="<?php $this->options->themeUrl('/self/css/font.css') ?>">
+  <link rel="stylesheet" href="<?php $this->options->themeUrl('/self/css/custom.css') ?>">
 </head>
 
 <body>
+  <script src="<?php $this->options->themeUrl('/js/instantpage.min.js'); ?>"> </script>
   <script src="<?php $this->options->themeUrl('/js/main.js?v1.7.3'); ?>"> </script>
   <script src="<?php $this->options->themeUrl('/js/utils.js?v1.7.3'); ?>"> </script>
   <script src="<?php $this->options->themeUrl('/js/tw_cn.js?v1.7.3'); ?>"> </script>

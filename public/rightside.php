@@ -21,7 +21,7 @@
     </button>
   </div>
   <div id="rightside-config-show">
-    <button id="rightside_config" type="button" title="设置">
+    <button id="rightside-config" type="button" title="设置">
       <i class="fas fa-cog fa-spin">
       </i>
     </button>
