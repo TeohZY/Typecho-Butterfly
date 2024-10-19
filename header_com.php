@@ -51,6 +51,8 @@
   <!--其余静态文件-->
   <link rel="stylesheet" href="<?php cdnBaseUrl() ?>/css/fancybox.css">
   <link rel="stylesheet" href="<?php cdnBaseUrl() ?>/css/OwO.min.css">
+  <link rel="stylesheet" href="<?php $this->options->themeUrl('/self/css/post.css') ?>">
+  <link rel="stylesheet" href="<?php $this->options->themeUrl('/self/css/custom.css') ?>">
   <?php if (!empty($this->options->beautifyBlock) && in_array('showSnackbar', $this->options->beautifyBlock)) : ?>
     <link rel="stylesheet" href="<?php $this->options->themeUrl('/css/snackbar.min.css') ?>" media="print" onload="this.media='all'">
     <script src="<?php $this->options->themeUrl('js/snackbar.min.js') ?>"></script>

@@ -240,6 +240,17 @@ function GetLazyLoad()
 /* 格式化标签 */
 function ParseCode($text)
 {
+    // 首先保存 <pre>...</pre> 区块内容，避免被自定义标签解析干扰。
+    preg_match_all('!(<pre[^>]*>.*?</pre>)!is', $text, $pre_blocks);
+    $placeholders = [];
+
+    foreach ($pre_blocks[0] as $index => $pre_block) {
+        $placeholder = "<!--placeholder{$index}-->";
+        $placeholders[] = $placeholder;
+        $text = str_replace($pre_block, $placeholder, $text);
+    }
+    $original_content = $text;
+
     $text = Short_Tabs($text);
     $text = Note_Fsm($text);
     $text = Note_Ico($text);
@@ -252,9 +263,14 @@ function ParseCode($text)
     $text = Bf_Radio($text);
     $text = Bf_Mark($text);
     $text = Font($text);
+    $text = timeLine($text);
     $text = ArtPlayer($text);
     $text = PostImage($text);
     $text = customLink($text);
+
+    // 在所有自定义解析完成后，还原保存的 <pre></pre> 区块内容。
+    $text = str_replace($placeholders, $pre_blocks[0], $text);
+    $text = codeHightLight($text);
     return $text;
 }
 // 自定义链接样式
@@ -300,34 +316,50 @@ function customLink($text){
 // 标签外挂-Tabs
 function Short_Tabs($text)
 {
-    $text = preg_replace_callback('/<p>\[tabs\](.*?)\[\/tabs\]<\/p>/ism', function ($text) {
-        return '[tabs]' . $text[1] . '[/tabs]';
-    }, $text);
-    $text = preg_replace_callback('/\[tabs\](.*?)\[\/tabs\]/ism', function ($text) {
-        return preg_replace('~<br.*?>~', '', $text[0]);
-    }, $text);
-    $text = preg_replace_callback('/\[tabs\](.*?)\[\/tabs\]/ism', function ($text) {
-        $tabname = '';
-        preg_match_all('/label=\"(.*?)\"\]/i', $text[1], $tabnamearr);
-        for ($i = 0; $i < count($tabnamearr[1]); $i++) {
-            if ($i === 0) {
-                $tabname .= '<li class="tab active"><button type="button" data-href="' . $i . '">' . $tabnamearr[1][$i] . '</button></li>';
-            } else {
-                $tabname .= '<li class="tab"  data-href="' . $i . '"><button type="button" data-href="' . $i . '">' . $tabnamearr[1][$i] . '</button></li>';
+    // tables 
+    $text = preg_replace_callback(
+        '/{%\s*tabs\s*(.*?),?\s*([\d-]*)?\s*%}([\s\S]*?){%\s*endtabs\s*%}/',
+        function ($matches) {
+            $id = $matches[1];
+            $defaultActiveTab = !empty($matches[2]) ? (int)$matches[2] : 0;
+            $tabsBlock = $matches[3];
+
+            preg_match_all(
+                '/<!--\s*tab\s*(.*?)\s*-->([\s\S]*?)<!--\s*endtab\s*-->/',
+                $tabsBlock,
+                $tabs_matches
+            );
+            $tabTitles = $tabs_matches[1];
+            $tabContents = $tabs_matches[2];
+
+            $html = '<div class="tabs" id="' . $id . '"><ul class="nav-tabs">';
+
+            foreach ($tabTitles as $i => $title) {
+                $index = $i + 1;
+                $active = $i === ($defaultActiveTab - 1) ? ' active' : '';
+                if (strpos($title, '@') !== false) {
+                    $titleParts = explode('@', $title, 2);
+                    $iconClass = isset($titleParts[1]) ? '<i class="' . trim($titleParts[1]) . '" style="text-align:center"></i>' : '';
+                    $title = isset($titleParts[0]) && !empty(trim($titleParts[0])) ? $iconClass . ' ' . trim($titleParts[0]) : $iconClass;
+                } else {
+                    $title = !empty($title) ? $title : $id . ' ' . $index;
+                }
+                $html .= '<button type="button" class="tab' . $active . '" data-href="' . $id . '-' . $index . '">' . $title . '</button>';
             }
-        }
-        $tabcon = '';
-        preg_match_all('/"\](.*?)\[\//i', $text[1], $tabconarr);
-        for ($i = 0; $i < count($tabconarr[1]); $i++) {
-            if ($i === 0) {
-                $tabcon .= '<div class="tab-item-content active" id="' . $i . '">' . $tabconarr[1][$i] . ' <button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div>';
-            } else {
-                $tabcon .= '<div class="tab-item-content" id="' . $i . '">' . $tabconarr[1][$i] . '<button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div>';
+
+            $html .= '</ul><div class="tab-contents">';
+
+            foreach ($tabContents as $i => $content) {
+                $index = $i + 1;
+                $active = $i === ($defaultActiveTab - 1) ? ' active' : '';
+                $html .= '<div class="tab-item-content' . $active . '" id="' . $id . '-' . $index . '"><p>' . $content . '</p></div>';
             }
-        }
-        return '
-        <div class="tabs" id="tags"><ul class="nav-tabs">' . $tabname . '</ul><div class="tab-contents">' . $tabcon . '</div></div>';
-    }, $text);
+
+            $html .= '</div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div>';
+            return $html;
+        },
+        $text
+    );
     return $text;
 }
 // 标签外挂-btn
@@ -343,8 +375,14 @@ function Button($text)
 // 标签外挂-note
 function Note_Fsm($text)
 {
-    $text = preg_replace_callback('/\[note type=\"(.*?)\".*?\](.*?)\[\/note\]/ism', function ($text) {
-        return '<div class="note ' . $text[1] . '"> <p>' . $text[2] . '</p></div>';
+    $notePattern = '/{%\s*note\s+([\w\s]+?)\s*%}(.*?)\{%\s*endnote\s*%}/su';
+
+    $text = preg_replace_callback('/{%\s*note\s+([\w\s]+?)\s*%}(.*?)\{%\s*endnote\s*%}/su', function ($matches) {
+        // 在此处，$matches[1] 是属性，$matches[2] 是内容
+        $classString = htmlspecialchars(trim('note') . ' ' . trim($matches[1]));
+        $textContent = trim($matches[2]);
+        $textContent = preg_replace('/<br\s*\/?>/', '', $textContent);
+        return "<div class=\"{$classString}\"><p>{$textContent}</p></div>";
     }, $text);
     return $text;
 }
@@ -376,8 +414,21 @@ function Hide_Block($text)
 // hide-toggle
 function Hide_Toggle($text)
 {
-    $text = preg_replace_callback('/\[hide-toggle name=\"(.*?)\".*?\](.*?)\[\/hide-toggle\]/ism', function ($text) {
-        return '<details class="toggle"><summary class="toggle-button">' . $text[1] . '</summary><div class="toggle-content">' . $text[2] . '</div></details>';
+    $text = preg_replace_callback('/\{%\s*hideToggle\s+(.*?)\s*%\}(.*?)\{%\s*endhideToggle\s*%\}/su', function ($matches) {
+        $title = $matches[1];
+        $text = $matches[2];
+        // Convert each line of text into a paragraph
+        $contentLines = explode("\n", $text);
+        $contentHtml = "";
+
+        foreach ($contentLines as $line) {
+            $line = trim($line);
+            if ($line !== '') {
+                $contentHtml .= "<p>$line</p>";
+            }
+        }
+
+        return "<details class=\"toggle\"><summary class=\"toggle-button\">$title</summary><div class=\"toggle-content\">$contentHtml</div></details>";
     }, $text);
     return $text;
 }
@@ -408,9 +459,17 @@ function Bf_Radio($text)
 
 function Bf_Mark($text)
 {
-    $text = preg_replace_callback('/\[label color=\"(.*?)\".*?\](.*?)\[\/label\]/ism', function ($text) {
-        return '<mark class="hl-label ' . $text[1] . '">' . $text[2] . '</mark>';
-    }, $text);
+    $text = preg_replace_callback(
+        '/{%\s*label\s+(\S+?)(?:\s+(\S+))?\s*%}/',
+        function ($matches) {
+            $content = $matches[1]; // 获取文本内容
+            // 如果指定了颜色类，则使用，否则默认为'default'
+            $color_class = isset($matches[2]) ? $matches[2] : 'default';
+
+            return '<mark class="hl-label ' . $color_class . '">' . $content . '</mark>';
+        },
+        $text
+    );
     return $text;
 }
 
@@ -419,6 +478,86 @@ function Font($text)
     $text = preg_replace_callback('/\[font size=\"(.*?)"\ color=\"(.*?)"\](.*?)\[\/font\]/ism', function ($text) {
         return '<font style="font-size: ' . $text[1] . 'px;color:' . $text[2] . '">' . $text[3] . '</font>';
     }, $text);
+    return $text;
+}
+
+function codeHightLight($text){
+    // 使用正则表达式将 <pre><code class="lang-xxx">...</code></pre> 或 <pre><code>...</code></pre> 转换为自定义的 HTML 结构
+    $text = preg_replace_callback(
+        '/<pre><code(?: class="lang-(.*?)")?>(.*?)<\/code><\/pre>/s',
+        function ($matches) {
+            // 如果没有匹配到语言类型，默认使用 'plaintext'
+            $language = isset($matches[1]) && !empty($matches[1]) ? $matches[1] : 'plaintext';
+            $code = htmlentities($matches[2]); // 获取代码并转义 HTML 实体
+            
+            // 将代码按行分割
+            $lines = explode("\n", $code);
+            $line_numbers = '';
+            $code_lines = '';
+            
+            // 生成行号和代码行
+            foreach ($lines as $index => $line) {
+                $line_number = $index + 1;
+                $line_numbers .= "<span class=\"line\">{$line_number}</span><br>";
+                $code_lines .= "<span class=\"line\">" . $line . "</span><br>";
+            }
+    
+            // 返回自定义的 HTML 结构
+            return '
+            <figure class="highlight ' . $language . '">
+                <div class="highlight-tools ">
+                    <div class="macStyle">
+                        <div class="mac-close"></div>
+                        <div class="mac-minimize"></div>
+                        <div class="mac-maximize"></div>
+                    </div>
+                    <i class="fas fa-angle-down expand"></i>
+                    <div class="code-lang">' . $language . '</div>  <!-- 确保显示正确的语言或plaintext -->
+                    <div class="copy-notice"></div>
+                    <i class="fas fa-paste copy-button"></i>
+                    <i class="fa-solid fullpage-button fa-up-right-and-down-left-from-center"></i>
+                </div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td class="gutter"><pre>' . $line_numbers . '</pre></td>
+                            <td class="code"><pre>' . $code_lines . '</pre></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </figure>';
+        },
+        $text
+    );
+    return $text;
+}
+
+function timeLine($text){
+    $text = preg_replace_callback(
+        '/{%\s*timeline\s*(.*?)\s*%}(.*?){%\s*endtimeline\s*%}/s',
+        function ($matches) {
+            // 分解并处理模板标签参数
+            $params = explode(',', $matches[1]);
+            $year = trim($params[0]);
+            $color_class = isset($params[1]) ? trim($params[1]) : 'undefined';
+
+            // 分解并处理时间线内容
+            $timeline_contents = '';
+            preg_match_all('#<!--\s*timeline\s*(.*?)\s*-->(.*?)<!--\s*endtimeline\s*-->#is', $matches[2], $timeline_contents_template);
+            for ($i = 0; $i < count($timeline_contents_template[1]); $i++) {
+                $date = $timeline_contents_template[1][$i];
+                $text = $timeline_contents_template[2][$i];
+
+                $timeline_contents .= '<div class="timeline-item"><div class="timeline-item-title"><div class="item-circle"><p>' . trim($date) . '</p></div></div><div class="timeline-item-content"><p>' . trim($content) . '</p></div></div>';
+            }
+
+            // 构建最终的HTML结构
+            $rendered_html = '<div class="custom-tags"><div class="timeline ' . $color_class . '"><div class="timeline-item headline"><div class="timeline-item-title"><div class="item-circle"><p>' . $year . '</p></div></div></div>' . $timeline_contents . '</div></div>';
+
+            return $rendered_html;
+        },
+        $text
+    );
     return $text;
 }
 
