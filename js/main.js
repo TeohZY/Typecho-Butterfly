@@ -658,8 +658,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('rightside').addEventListener('click', e => {
     const $target = e.target.closest('[id]')
-    console.log(rightSideFn[$target.id]);
-    
     if ($target && rightSideFn[$target.id]) {
       rightSideFn[$target.id](e.currentTarget, $target)
     }

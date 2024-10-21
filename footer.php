@@ -94,33 +94,11 @@
 </div>
 <!--搜索end  -->
 <div class="js-pjax">
-  <script data-pjax src="<?php $this->options->themeUrl('js/comjs.js?v1.8.0'); ?>"></script>
   <script data-pjax src="<?php $this->options->themeUrl('/js/smooth.min.js'); ?>"> </script>
   <?php if (is_array($this->options->beautifyBlock) && in_array('showNoAlertSearch', $this->options->beautifyBlock)) : ?>
-    <script>
-      (function() {
-        const searchButton = document.getElementById('search-button');
-        const input = document.getElementById('dSearchIn');
-        searchButton.addEventListener('click', function() {
-          input.style.width = '150px';
-          input.focus();
-        });
-        input.addEventListener('blur', function() {
-          input.style.width = '35px';
-        });
-      })()
-    </script>
   <?php endif ?>
   <?php if ($this->options->hcaptchaSecretKey !== "" && $this->options->hcaptchaAPIKey !== "") : ?>
     <script src="https://hcaptcha.com/1/api.js" async defer></script>
-  <?php endif ?>
-  <?php if ($this->is('post') || $this->is('page')) : ?>
-    <script>
-      document.addEventListener('DOMContentLoaded', ()=>{
-        initializeCodeToolbar();
-        tocCheck();
-      });
-    </script>
   <?php endif ?>
 
   <?php if (!empty($this->options->beautifyBlock) && in_array('showButterflyClock', $this->options->beautifyBlock)) : ?>
@@ -269,25 +247,6 @@
         <?php endif ?>
         <?php $this->options->PjaxCallBack() ?>
         NProgress.done();
-        const checkInterval = setInterval(() => {
-          intervalNum ++
-          if(intervalNum > 100 || document.querySelectorAll(".recent-post-item").length > 0){
-            clearInterval(checkInterval)
-          }
-          if(document.getElementsByTagName('article').length > 0){
-            clearInterval(checkInterval)
-            initializeCodeToolbar()
-            if (document.getElementById("web-login")) {
-              webLogin()
-              document.querySelector('.submit').addEventListener("click", function() {
-                document.getElementById("comment_login").classList.toggle("login_active");
-              });
-            }
-            if(document.querySelector('.toc')){
-              tocCheck()
-            }
-          }
-        }, 600);
         window.refreshFn(),
           document.querySelectorAll("script[data-pjax]").forEach(e => {
             const t = document.createElement("script"),

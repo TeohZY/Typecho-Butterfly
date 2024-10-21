@@ -49,7 +49,6 @@
   <link href="https://at.alicdn.com/t/font_3159629_5bvsat8p5l.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://lib.baomitu.com/font-awesome/6.5.1/css/all.min.css">
   <!--其余静态文件-->
-  <link rel="stylesheet" href="<?php cdnBaseUrl() ?>/css/fancybox.css">
   <link rel="stylesheet" href="<?php cdnBaseUrl() ?>/css/OwO.min.css">
   <?php if (!empty($this->options->beautifyBlock) && in_array('showSnackbar', $this->options->beautifyBlock)) : ?>
     <link rel="stylesheet" href="<?php $this->options->themeUrl('/css/snackbar.min.css') ?>" media="print" onload="this.media='all'">
@@ -98,10 +97,14 @@
     const GLOBAL_CONFIG = {
       root: "/",
       algolia: void 0,
-      localSearch: {
-        path: undefined,
-        languages: {
-          hits_empty: "回车查询：${query}"
+      localSearch:{
+        path:"<?php Helper::options()->siteUrl(); ?>?action=get_data&",
+        preload:!1,
+        top_n_per_article:1,
+        unescape:!1,
+        languages:{
+          hits_empty:"未找到相關內容：${query}",
+          hits_stats:"找到 ${hits} 篇文章"
         }
       },
       translate: {
@@ -242,68 +245,7 @@
       }
     </style>
   </noscript>
-  <script>
-    (e => {
-      e.saveToLocal = {
-        set: (e, t, a) => {
-          if (0 === a) return;
-          const o = {
-            value: t,
-            expiry: Date.now() + 864e5 * a
-          };
-          localStorage.setItem(e, JSON.stringify(o))
-        },
-        get: e => {
-          const t = localStorage.getItem(e);
-          if (!t) return;
-          const a = JSON.parse(t);
-          if (!(Date.now() > a.expiry)) return a.value;
-          localStorage.removeItem(e)
-        }
-      }, 
-      e.getScript = (e, t = {}) => new Promise(((a, o) => {
-        const c = document.createElement("script");
-        c.src = e, c.async = !0, c.onerror = o, c.onload = c.onreadystatechange = function() {
-          const e = this.readyState;
-          e && "loaded" !== e && "complete" !== e || (c.onload = c.onreadystatechange = null, a())
-        }, Object.keys(t).forEach((e => {
-          c.setAttribute(e, t[e])
-        })), document.head.appendChild(c)
-      })), 
-      e.getCSS = (e, t = !1) => new Promise(((a, o) => {
-        const c = document.createElement("link");
-        c.rel = "stylesheet", c.href = e, t && (c.id = t), c.onerror = o, c.onload = c.onreadystatechange = function() {
-          const e = this.readyState;
-          e && "loaded" !== e && "complete" !== e || (c.onload = c.onreadystatechange = null, a())
-        }, document.head.appendChild(c)
-      })), 
-      e.activateDarkMode = () => {
-        document.documentElement.setAttribute("data-theme", "dark"), null !== document.querySelector('meta[name="theme-color"]') && document.querySelector('meta[name="theme-color"]').setAttribute("content", "#0d0d0d")
-      }, 
-      e.activateLightMode = () => {
-        document.documentElement.setAttribute("data-theme", "light"), null !== document.querySelector('meta[name="theme-color"]') && document.querySelector('meta[name="theme-color"]').setAttribute("content", "#ffffff")
-      };
-      const t = saveToLocal.get("theme"),
-        a = <?php $this->options->darkModeSelect() ?> === 4,
-        o = <?php $this->options->darkModeSelect() ?> === 1,
-        c = <?php $this->options->darkModeSelect() ?> === 2,
-        n = !a && !o && !c;
-      if (void 0 === t) {
-        if (o) activateLightMode();
-        else if (a) activateDarkMode();
-        else if (n) {
-          const e = (new Date).getHours();
-          <?php darkTimeFunc() ?> ? activateDarkMode() : activateLightMode()
-        }
-        window.matchMedia("(prefers-color-scheme: dark)").addListener((e => {
-          void 0 === saveToLocal.get("theme") && (e.matches ? activateDarkMode() : activateLightMode())
-        }))
-      } else "light" === t ? activateLightMode() : activateDarkMode();
-      const d = saveToLocal.get("aside-status");
-      void 0 !== d && ("hide" === d ? document.documentElement.classList.add("hide-aside") : document.documentElement.classList.remove("hide-aside"));
-      /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent) && document.documentElement.classList.add("apple")
-    })(window)
-  </script>
+
   <style type="text/css" data-typed-js-css="true">
     .typed-cursor {
       opacity: 1;
@@ -377,10 +319,6 @@
         background-color: <?php $this->options->CustomColorMain() ?>
       }
 
-      #local-search .search-dialog .local-search-box input {
-        border: 2px solid <?php $this->options->CustomColorMain() ?> !important;
-      }
-
       #aside-content .card-archives ul.card-archive-list>.card-archive-list-item a:hover,
       #aside-content .card-categories ul.card-category-list>.card-category-list-item a:hover {
         background-color: var(--btn-bg);
@@ -431,24 +369,128 @@
     </style>
   <?php endif ?>
   <link rel="stylesheet" href="<?php $this->options->themeUrl('/self/css/post.css') ?>">
+  <link rel="stylesheet" href="<?php $this->options->themeUrl('/css/fancybox.min.css') ?>">
   <link rel="stylesheet" href="<?php $this->options->themeUrl('/self/css/font.css') ?>">
   <link rel="stylesheet" href="<?php $this->options->themeUrl('/self/css/custom.css') ?>">
+
+  <script>
+    ((win) => {
+  win.btf = {
+    saveToLocal: {
+      set: (key, value, ttl) => {
+        if (ttl === 0) return;
+        const now = Date.now();
+        const expiry = now + ttl * 86400000;
+        const item = { value, expiry };
+        localStorage.setItem(key, JSON.stringify(item));
+      },
+
+      get: (key) => {
+        const itemStr = localStorage.getItem(key);
+        if (!itemStr) return undefined;
+
+        const item = JSON.parse(itemStr);
+        const now = Date.now();
+
+        if (now > item.expiry) {
+          localStorage.removeItem(key);
+          return undefined;
+        }
+        return item.value;
+      }
+    },
+
+    getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = url;
+      script.async = true;
+      script.onerror = reject;
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState;
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return;
+        script.onload = script.onreadystatechange = null;
+        resolve();
+      };
+
+      Object.keys(attr).forEach(key => {
+        script.setAttribute(key, attr[key]);
+      });
+
+      document.head.appendChild(script);
+    }),
+
+    getCSS: (url, id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = url;
+      if (id) link.id = id;
+      link.onerror = reject;
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState;
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return;
+        link.onload = link.onreadystatechange = null;
+        resolve();
+      };
+      document.head.appendChild(link);
+    }),
+
+    activateDarkMode: () => {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      btf.updateThemeColor('#0d0d0d');
+    },
+
+    activateLightMode: () => {
+      document.documentElement.setAttribute('data-theme', 'light');
+      btf.updateThemeColor('#ffffff');
+    },
+
+    updateThemeColor: (color) => {
+      const themeMeta = document.querySelector('meta[name="theme-color"]');
+      if (themeMeta) {
+        themeMeta.setAttribute('content', color);
+      }
+    },
+
+    detectApple: () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple');
+      }
+    },
+
+    init: () => {
+      const t = btf.saveToLocal.get('theme');
+      if (t === 'dark') btf.activateDarkMode();
+      else if (t === 'light') btf.activateLightMode();
+
+      const asideStatus = btf.saveToLocal.get('aside-status');
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide');
+      }
+
+      btf.detectApple();
+    }
+  };
+
+  // Initialize settings on page load
+  btf.init();
+
+})(window);
+
+    </script>
+    <script src="<?php $this->options->themeUrl('/js/fancybox.umd.min.js'); ?>"> </script>
+    
 </head>
 
 <body>
-  <script src="<?php $this->options->themeUrl('/js/instantpage.min.js'); ?>"> </script>
   <script src="<?php $this->options->themeUrl('/js/main.js?v1.7.3'); ?>"> </script>
   <script src="<?php $this->options->themeUrl('/js/utils.js?v1.7.3'); ?>"> </script>
   <script src="<?php $this->options->themeUrl('/js/tw_cn.js?v1.7.3'); ?>"> </script>
-  <?php if (is_array($this->options->beautifyBlock) && !in_array('showNoAlertSearch', $this->options->beautifyBlock)) : ?>
-    <script src="<?php $this->options->themeUrl('/js/local-search.js'); ?>"> </script>
-  <?php endif ?>
+
 
   <script src="<?php cdnBaseUrl() ?>/js/instantpage.min.js" type = "module"></script>
   <script src="<?php cdnBaseUrl() ?>/js/medium-zoom.min.js"> </script>
   <script src="<?php cdnBaseUrl() ?>/js/dream-msg.min.js"></script>
   <script src="<?php cdnBaseUrl() ?>/js/lazyload.iife.min.js"></script>
-  <script src="<?php cdnBaseUrl() ?>/js/fancybox.umd.js"></script>
   <script src="<?php cdnBaseUrl() ?>/js/OwO.min.js"></script>
   <script src="<?php cdnBaseUrl() ?>/js/artplayer.js"> </script>
 
