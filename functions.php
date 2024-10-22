@@ -4,6 +4,7 @@ if (!defined('__TYPECHO_ROOT_DIR__'))
     exit;
 
 require_once('api/api.php');
+require_once('api/search.php');
 require_once('config/custom_config.php');
 
 // 新文章缩略图
@@ -1410,46 +1411,3 @@ function getThemeVersion()
   return $version;
 }
 
-// 假设这是你的 handle_ajax_request 函数
-
-function handle_ajax_request() {
-    $request = Typecho_Request::getInstance();
-
-    // 获取并过滤查询关键词
-    $keywords = $request->get('keywords');
-    $keywords = strip_tags(trim($keywords));
-
-    // 数据库查询
-    $db = Typecho_Db::get();
-    $select = $db->select()->from('table.contents')
-        ->where('status = ?', 'publish')
-        ->where('type = ?', 'post')
-        ->where('title LIKE ? OR text LIKE ?', '%' . $keywords . '%', '%' . $keywords . '%')
-        ->limit(10);
-
-    $results = $db->fetchAll($select);
-
-    // 设置响应头为 JSON
-    header('Content-Type: application/json; charset=utf-8');
-
-    // 构建 JSON 结果
-    $jsonResults = array();
-    foreach ($results as $result) {
-        $jsonResults[] = array(
-            'title' => htmlspecialchars($result['title'], ENT_QUOTES, 'UTF-8'),
-            'url' => Typecho_Common::url($result['slug'], Helper::options()->index),
-            'excerpt' => mb_substr(strip_tags($result['text']), 0, 100) // 截取摘要
-        );
-    }
-
-    // 输出 JSON
-    echo json_encode($jsonResults);
-    exit;
-}
-
-
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    if(isset($_GET['action'])&& $_GET['action'] == 'get_data'){
-        handle_ajax_request();
-    }
-}

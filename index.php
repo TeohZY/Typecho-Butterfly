@@ -60,7 +60,6 @@ if($this->options->pageSize<=5)
 }
 endif;
 $coverIndex = 1; 
-$this->listPosts(10);
 while($this->next()): 
     if($this->options->googleadsense != ""):
     if($i==$k || $i==$m || $i==$g){

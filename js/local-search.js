@@ -171,14 +171,11 @@ class LocalSearch {
   }
 
   fetchData (keyword) {
-    // const isXml = !this.path.endsWith('json');
-    const isXml = false;
+    const isXml = !this.path.endsWith('json');
     const url = this.path + `keyword=${encodeURIComponent(keyword?keyword:'')}`;
     fetch(url)
       .then(response => response.text())
       .then(res => {
-
-        
         // 获取数据，处理数据
         this.isfetched = true;
         this.datas = isXml
@@ -252,15 +249,45 @@ window.addEventListener('load', () => {
   const isXml = !path.endsWith('json')
 
   const inputEventFunction = () => {
-    let searchText = input.value.trim().toLowerCase();
-    
-    if (searchText !== '') {
-      $loadingStatus.innerHTML = '<i class="fas fa-spinner fa-pulse"></i>';
-      if (isXml) searchText = searchText.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      localSearch.fetchData(searchText);
+    if (!localSearch.isfetched) return
+    let searchText = input.value.trim().toLowerCase()
+    isXml && (searchText = searchText.replace(/</g, '&lt;').replace(/>/g, '&gt;'))
+    if (searchText !== '') $loadingStatus.innerHTML = '<i class="fas fa-spinner fa-pulse"></i>'
+    const keywords = searchText.split(/[-\s]+/)
+    const container = document.getElementById('local-search-results')
+    let resultItems = []
+    if (searchText.length > 0) {
+    // Perform local searching
+      resultItems = localSearch.getResultItems(keywords)
     }
-  };
-  
+    if (keywords.length === 1 && keywords[0] === '') {
+      container.textContent = ''
+      statsItem.textContent = ''
+    } else if (resultItems.length === 0) {
+      container.textContent = ''
+      const statsDiv = document.createElement('div')
+      statsDiv.className = 'search-result-stats'
+      statsDiv.textContent = languages.hits_empty.replace(/\$\{query}/, searchText)
+      statsItem.innerHTML = statsDiv.outerHTML
+    } else {
+      resultItems.sort((left, right) => {
+        if (left.includedCount !== right.includedCount) {
+          return right.includedCount - left.includedCount
+        } else if (left.hitCount !== right.hitCount) {
+          return right.hitCount - left.hitCount
+        }
+        return right.id - left.id
+      })
+
+      const stats = languages.hits_stats.replace(/\$\{hits}/, resultItems.length)
+
+      container.innerHTML = `<ol class="search-result-list">${resultItems.map(result => result.item).join('')}</ol>`
+      statsItem.innerHTML = `<hr><div class="search-result-stats">${stats}</div>`
+      window.pjax && window.pjax.refresh(container)
+    }
+
+    $loadingStatus.textContent = ''
+  }
 
   let loadFlag = false
   const $searchMask = document.getElementById('search-mask')

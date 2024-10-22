@@ -98,7 +98,7 @@
       root: "/",
       algolia: void 0,
       localSearch:{
-        path:"<?php Helper::options()->siteUrl(); ?>?action=get_data&",
+        path:"<?php Helper::options()->siteUrl(); ?>?action=search-post&",
         preload:!1,
         top_n_per_article:1,
         unescape:!1,
