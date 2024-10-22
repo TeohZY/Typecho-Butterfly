@@ -40,12 +40,11 @@ function searchPost() {
         $link = $entry->addChild('link');
         $link->addAttribute('href', Typecho_Common::url($result['slug'], Helper::options()->index));
         
-        $entry->addChild('url', htmlspecialchars(Typecho_Common::url($result['slug'], Helper::options()->index), ENT_QUOTES, 'UTF-8'));
+        $entry->addChild('url', htmlspecialchars(Typecho_Router::url('post', $result), ENT_QUOTES, 'UTF-8'));
 
         // 使用 Typecho 自带的 Markdown 转换功能
         $htmlContent = markdownToHtml($result['text']);
-        // $htmlContent = $result['text'];
-        
+        $htmlContent = preg_replace('/<!--.*?-->/s', '', $htmlContent);
         // Use CDATA for content to preserve HTML
         $content = $entry->addChild('content');
         $content->addAttribute('type', 'html');
