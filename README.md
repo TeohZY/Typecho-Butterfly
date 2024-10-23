@@ -1,8 +1,5 @@
 # Typecho-Butterfly
-![master version](https://img.shields.io/github/v/release/wehaox/Typecho-Butterfly?sort=semver)
-![typecho version](https://img.shields.io/badge/Tyepcho-1.2.0-green)
-![php version](https://img.shields.io/badge/PHP-7.4+-9cf)
-![license](https://img.shields.io/github/license/wehaox/Typecho-Butterfly?color=FF5531)  
+
 
 这是 Typecho 版本的 butterfly 主题
 主题好看，但是由于经常换设备并且hexo操作还是不方便，某些功能受限于第三方
@@ -15,13 +12,7 @@ Demo：[WeHao‘s Blog](https://blog.haoi.net/)
 使用文档：[使用文档](https://blog.haoi.net/archives/typecho-butterfly.html)
 
 ## 💻安装
-你最好从[Release](https://github.com/wehaox/Typecho-Butterfly/releases)  页面下载，code页下载代码可能更新遗漏或者更新提前导致页面出错  
-下载好后放进博客usr/theme内解压即可
 
-## ⭐帮助主题发展(加快更新)
- - 如果你发现主题bug或者建议可以去[issues](https://github.com/wehaox/Typecho-Butterfly/issues)提交反馈
- - 如果你一定能力可以向主题提交[PR](https://github.com/wehaox/Typecho-Butterfly/pulls)来丰富主题
- - 如果你只是一个普通是使用者，你可以在右上角给主题点一个[star](https://github.com/wehaox/Typecho-Butterfly/stargazers)来鼓励作者来加快更新
 
 ## ✌️移植特色
  1. 方便原hexo的博文转移，因为都是md文档
@@ -83,4 +74,3 @@ Demo：[WeHao‘s Blog](https://blog.haoi.net/)
 
 ## 请作者喝瓶快乐水
 
-<img src="https://cdn.jsdelivr.net/gh/wehaox/CDN@main/reward/wechat.jpg" alt="微信" width="300px"><img src="https://cdn.jsdelivr.net/gh/wehaox/CDN@main/reward/alipay.jpg" alt="支付宝" width="300px">

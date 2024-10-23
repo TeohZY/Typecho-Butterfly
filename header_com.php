@@ -486,13 +486,9 @@
   <script src="<?php $this->options->themeUrl('/js/utils.js?v1.7.3'); ?>"> </script>
   <script src="<?php $this->options->themeUrl('/js/tw_cn.js?v1.7.3'); ?>"> </script>
 
-
-  <script src="<?php cdnBaseUrl() ?>/js/instantpage.min.js" type = "module"></script>
-  <script src="<?php cdnBaseUrl() ?>/js/medium-zoom.min.js"> </script>
-  <script src="<?php cdnBaseUrl() ?>/js/dream-msg.min.js"></script>
-  <script src="<?php cdnBaseUrl() ?>/js/lazyload.iife.min.js"></script>
-  <script src="<?php cdnBaseUrl() ?>/js/OwO.min.js"></script>
-  <script src="<?php cdnBaseUrl() ?>/js/artplayer.js"> </script>
+  <script src="<?php $this->options->themeUrl('/js/instantpage.min.js'); ?>"> </script>
+  <script src="<?php $this->options->themeUrl('/js/lazyload.iife.min.js'); ?>"> </script>
+  <script src="<?php $this->options->themeUrl('/js/OwO.min.js'); ?>"> </script>
 
   <!--[if lt IE 8]>
     <div class="browsehappy" role="dialog"><?php _e('当前网页 <strong>不支持</strong> 你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/">升级你的浏览器</a>'); ?>.</div>

@@ -9,7 +9,7 @@
           <a target="_blank" href="http://www.typecho.org">Typecho</a><span> 强力驱动</span>
           <span class="footer-separator">|</span>
           <span>主题</span>
-          <a id="btheme" target="_blank" href="https://github.com/wehaox/Typecho-Butterfly">Butterfly</a>
+          <a id="btheme" target="_blank" href="https://butterfly.js.org">Butterfly</a>
         </div>
         <div class="footer_custom_text"><?php $this->options->Customfooter() ?></div>
       </div>

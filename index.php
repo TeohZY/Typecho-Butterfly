@@ -1,14 +1,10 @@
 <?php
 /**
- * <span>主题最新版本：<span id="latest">获取中...</span><script>fetch('https://ty.wehao.org').then(res => res.json()).then(({ver}) => {document.getElementById("latest").textContent = ver})</script></span>
  * 这是 Typecho 版本的 butterfly 主题
  * 主题为移植至Typecho，你可以替换原butterfly主题的index.css文件
  * 当前适配 hexo-butterfly 4.6.0
- * <a href="https://www.haoi.net">个人网站</a> | <a href="https://blog.haoi.net/archives/typecho-butterfly.html">主题使用文档</a>
  * @package Typecho-Butterfly
- * @author b站:wehao-
  * @version 1.8.0
- * @link https://space.bilibili.com/34174433
  */
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 /** 文章置顶 */
@@ -87,10 +83,10 @@ if($this->options->coverPosition === 'cross'){
 ?>
     <div class="recent-post-item">
     <?php if(noCover($this)): ?>  
-        <wehao class="post_cover  <?php echo $sideClass; ?>">
+        <div class="post_cover  <?php echo $sideClass; ?>">
              <a href="<?php $this->permalink() ?>">
                 <img class="post-bg" data-lazy-src="<?php echo get_ArticleThumbnail($this);?>" src="<?php echo GetLazyLoad() ?>" onerror="this.onerror=null;this.src='<?php $this->options->themeUrl('img/404.jpg'); ?>'"></a>
-        </wehao>
+        </div>
     <?php endif ?>
     <div class="recent-post-info<?php echo noCover($this) ? '' : ' no-cover'; ?>">
         <a  class="article-title" href="<?php $this->permalink() ?>"><?php $this->title() ?></a>

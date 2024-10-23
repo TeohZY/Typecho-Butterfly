@@ -16,10 +16,10 @@
 			?>
 				<div class="recent-post-item">
 					<?php if (noCover($this)) : ?>
-						<wehao class="post_cover  <?php echo $sideClass; ?>">
+						<div class="post_cover  <?php echo $sideClass; ?>">
 							<a href="<?php $this->permalink() ?>">
 								<img class="post-bg" data-lazy-src="<?php echo get_ArticleThumbnail($this); ?>" src="<?php echo GetLazyLoad() ?>" onerror="this.onerror=null;this.src='<?php $this->options->themeUrl('img/404.jpg'); ?>'"></a>
-						</wehao>
+						</div>
 					<?php endif ?>
 					<div class="recent-post-info<?php echo noCover($this) ? '' : ' no-cover'; ?>">
 						<a class="article-title" href="<?php $this->permalink(); ?>"><?php $this->title(); ?></a>

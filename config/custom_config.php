@@ -24,9 +24,8 @@ function themeConfig($form)
             class="btn btn-s" value="还原主题数据" />&nbsp;&nbsp;<input type="submit" name="type" class="btn btn-s"
             value="删除备份数据" />
     </form>
-    <script src='https://lib.baomitu.com/jquery/1.10.2/jquery.min.js'></script>
+    <script src="<?php Helper::options()->themeUrl('js/jquery.min.js'); ?>"></script>
     <script src="<?php Helper::options()->themeUrl('js/themecustom.js?v1.5.3'); ?>"></script>
-    <script src='https://static.wehao.org/postdomai.js'></script>
     <?php
     $sticky_cids = new Typecho_Widget_Helper_Form_Element_Text('sticky_cids', NULL, NULL, '置顶文章的 cid', '<div style="font-family:arial; background:#E8EFD1; padding:8px">按照排序输入, 请以半角逗号或空格分隔 cid</div>');
     $sticky_cids->setAttribute('id', 'cids');
@@ -57,7 +56,6 @@ function themeConfig($form)
         '博客静态资源加载方式',
         '介绍：无网络服务器或者CDN炸了可开启此项<br>
          将博客静态资源，如js、css、图片从服务器加载(会稍微增加服务器流量消耗)<br>
-         注意：你需要额外<a href="https://github.com/wehaox/Typecho-Butterfly/releases/download/1.7.7/static-23.11.zip">下载</a>对应版本的静态资源放进主题根目录直接解压即可<br>
          此文件与下方的自定义CDN文件通用'
     );
     $form->addInput($StaticFile->multiMode());
@@ -68,7 +66,6 @@ function themeConfig($form)
         NULL,
         '自定义CDNURL(由@origami-tech提供)',
         '需要选择博客静态资源加载方式为CDN加载 此项才会生效 且<b>本地加载>自定义CDNURL>jsdelivr源</b><br>
-    注意：你需要额外<a href="https://github.com/wehaox/Typecho-Butterfly/releases/download/1.7.7/static-23.11.zip">下载</a>静态资源放CDN解压<br>
     链接填写规则：填写static文件夹的父文件夹 无需最后的/ 例如 https://pub-gcdn.starsdust.cn/libs/butterfly '
     );
     $form->addInput($CDNURL);
@@ -295,8 +292,6 @@ function themeConfig($form)
             '1' => '插件模式',
         ),
         '0',
-        '是否使用Link插件进行友链(需点击<a href="https://static.wehao.org/Links.zip">这里</a>下载)',
-        '介绍：新手和手残党极其友好,默认从主题读取防止报错'
     );
     $friendset->setAttribute('id', 'friends');
     $form->addInput($friendset);
@@ -340,8 +335,8 @@ function themeConfig($form)
     $RewardInfo = new Typecho_Widget_Helper_Form_Element_Textarea(
         'RewardInfo',
         NULL,
-        _t('微信 || https://cdn.jsdelivr.net/gh/wehaox/CDN@main/reward/wechat.jpg
-    支付宝 || https://cdn.jsdelivr.net/gh/wehaox/CDN@main/reward/alipay.jpg'),
+        _t('微信 || ""
+    支付宝 || ""'),
         '打赏信息（非必填）',
         '注意：需在开启打赏功能，该项才会显示 <br />
          格式：打赏名称 || 图片地址 <br />一行一个'
