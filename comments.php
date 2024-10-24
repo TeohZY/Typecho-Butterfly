@@ -60,14 +60,14 @@
                     required><?php $this->remember('text'); ?></textarea>
                 <div class="comments-bottom-left">
                     <div title="OwO" class="OwO"></div>
-                    <div title="uploadImg" class="uploadImg">
+                    <!-- <div title="uploadImg" class="uploadImg">
                         <span class="atk-plug-btn"><i aria-label="上传图片"><svg fill="currentColor" aria-hidden="true"
                                     height="14" viewBox="0 0 14 14" width="14">
                                     <path
                                         d="m0 1.94444c0-1.074107.870333-1.94444 1.94444-1.94444h10.11116c1.0741 0 1.9444.870333 1.9444 1.94444v10.11116c0 1.0741-.8703 1.9444-1.9444 1.9444h-10.11116c-1.074107 0-1.94444-.8703-1.94444-1.9444zm1.94444-.38888c-.21466 0-.38888.17422-.38888.38888v7.06689l2.33333-2.33333 2.33333 2.33333 3.88888-3.88889 2.3333 2.33334v-5.51134c0-.21466-.1742-.38888-.3888-.38888zm10.49996 8.09977-2.3333-2.33333-3.88888 3.8889-2.33333-2.33334-2.33333 2.33334v.8447c0 .2146.17422.3888.38888.3888h10.11116c.2146 0 .3888-.1742.3888-.3888zm-7.1944-6.54422c-.75133 0-1.36111.60978-1.36111 1.36111 0 .75134.60978 1.36111 1.36111 1.36111s1.36111-.60977 1.36111-1.36111c0-.75133-.60978-1.36111-1.36111-1.36111z">
                                     </path>
                                 </svg></i></span>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <?php if (!$this->user->hasLogin() && $this->options->EnableCommentsLogin === 'on') : ?>
@@ -180,7 +180,7 @@
             try {
                 const owoData = OwO_demo.odata;
                 // 正则表达式匹配 {% icon QQ,QQ-OK %}
-                const regex = /{% icon (\w+),([\w-]+) %}/g;
+                const regex = /{% icon ([\w\u4e00-\u9fa5]+),([\w\u4e00-\u9fa5-]+) %}/g;
 
                 // 使用回调函数替换匹配的标签
                 commentContent = commentContent.replace(regex, (match, type, name) => {
@@ -188,7 +188,7 @@
                     if (typeData && typeData.type === 'image') {
                         const iconData = typeData.container.find(item => item.text === name);
                         if (iconData) {
-                            return `<img src="${iconData.icon}" style="height:40px;width:40px;">`;
+                            return iconData.icon.replace('<img','<img style="height:40px;width:40px;"')
                         }
                     }
                     // If no match is found, return the original match
@@ -213,7 +213,7 @@
                     const formData = new FormData(form);
                     const submitButton = form.querySelector('.submit');
                     submitButton.disabled = true; // 禁用提交按钮
-                    formData.set('text', parseOwOTags(formData.get('text')))
+                    formData.set('text', parseOwOTags(formData.get('text')))                 
                     fetch('<?php $this->commentUrl() ?>', {
                         method: 'POST',
                         body: formData
