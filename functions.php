@@ -1404,6 +1404,36 @@ function getSiteStatistics()
         'tagsNum' =>  $tagsNum,
     ];
 }
+// 处理评论区表情包
+function parseOwOTags($commentContent) {
+    // 读取 OwO.json 文件
+    $owoJsonPath = 'path/to/OwO.json';
+    $owoData = json_decode(file_get_contents($owoJsonPath), true);
+
+    // 正则表达式匹配 {% icon QQ,QQ-OK %}
+    $pattern = '/\{% icon (\w+),(\w+) %\}/';
+
+    // 使用回调函数替换匹配的标签
+    $commentContent = preg_replace_callback($pattern, function($matches) use ($owoData) {
+        $category = $matches[1];
+        $text = $matches[2];
+
+        // 检查 JSON 数据中是否存在该类别和文本
+        if (isset($owoData[$category]['container'])) {
+            foreach ($owoData[$category]['container'] as $item) {
+                if ($item['text'] === $text) {
+                    // 返回带有样式的 img 标签
+                    return "<img src='{$item['icon']}' style='height:60px;width:60px;'>";
+                }
+            }
+        }
+
+        // 如果没有找到匹配的，返回原始文本
+        return $matches[0];
+    }, $commentContent);
+
+    return $commentContent;
+}
 
 function getThemeVersion()
 {
@@ -1411,3 +1441,8 @@ function getThemeVersion()
   return $version;
 }
 
+function myCommentUrl() {
+    // 自定义逻辑
+    
+    return $this->permalink . '?custom=true#comments';
+}

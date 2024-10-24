@@ -83,6 +83,10 @@
 .commentsFormArea {
   margin-top: 10px;
 }
+
+.comments-bottom-left{
+  display: flex;
+}
 #cancel-comment-reply-link {
   position: absolute;
   margin-top: 5px;
@@ -544,74 +548,5 @@
 .ads-wrap{
     overflow: hidden;
 }
-/*已移除内容*/
-/*#article-container.post-content ul>li:not(.tab):before {*/
-/*    top: 0.78em;*/
-/*    width: 0.42em;*/
-/*    height: 0.42em;*/
-/*    border: 0.21em solid #49b1f5;*/
-/*    border-radius: 0.42em;*/
-/*    background: 0 0;*/
-/*    content: '';*/
-/*    line-height: .42em;*/
-/*    position: absolute;*/
-/*}*/
-/*#article-container.post-content ol li:before, #article-container.post-content ul li:before {*/
-/*    position: absolute;*/
-/*    top: 0;*/
-/*    left: 0;*/
-/*    background: #49b1f5;*/
-/*    transition: all .3s ease-out; */
-/*}*/
-/*#article-container ol li, #article-container ul li {*/
-/*    position: relative;*/
-/*    margin: 0.3rem0;*/
-/*    padding-left: 0.3rem;*/
-/*}*/
 
-/*.button--animated {*/
-/*    position: relative;*/
-/*    z-index: 1;*/
-/*    -webkit-transition: color 1s;*/
-/*    -moz-transition: color 1s;*/
-/*    -o-transition: color 1s;*/
-/*    -ms-transition: color 1s;*/
-/*    transition: color 1s;*/
-/*}*/
-/*.button--animated:hover:before {*/
-/*    -webkit-transition-timing-function: cubic-bezier(.45,1.64,.47,.66);*/
-/*    -moz-transition-timing-function: cubic-bezier(.45,1.64,.47,.66);*/
-/*    -o-transition-timing-function: cubic-bezier(.45,1.64,.47,.66);*/
-/*    -ms-transition-timing-function: cubic-bezier(.45,1.64,.47,.66);*/
-/*    transition-timing-function: cubic-bezier(.45,1.64,.47,.66);*/
-/*    -webkit-transform: scaleX(1);*/
-/*    -moz-transform: scaleX(1);*/
-/*    -o-transform: scaleX(1);*/
-/*    -ms-transform: scaleX(1);*/
-/*    transform: scaleX(1);*/
-/*}*/
-/*.button--animated:before {*/
-/*    position: absolute;*/
-/*    top: 0;*/
-/*    right: 0;*/
-/*    bottom: 0;*/
-/*    left: 0;*/
-/*    z-index: -1;*/
-/*    background: var(--btn-hover-color);*/
-/*    content: '';*/
-/*    -webkit-transition: -webkit-transform .5s ease-out;*/
-/*    -moz-transition: -moz-transform .5s ease-out;*/
-/*    -o-transition: -o-transform .5s ease-out;*/
-/*    -ms-transition: -ms-transform .5s ease-out;*/
-/*    transition: transform .5s ease-out;*/
-/*    -webkit-transform: scaleX(0);*/
-/*    -moz-transform: scaleX(0);*/
-/*    -o-transform: scaleX(0);*/
-/*    -ms-transform: scaleX(0);*/
-/*    transform: scaleX(0);*/
-/*    -webkit-transform-origin: 0 50%;*/
-/*    -moz-transform-origin: 0 50%;*/
-/*    -o-transform-origin: 0 50%;*/
-/*    -ms-transform-origin: 0 50%;*/
-/*    transform-origin: 0 50%;*/
-/*}*/
+

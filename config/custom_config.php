@@ -292,6 +292,7 @@ function themeConfig($form)
             '1' => '插件模式',
         ),
         '0',
+        '介绍：新手和手残党极其友好,默认从主题读取防止报错'
     );
     $friendset->setAttribute('id', 'friends');
     $form->addInput($friendset);
