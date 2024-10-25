@@ -8,7 +8,7 @@
         <header class="full_page" id="page-header" style="background-image: url(<?php $this->options->headerimg() ?>)">
             <div id="site-info">
                 <h1 id="site-title">
-                    <?php $this->options->description() ?>
+                    <?php $this->options->author_site_description() ?>
                 </h1>
                 <div id="site-subtitle">
                     <span id="subtitle"></span>
