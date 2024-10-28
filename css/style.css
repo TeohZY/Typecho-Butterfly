@@ -121,7 +121,10 @@
   color: var(--font-color);
   padding-left: 50px;
 }
-
+.commentReview{
+  color: #e17979;
+  font-weight: bold;
+}
 /* .comment-children:hover > ol > li > div > .vhead > .comment-reply {
   display: block;
 } */

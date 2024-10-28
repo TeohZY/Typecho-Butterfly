@@ -230,6 +230,7 @@
 
                             form.reset(); // 重置表单
                             submitButton.disabled = false; // 重新启用提交按钮
+                            location.reload();
                         })
                         .catch(error => {
                             console.error('提交评论时出现错误:', error);
@@ -254,11 +255,10 @@
     </h3>
     <?php else : ?>
     <?php endif; ?>
-    <?php if ($comments->have()) : ?>
     <h3>
         <?php $this->commentsNum(_t('暂无评论'), _t('仅有一条评论'), _t('已有 %d 条评论')); ?>
     </h3>
     <?php $comments->listComments(); ?>
+    <?php var_dump($comments) ?>
     <?php $comments->pageNav('<i class="fas fa-chevron-left fa-fw"></i>', '<i class="fas fa-chevron-right fa-fw"></i>', 1, '...', array('wrapTag' => 'ol', 'wrapClass' => 'page-navigator', 'itemTag' => '', 'prevClass' => 'prev', 'nextClass' => 'next', 'currentClass' => 'current')); ?>
-    <?php endif; ?>
 </div>

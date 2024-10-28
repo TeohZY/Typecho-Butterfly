@@ -804,12 +804,12 @@ function get_comment_at($coid)
         $mail = @$arow['mail'];
         if (@$author && $arow['status'] == "approved") { //父评论作者存在且父评论已经审核通过
             if (@$prow['status'] == "waiting") {
-                echo '<p class="commentReview">（评论审核中）)</p>';
+                echo '<span class="commentReview">（评论审核中）</span>';
             }
             echo '<a onclick="b(this);return false;" href="#comment-' . $parent . '">@' . $author . '</a>';
         } else { //父评论作者不存在或者父评论没有审核通过
             if (@$prow['status'] == "waiting") {
-                echo '<p class="commentReview">（评论审核中）)</p>';
+                echo '<span class="commentReview">（评论审核中）</span>';
             } else {
                 echo '';
             }
@@ -817,7 +817,7 @@ function get_comment_at($coid)
 
     } else { //母评论，无需输出锚点链接
         if (@$prow['status'] == "waiting") {
-            echo '<p class="commentReview">（评论审核中）)</p>';
+            echo '<span class="commentReview">（评论审核中）</span>';
         } else {
             echo '';
         }
@@ -859,13 +859,13 @@ function threadedComments($comments, $options)
                         <?php $comments->author(); ?>
                     </cite>
                     <?php commentRank($comments, $comments->mail); ?>
+                    <span class="vtag">
+                        <?php $parentMail = get_comment_at($comments->coid) ?>
+                        <?php echo $parentMail; ?>
+                    </span>
                 </div>
             </div>
             <div class="vhead">
-                <b>
-                    <?php $parentMail = get_comment_at($comments->coid) ?>
-                    <?php echo $parentMail; ?>
-                </b>
                 <a class="vtime" href="<?php $comments->permalink(); ?>"><?php $comments->date('Y-m-d H:i'); ?></a>
                 <?php if (Helper::options()->CloseComments == 'off'): ?>
                     <span class="comment-reply">
