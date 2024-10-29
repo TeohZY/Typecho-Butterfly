@@ -836,6 +836,9 @@ function threadedComments($comments, $options)
             $commentClass .= ' comment-by-user';
         }
     }
+    // 获取当前用户信息
+    $user = Typecho_Widget::widget('Widget_User');
+    $isAuthor = $user->hasLogin() && $user->uid == $comments->ownerId;
     $commentLevelClass = $comments->levels > 0 ? ' comment-child' : ' comment-parent';
     ?>
     <li id="li-<?php $comments->theId(); ?>" class="comment-body<?php
@@ -874,7 +877,17 @@ function threadedComments($comments, $options)
                 <?php endif ?>
             </div>
             <div class="comment-content">
-                <?php $comments->content(); ?>
+                <?php
+                // 仅文章作者可见 {% self text %} 包裹的内容
+                $content = $comments->content;
+                if ($isAuthor) {
+                    $content = preg_replace('/\{% self (.*?) %\}/is', '$1', $content);
+                } else {
+                    $content = preg_replace('/\{% self .*?%\}/is', '<div class=comment-self>仅作者可见</div>', $content);
+                }
+                $content = ParseCode($content) ;
+                echo $content;
+                ?>
             </div>
             <span class="comment-ua">
                 <?php getOs($comments->agent); ?>

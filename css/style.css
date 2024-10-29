@@ -113,6 +113,11 @@
 .comment-content p {
   word-break: break-all;
 }
+.comment-content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
 .comment-list li {
   list-style: none;
   margin-bottom: 20px;
@@ -128,6 +133,57 @@
 /* .comment-children:hover > ol > li > div > .vhead > .comment-reply {
   display: block;
 } */
+
+.comment-self {
+  position: relative;
+  padding: 20px;
+  background-color: #fdf3e7;
+  overflow: hidden;
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+}
+
+.comment-self::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  background: repeating-linear-gradient(
+      135deg,
+      rgba(255, 165, 0, 0.5),
+      rgba(255, 165, 0, 0.5) 20px,
+      rgba(255, 255, 0, 0.5) 20px,
+      rgba(255, 255, 0, 0.5) 40px
+  );
+  animation: scroll-stripes 4s linear infinite, breathe 4s ease-in-out infinite;
+  opacity: 0.7;
+}
+
+@keyframes scroll-stripes {
+  from {
+      transform: translateX(0);
+  }
+  to {
+      transform: translateX(-80px);
+  }
+}
+
+@keyframes breathe {
+  0%, 100% {
+      opacity: 0.6;
+  }
+  50% {
+      opacity: 1;
+  }
+}
+
+.comment-self span {
+  position: relative;
+  z-index: 1;
+}
 
 .text {
   border: none;
