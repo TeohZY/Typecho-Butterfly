@@ -159,25 +159,24 @@ if($this->options->coverPosition === 'cross'){
     );
     $pagination_html = ob_get_clean(); // 获取缓冲内容并结束缓冲
 
-    // 处理渲染后的 HTML
+    // 优化后的正则替换
+    // 替换当前页、普通页码链接和分隔符
     $pagination_html = preg_replace_callback(
-        // 正则匹配当前页的格式、普通链接的格式，以及 <span>...</span> 并将其替换为 <span class="space">...</span>
-        '/<a href="([^"]+)"(?: class="page-number current")?>(\d+)<\/a>|<span>\.\.\.<\/span>/',
+        '/<a href="([^"]+)"(?: class="page-number current")?>(\d+)<\/a>|<span>\.\.\.<\/span>|<a href="([^"]+)" class="extend (prev|next)"[^>]*>(.*?)<\/a>/',
         function ($matches) {
-            // 处理当前页
+            // 处理当前页和普通链接
             if (!empty($matches[2])) {
-                if (strpos($matches[0], 'class="page-number current"') !== false) {
-                    // 渲染当前页为 <span class="page-number current">{text}</span>
-                    return '<span class="page-number current">' . $matches[2] . '</span>';
-                } else {
-                    // 渲染普通页码链接为 <a href="{url}#content-inner" data-pjax-state="">{text}</a>
-                    return '<a href="' . $matches[1] . '#content-inner" data-pjax-state="">' . $matches[2] . '</a>';
-                }
+                return strpos($matches[0], 'class="page-number current"') !== false
+                    ? '<span class="page-number current">' . $matches[2] . '</span>' // 当前页
+                    : '<a href="' . $matches[1] . '#content-inner" data-pjax-state="">' . $matches[2] . '</a>'; // 普通页
             }
-            // 处理分隔符 <span>...</span>
-            if (strpos($matches[0], '<span>...</span>') !== false) {
-                // 将 <span>...</span> 替换为 <span class="space">...</span>
-                return '<span class="space">...</span>';
+            // 处理分隔符
+            if (!empty($matches[0]) && strpos($matches[0], '...') !== false) {
+                return '<span class="space">...</span>'; // 分隔符
+            }
+            // 处理上一页和下一页链接
+            if (!empty($matches[3])) {
+                return '<a href="' . $matches[3] . '#content-inner" class="extend ' . $matches[4] . '">' . $matches[5] . '</a>';
             }
         },
         $pagination_html
@@ -187,6 +186,7 @@ if($this->options->coverPosition === 'cross'){
     echo $pagination_html;
     ?>
 </nav>
+
 </div>
 <?php $this->need('sidebar.php'); ?>
 </main>
