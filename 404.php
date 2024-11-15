@@ -1,6 +1,6 @@
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
 <?php $this->page404(); ?>
-<?php  $this->need('header_com.php'); ?>
+<?php  $this->need('common/header_com.php'); ?>
 <div id="web_bg"></div>
 <div class="error404" id="body-wrap">
      <header class="not-top-img" id="page-header">

@@ -201,7 +201,7 @@
         </div>
       </div>
     <?php endif ?>
-    <?php $this->need('comments.php'); ?>
+    <?php $this->need('common/comments.php'); ?>
   </div>
   <?php $this->need('post_sidebar.php'); ?>
   <link rel="stylesheet" href="<?php $this->options->themeUrl('css/GrayMac.css'); ?>">

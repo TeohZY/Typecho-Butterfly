@@ -31,7 +31,7 @@ $this->need('page_header.php'); ?>
             rel="tag" class="tagslink" href="<?php $tags->permalink(); ?>"  title="<?php $tags->name(); ?>" style='display: inline-block; margin: 0 5px 5px 0;'><?php $tags->name(); ?></a>
             <?php endwhile; ?>
   </div>
-         <?php $this->need('comments.php'); ?>
+         <?php $this->need('common/comments.php'); ?>
     </div>
      <?php $this->need('sidebar.php'); ?>
 </main>

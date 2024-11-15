@@ -37,7 +37,7 @@ if($sticky && $this->is('index') || $this->is('front')){
     $this->setTotal($this->getTotal()-count($sticky_cids)); //置顶文章不计算在所有文章内
 }
 ?>
-<?php  $this->need('header.php'); ?>
+<?php  $this->need('common/header.php'); ?>
 <main class="layout" id="content-inner">
 <div class="recent-posts nc" id="recent-posts">
 <?php 

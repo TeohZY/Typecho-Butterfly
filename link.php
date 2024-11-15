@@ -62,7 +62,7 @@ if ($this->options->Friends){
     </div>
 </div>
 
-<?php $this->need('comments.php'); ?>
+<?php $this->need('common/comments.php'); ?>
 </div>
 <?php $this->need('post_sidebar.php'); ?>
 <script src="<?php $this->options->themeUrl('js/comjs.js'); ?>"></script>
