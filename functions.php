@@ -1264,15 +1264,15 @@ function weibohot()
 // 自定义文章摘要
 function summaryContent($widget)
 {
-    $summaryContent = '';
-    if ($widget->fields->summaryContent) {
-        $summaryContent = $widget->fields->summaryContent;
+    $customSummary = '';
+    if ($widget->fields->customSummary) {
+        $customSummary = $widget->fields->customSummary;
     } elseif ($widget->fields->excerpt && $widget->fields->excerpt != '') {
-        $summaryContent = $widget->fields->excerpt;
+        $customSummary = $widget->fields->excerpt;
     } else {
-        $summaryContent = $widget->excerpt(130);
+        $customSummary = $widget->excerpt(130);
     }
-    echo $summaryContent;
+    echo $customSummary;
 }
 
 //主页封面处理函数
@@ -1454,8 +1454,3 @@ function getThemeVersion()
   return $version;
 }
 
-function myCommentUrl() {
-    // 自定义逻辑
-    
-    return $this->permalink . '?custom=true#comments';
-}

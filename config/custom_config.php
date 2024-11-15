@@ -758,14 +758,16 @@ function themeFields($layout)
     );
     $layout->addItem($thumb);
 
-    $summaryContent = new Typecho_Widget_Helper_Form_Element_Textarea(
-        'summaryContent',
+    // 自定义摘要
+    $customSummary = new Typecho_Widget_Helper_Form_Element_Textarea(
+        'customSummary',
         NULL,
         NULL,
         '自定义文章摘要',
         '不喜欢自动生成的摘要？那就来自定义吧！'
     );
-    $layout->addItem($summaryContent);
+    $customSummary->input->setAttribute('style', 'width: 100%;');
+    $layout->addItem($customSummary);
 
     $desc = new Typecho_Widget_Helper_Form_Element_Text(
         'desc',
