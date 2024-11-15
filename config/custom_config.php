@@ -756,6 +756,7 @@ function themeFields($layout)
         '自定义文章缩略图',
         '填写时：将会显示填写的文章缩略图 <br>不填写时采用默认图片'
     );
+    $thumb->input->setAttribute('style', 'width: 100%;');
     $layout->addItem($thumb);
 
     // 自定义摘要
@@ -776,6 +777,7 @@ function themeFields($layout)
         'SEO描述',
         '用于填写文章或独立页面的SEO描述，如果不填写则没有'
     );
+    $desc->input->setAttribute('style', 'width: 100%;');
     $layout->addItem($desc);
 
     $keywords = new Typecho_Widget_Helper_Form_Element_Text(
@@ -785,6 +787,7 @@ function themeFields($layout)
         'SEO关键词',
         '用于填写文章或独立页面的SEO关键词，如果不填写则没有'
     );
+    $keywords->input->setAttribute('style', 'width: 100%;');
     $layout->addItem($keywords);
 
 
