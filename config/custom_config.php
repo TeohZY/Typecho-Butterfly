@@ -688,7 +688,7 @@ function themeConfig($form)
 
     $db = Typecho_Db::get();
     $sjdq = $db->fetchRow($db->select()->from('table.options')->where('name = ?', 'theme:butterfly'));
-    $ysj = $sjdq['value'];
+    $ysj = $sjdq['value'] ?? null;
     if (isset($_POST['type'])) {
         if ($_POST["type"] == "备份主题数据") {
             if ($db->fetchRow($db->select()->from('table.options')->where('name = ?', 'theme:butterflybf'))) {

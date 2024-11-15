@@ -536,7 +536,7 @@ function timeLine($text){
                 $date = $timeline_contents_template[1][$i];
                 $text = $timeline_contents_template[2][$i];
 
-                $timeline_contents .= '<div class="timeline-item"><div class="timeline-item-title"><div class="item-circle"><p>' . trim($date) . '</p></div></div><div class="timeline-item-content"><p>' . trim($content) . '</p></div></div>';
+                $timeline_contents .= '<div class="timeline-item"><div class="timeline-item-title"><div class="item-circle"><p>' . trim($date) . '</p></div></div><div class="timeline-item-content"><p>' . trim($text) . '</p></div></div>';
             }
 
             // 构建最终的HTML结构
