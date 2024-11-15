@@ -1,5 +1,5 @@
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
-<?php  $this->need('common/header_com.php'); ?>
+<?php  $this->need('header_com.php'); ?>
 <style>#body-wrap {min-height: 0;}</style>
 <div id="web_bg"></div>
 <?php require_once('public/rightside.php');?>

@@ -46,7 +46,7 @@ $child = $categorys->getCategory($mid); echo($this->is('category', $mid));?>
 <?php endwhile; ?>
 </ul>
 </div>
-<?php $this->need('common/comments.php'); ?>
+<?php $this->need('comments.php'); ?>
 </div>
 <?php $this->need('sidebar.php'); ?>
 </main>

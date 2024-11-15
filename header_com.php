@@ -127,7 +127,7 @@
         }
       },
       translate: {
-        defaultEncoding: <? php $this-> options -> DefaultEncoding() ?>,
+        defaultEncoding: "<? php $this-> options -> DefaultEncoding() ?>",
       translateDelay: 0,
       msgToTraditionalChinese: "繁",
       msgToSimplifiedChinese: "简"
@@ -226,7 +226,7 @@
       isPost: !0,
       isHome: !0,
       isHighlightShrink: !0,
-      isToc: <? php echo $this-> fields -> ShowToc === 'off' ? 0 : 1; ?>,
+      isToc: "<? php echo $this-> fields -> ShowToc === 'off' ? 0 : 1; ?>",
     }
   </script>
   <?php if ($this->is('post')) : ?>
@@ -235,7 +235,7 @@
       isPost: !0,
       isHome: !0,
       isHighlightShrink: !1,
-      isToc: <? php echo $this-> fields -> ShowToc === 'off' ? 0 : 1; ?>,
+      isToc: "<? php echo $this-> fields -> ShowToc === 'off' ? 0 : 1; ?>",
       }
   </script>
   <?php else : ?>
@@ -244,7 +244,7 @@
       isPost: !1,
       isHome: !0,
       isHighlightShrink: !1,
-      isToc: <? php echo $this-> fields -> ShowToc === 'off' ? 0 : 1; ?>,
+      isToc: "<? php echo $this-> fields -> ShowToc === 'off' ? 0 : 1; ?>",
       }
   </script>
   <?php endif; ?>
