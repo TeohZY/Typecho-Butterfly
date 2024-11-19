@@ -886,6 +886,7 @@ function threadedComments($comments, $options)
                     $content = preg_replace('/\{% self .*?%\}/is', '<div class=comment-self>仅作者可见</div>', $content);
                 }
                 $content = ParseCode($content) ;
+                $content = PostImage($content);
                 echo $content;
                 ?>
             </div>

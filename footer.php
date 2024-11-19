@@ -165,7 +165,12 @@
           function subtitleType() {
             fetch("https://v1.hitokoto.cn").then(t => t.json()).then(t => {
               o = 0 == "".length ? new Array : " ".split(",");
+              const sub = `<?php $this->options->subtitle_sub() ?>`.split(/\r?\n/)
+                            
               o.unshift(t.hitokoto),
+              o.push(t.hitokoto),
+              o.push("出自 " + t.from),
+              o=[...o,...sub],
                 new Typed("#subtitle", {
                   strings: o,
                   startDelay: 300,

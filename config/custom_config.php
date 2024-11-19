@@ -144,6 +144,10 @@ function themeConfig($form)
     $author_site_description = new Typecho_Widget_Helper_Form_Element_Text('author_site_description', NULL, _t('个人网站'), _t('作者链接描述'), _t('作者链接描述'));
     $form->addInput($author_site_description);
 
+
+    $subtitle_sub = new Typecho_Widget_Helper_Form_Element_Textarea('subtitle_sub', NULL, NULL, _t('自定义网站副标题'), _t('输入副标题'));
+    $form->addInput($subtitle_sub);
+
     $author_site = new Typecho_Widget_Helper_Form_Element_Text('author_site', NULL, _t('#null'), _t('作者链接'), _t('在这里填入作者链接，它会显示在右侧栏的作者信息的个人网站上'));
     $form->addInput($author_site);
 

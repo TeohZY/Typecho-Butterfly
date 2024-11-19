@@ -165,7 +165,7 @@
             logo: '<i class="iconfont icon-face"></i>',
             container: document.getElementsByClassName('OwO')[0],
             target: document.getElementsByClassName('textarea')[0],
-            api: '<?php $this->options->themeUrl('OwO.json'); ?>',
+            api: "<?php $this->options->themeUrl('OwO.json'); ?>",
             position: 'down',
             width: '100%',
             maxHeight: '350px'
