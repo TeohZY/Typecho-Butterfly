@@ -19,7 +19,8 @@
             </a>
         </div>
         <div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div>
-        <div class="menus_items">
+        <?php renderMenu($this->options->menu) ?>
+        <!-- <div class="menus_items">
             <div class="menus_item">
                 <a class="site-page" href="<?php $this->options->siteUrl(); ?>">
                     <li class="fa-fw fas fa-home"></li>
@@ -64,6 +65,6 @@
             <?php endwhile; ?>
             <?php endif; ?>
             <?php $this->options->CustomHeaderLink() ?>
-        </div>
+        </div> -->
     </div>
 </nav>

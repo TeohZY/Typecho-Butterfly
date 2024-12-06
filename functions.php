@@ -6,6 +6,7 @@ if (!defined('__TYPECHO_ROOT_DIR__'))
 require_once('api/api.php');
 require_once('api/search.php');
 require_once('config/custom_config.php');
+require_once('lib/core.php');
 
 // 新文章缩略图
 function get_ArticleThumbnail($widget)
@@ -488,7 +489,7 @@ function codeHightLight($text){
         function ($matches) {
             // 如果没有匹配到语言类型，默认使用 'plaintext'
             $language = isset($matches[1]) && !empty($matches[1]) ? $matches[1] : 'plaintext';
-            $code = htmlentities($matches[2]); // 获取代码并转义 HTML 实体
+            $code = $matches[2]; // 获取代码并转义 HTML 实体
             
             // 将代码按行分割
             $lines = explode("\n", $code);
@@ -1455,3 +1456,4 @@ function getThemeVersion()
   return $version;
 }
 
+?>

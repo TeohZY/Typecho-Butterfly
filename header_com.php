@@ -44,6 +44,7 @@
   <!--魔改美化-->
   <?php if (!empty($this->options->beautifyBlock) && in_array('ShowBeautifyChange', $this->options->beautifyBlock)) : ?>
   <link rel="stylesheet" href="<?php $this->options->themeUrl('css/custom.css?v1.8.1'); ?>">
+  <link rel="stylesheet" href="<?php $this->options->themeUrl('css/font.css'); ?>">
   <?php endif; ?>
   <!--百度统计-->
   <?php if ($this->options->baidustatistics != "") : ?>
