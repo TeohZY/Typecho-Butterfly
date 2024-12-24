@@ -494,13 +494,11 @@ function codeHightLight($text){
             // 将代码按行分割
             $lines = explode("\n", $code);
             $line_numbers = '';
-            $code_lines = '';
             
             // 生成行号和代码行
             foreach ($lines as $index => $line) {
                 $line_number = $index + 1;
                 $line_numbers .= "<span class=\"line\">{$line_number}</span><br>";
-                $code_lines .= "<span class=\"line\">" . $line . "</span><br>";
             }
     
             // 返回自定义的 HTML 结构
@@ -510,7 +508,7 @@ function codeHightLight($text){
                     <tbody>
                         <tr>
                             <td class="gutter"><pre>' . $line_numbers . '</pre></td>
-                            <td class="code"><pre>' . $code_lines . '</pre></td>
+                            <td class="code"><pre class="lang-' . $language . '"><code>' . $code . '</code></pre></td>
                         </tr>
                     </tbody>
                 </table>

@@ -204,8 +204,7 @@
     <?php $this->need('comments.php'); ?>
   </div>
   <?php $this->need('post_sidebar.php'); ?>
-  <link rel="stylesheet" href="<?php $this->options->themeUrl('css/GrayMac.css'); ?>">
-  <script type="text/javascript" src="<?php $this->options->themeUrl('js/prism.js?v1.5.3'); ?>"></script>
+  
   <script type="text/javascript" src="<?php $this->options->themeUrl('js/clipboard.min.js'); ?>"></script>
 </main>
 <!-- end #main-->

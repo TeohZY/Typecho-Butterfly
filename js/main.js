@@ -158,31 +158,34 @@ document.addEventListener('DOMContentLoaded', () => {
       return height
     }
 
-    const createEle = (lang, item) => {
-      const fragment = document.createDocumentFragment()
+    const createEle = (lang, item) => {     
+      const parentFigure = item.closest('figure.highlight');
       
-      if (isShowTool) {
-        const hlTools = document.createElement('div')
-        hlTools.className = `highlight-tools ${highlightShrinkClass}`
-        hlTools.innerHTML = highlightMacStyleEle + highlightShrinkEle + lang + highlightCopyEle + highlightFullpageEle
-        btf.addEventListenerPjax(hlTools, 'click', highlightToolsFn)
-        fragment.appendChild(hlTools)
-      }
+      const haveParent = parentFigure && parentFigure.tagName.toLowerCase() === 'figure' && parentFigure.classList.contains('highlight');
+      const fragment = haveParent ? parentFigure :document.createDocumentFragment()
 
       if (highlightHeightLimit && getActualHeight(item) > highlightHeightLimit + 30) {
         const ele = document.createElement('div')
         ele.className = 'code-expand-btn'
         ele.innerHTML = '<i class="fas fa-angle-double-down"></i>'
         btf.addEventListenerPjax(ele, 'click', expandCode)
-        fragment.appendChild(ele)
+        fragment.prepend(ele)
       }
 
+      if (isShowTool) {
+        const hlTools = document.createElement('div')
+        hlTools.className = `highlight-tools ${highlightShrinkClass}`
+        hlTools.innerHTML = highlightMacStyleEle + highlightShrinkEle + lang + highlightCopyEle + highlightFullpageEle
+        btf.addEventListenerPjax(hlTools, 'click', highlightToolsFn)
+        fragment.prepend(hlTools)
+      }
+
+      if(haveParent) return;
       isPrismjs ? item.parentNode.insertBefore(fragment, item) : item.insertBefore(fragment, item.firstChild)
     }
 
     $figureHighlight.forEach(item => {
       let langName = ''
-      if (isPrismjs) btf.wrap(item, 'figure', { class: 'highlight' })
 
       if (!highlightLang) {
         createEle('', item)
@@ -190,12 +193,21 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (isPrismjs) {
-        langName = item.getAttribute('data-language') || 'Code'
+        langName = item.getAttribute('class').split('-')[1];
       } else {
-        langName = item.getAttribute('class').split(' ')[1]
-        if (langName === 'plain' || langName === undefined) langName = 'Code'
+        langName = item.getAttribute('class').split(' ')[1];
       }
       createEle(`<div class="code-lang">${langName}</div>`, item)
+
+      if(isPrismjs){
+        const codeToolbar = item.parentElement;
+        if (codeToolbar && codeToolbar.classList.contains('code-toolbar')) {
+          codeToolbar.parentNode.insertBefore(item, codeToolbar);
+          codeToolbar.remove();
+        }
+        
+      }
+
     })
   }
 

@@ -72,6 +72,7 @@
   <?php if (!empty($this->options->beautifyBlock) && in_array('showSnackbar', $this->options->beautifyBlock)) : ?>
   <link rel="stylesheet" href="<?php $this->options->themeUrl('/css/snackbar.min.css') ?>" media="print"
     onload="this.media='all'">
+    <script type="text/javascript" src="<?php $this->options->themeUrl('js/prism.js?v1.5.3'); ?>"></script>
   <script src="<?php $this->options->themeUrl('js/snackbar.min.js') ?>"></script>
   <?php endif; ?>
   <?php if (!empty($this->options->beautifyBlock) && in_array('showLazyloadBlur', $this->options->beautifyBlock)) : ?>
@@ -129,58 +130,58 @@
       },
       translate: {
         defaultEncoding: "<? php $this-> options -> DefaultEncoding() ?>",
-      translateDelay: 0,
-      msgToTraditionalChinese: "繁",
-      msgToSimplifiedChinese: "简"
-    },
+        translateDelay: 0,
+        msgToTraditionalChinese: "繁",
+        msgToSimplifiedChinese: "简"
+      },
       noticeOutdate: void 0,
-        highlight: {
-      plugin: "highlight.js",
+      highlight: {
+        plugin: "prismjs",
         highlightCopy: true,
-          highlightLang: true,
-            highlightHeightLimit: 400
-    },
-    copy: {
-      success: "复制成功",
+        highlightLang: true,
+        highlightHeightLimit: 400
+      },
+      copy: {
+        success: "复制成功",
         error: "复制错误",
-          noSupport: "浏览器不支持"
-    },
-    relativeDate: {
-      homepage: !0,
+        noSupport: "浏览器不支持"
+      },
+      relativeDate: {
+        homepage: !0,
         post: !0
-    },
-    runtime: "天",
+      },
+      runtime: "天",
       date_suffix: {
-      just: "",
+        just: "",
         min: "",
-          hour: "",
-            day: "",
-              month: ""
-    },
-    copyright: undefined,
+        hour: "",
+        day: "",
+        month: ""
+      },
+      copyright: undefined,
       lightbox: "fancybox",
-        Snackbar: {
-      "chs_to_cht": "你已切换为繁体",
+      Snackbar: {
+        "chs_to_cht": "你已切换为繁体",
         "cht_to_chs": "你已切换为简体",
-          "day_to_night": "你已切换为深色模式",
-            "night_to_day": "你已切换为浅色模式",
-              "bgLight": "#49b1f5",
-                "bgDark": "#121212",
-                  "position": "<?php $this->options->SnackbarPosition() ?>"
-    },
-    source: {
-      justifiedGallery: {
-        js: "https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.2/fjGallery.min.js",
+        "day_to_night": "你已切换为深色模式",
+        "night_to_day": "你已切换为浅色模式",
+        "bgLight": "#49b1f5",
+        "bgDark": "#121212",
+        "position": "<?php $this->options->SnackbarPosition() ?>"
+      },
+      source: {
+        justifiedGallery: {
+          js: "https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.2/fjGallery.min.js",
           css: "https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.2/fjGallery.min.css"
-      }
-    },
-    isPhotoFigcaption: !1,
+        }
+      },
+      isPhotoFigcaption: !1,
       islazyload: !0,
-        isAnchor: !0,
-          percent: {
-      toc: !0,
+      isAnchor: !0,
+      percent: {
+        toc: !0,
         rightside: !0
-    },
+      },
     }
     var saveToLocal = {
       set: function setWithExpiry(key, value, ttl) {
@@ -237,7 +238,7 @@
       isHome: !0,
       isHighlightShrink: !1,
       isToc: "<? php echo $this-> fields -> ShowToc === 'off' ? 0 : 1; ?>",
-      }
+    }
   </script>
   <?php else : ?>
   <script id="config_change">
@@ -246,7 +247,7 @@
       isHome: !0,
       isHighlightShrink: !1,
       isToc: "<? php echo $this-> fields -> ShowToc === 'off' ? 0 : 1; ?>",
-      }
+    }
   </script>
   <?php endif; ?>
   <noscript>
@@ -394,107 +395,107 @@
   <link rel="stylesheet" href="<?php $this->options->themeUrl('/self/css/custom.css') ?>">
 
   <script>
-    ((win) => {
-      win.btf = {
-        saveToLocal: {
-          set: (key, value, ttl) => {
-            if (ttl === 0) return;
-            const now = Date.now();
-            const expiry = now + ttl * 86400000;
-            const item = { value, expiry };
-            localStorage.setItem(key, JSON.stringify(item));
+      ((win) => {
+        win.btf = {
+          saveToLocal: {
+            set: (key, value, ttl) => {
+              if (ttl === 0) return;
+              const now = Date.now();
+              const expiry = now + ttl * 86400000;
+              const item = { value, expiry };
+              localStorage.setItem(key, JSON.stringify(item));
+            },
+
+            get: (key) => {
+              const itemStr = localStorage.getItem(key);
+              if (!itemStr) return undefined;
+
+              const item = JSON.parse(itemStr);
+              const now = Date.now();
+
+              if (now > item.expiry) {
+                localStorage.removeItem(key);
+                return undefined;
+              }
+              return item.value;
+            }
           },
 
-          get: (key) => {
-            const itemStr = localStorage.getItem(key);
-            if (!itemStr) return undefined;
+          getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = url;
+            script.async = true;
+            script.onerror = reject;
+            script.onload = script.onreadystatechange = function () {
+              const loadState = this.readyState;
+              if (loadState && loadState !== 'loaded' && loadState !== 'complete') return;
+              script.onload = script.onreadystatechange = null;
+              resolve();
+            };
 
-            const item = JSON.parse(itemStr);
-            const now = Date.now();
+            Object.keys(attr).forEach(key => {
+              script.setAttribute(key, attr[key]);
+            });
 
-            if (now > item.expiry) {
-              localStorage.removeItem(key);
-              return undefined;
+            document.head.appendChild(script);
+          }),
+
+          getCSS: (url, id = false) => new Promise((resolve, reject) => {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = url;
+            if (id) link.id = id;
+            link.onerror = reject;
+            link.onload = link.onreadystatechange = function () {
+              const loadState = this.readyState;
+              if (loadState && loadState !== 'loaded' && loadState !== 'complete') return;
+              link.onload = link.onreadystatechange = null;
+              resolve();
+            };
+            document.head.appendChild(link);
+          }),
+
+          activateDarkMode: () => {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            btf.updateThemeColor('#0d0d0d');
+          },
+
+          activateLightMode: () => {
+            document.documentElement.setAttribute('data-theme', 'light');
+            btf.updateThemeColor('#ffffff');
+          },
+
+          updateThemeColor: (color) => {
+            const themeMeta = document.querySelector('meta[name="theme-color"]');
+            if (themeMeta) {
+              themeMeta.setAttribute('content', color);
             }
-            return item.value;
+          },
+
+          detectApple: () => {
+            if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+              document.documentElement.classList.add('apple');
+            }
+          },
+
+          init: () => {
+            const t = btf.saveToLocal.get('theme');
+            if (t === 'dark') btf.activateDarkMode();
+            else if (t === 'light') btf.activateLightMode();
+
+            const asideStatus = btf.saveToLocal.get('aside-status');
+            if (asideStatus !== undefined) {
+              document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide');
+            }
+
+            btf.detectApple();
           }
-        },
+        };
 
-        getScript: (url, attr = {}) => new Promise((resolve, reject) => {
-          const script = document.createElement('script');
-          script.src = url;
-          script.async = true;
-          script.onerror = reject;
-          script.onload = script.onreadystatechange = function () {
-            const loadState = this.readyState;
-            if (loadState && loadState !== 'loaded' && loadState !== 'complete') return;
-            script.onload = script.onreadystatechange = null;
-            resolve();
-          };
+        // Initialize settings on page load
+        btf.init();
 
-          Object.keys(attr).forEach(key => {
-            script.setAttribute(key, attr[key]);
-          });
-
-          document.head.appendChild(script);
-        }),
-
-        getCSS: (url, id = false) => new Promise((resolve, reject) => {
-          const link = document.createElement('link');
-          link.rel = 'stylesheet';
-          link.href = url;
-          if (id) link.id = id;
-          link.onerror = reject;
-          link.onload = link.onreadystatechange = function () {
-            const loadState = this.readyState;
-            if (loadState && loadState !== 'loaded' && loadState !== 'complete') return;
-            link.onload = link.onreadystatechange = null;
-            resolve();
-          };
-          document.head.appendChild(link);
-        }),
-
-        activateDarkMode: () => {
-          document.documentElement.setAttribute('data-theme', 'dark');
-          btf.updateThemeColor('#0d0d0d');
-        },
-
-        activateLightMode: () => {
-          document.documentElement.setAttribute('data-theme', 'light');
-          btf.updateThemeColor('#ffffff');
-        },
-
-        updateThemeColor: (color) => {
-          const themeMeta = document.querySelector('meta[name="theme-color"]');
-          if (themeMeta) {
-            themeMeta.setAttribute('content', color);
-          }
-        },
-
-        detectApple: () => {
-          if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
-            document.documentElement.classList.add('apple');
-          }
-        },
-
-        init: () => {
-          const t = btf.saveToLocal.get('theme');
-          if (t === 'dark') btf.activateDarkMode();
-          else if (t === 'light') btf.activateLightMode();
-
-          const asideStatus = btf.saveToLocal.get('aside-status');
-          if (asideStatus !== undefined) {
-            document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide');
-          }
-
-          btf.detectApple();
-        }
-      };
-
-      // Initialize settings on page load
-      btf.init();
-
-    })(window);
+      })(window);
 
   </script>
   <script src="<?php $this->options->themeUrl('/js/fancybox.umd.min.js'); ?>"> </script>
@@ -509,6 +510,7 @@
   <script src="<?php $this->options->themeUrl('/js/instantpage.min.js'); ?>"> </script>
   <script src="<?php $this->options->themeUrl('/js/lazyload.iife.min.js'); ?>"> </script>
   <script src="<?php $this->options->themeUrl('/js/OwO.min.js'); ?>"> </script>
+
 
   <!--[if lt IE 8]>
     <div class="browsehappy" role="dialog"><?php _e('当前网页 <strong>不支持</strong> 你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/">升级你的浏览器</a>'); ?>.</div>

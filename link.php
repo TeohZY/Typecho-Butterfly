@@ -66,7 +66,6 @@ if ($this->options->Friends){
 </div>
 <?php $this->need('post_sidebar.php'); ?>
 <script src="<?php $this->options->themeUrl('js/comjs.js'); ?>"></script>
-<script type="text/javascript" src="<?php $this->options->themeUrl('js/prism.js?v1.0'); ?>"></script>
 <script type="text/javascript" src="<?php $this->options->themeUrl('js/clipboard.min.js'); ?>"></script>
 <?php if (!empty($this->options->beautifyBlock) && in_array('showLineNumber',
     $this->options->beautifyBlock)): ?> 
