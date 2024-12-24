@@ -138,7 +138,6 @@ NProgress.start();
 document.addEventListener("pjax:complete", (function() {
     <?php $this->options->PjaxCallBack() ?>
     NProgress.done();
-    window.refreshFn(), 
     document.querySelectorAll("script[data-pjax]").forEach(e => {
         const t = document.createElement("script"),
         o = e.text || e.textContent || e.innerHTML || "";
@@ -148,6 +147,8 @@ document.addEventListener("pjax:complete", (function() {
     "object" == typeof _hmt && _hmt.push(["_trackPageview", window.location.pathname]), 
     "function" == typeof loadMeting && document.getElementsByClassName("aplayer").length && loadMeting(),
     "object" == typeof Prism && Prism.highlightAll(), "object" == typeof preloader && preloader.endLoading()
+
+    window.refreshFn();
 })),
 document.addEventListener("pjax:error", e => {
     // 404 === e.request.status && pjax.loadUrl("/404");
