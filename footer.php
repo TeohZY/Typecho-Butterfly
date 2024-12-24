@@ -236,7 +236,7 @@
       scrollRestoration: !1
     });
     document.addEventListener("pjax:send", (function() {
-        if (window.removeEventListener("scroll", window.tocScrollFn), window.removeEventListener("scroll", scrollCollect), "object" == typeof preloader && preloader.initLoading(), window.aplayers)
+        if (window.removeEventListener("scroll", window.tocScrollFn), "object" == typeof preloader && preloader.initLoading(), window.aplayers)
           for (let e = 0; e < window.aplayers.length; e++) window.aplayers[e].options.fixed || window.aplayers[e].destroy();
         "object" == typeof typed && typed.destroy();
         const e = document.body.classList;
@@ -264,6 +264,7 @@
           "object" == typeof _hmt && _hmt.push(["_trackPageview", window.location.pathname]),
           "function" == typeof loadMeting && document.getElementsByClassName("aplayer").length && loadMeting(),
           "object" == typeof Prism && Prism.highlightAll(), "object" == typeof preloader && preloader.endLoading()
+          window.refreshFn();
       })),
       document.addEventListener("pjax:error", e => {
         // 404 === e.request.status && pjax.loadUrl("/404");
