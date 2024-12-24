@@ -138,7 +138,7 @@ NProgress.start();
 document.addEventListener("pjax:complete", (function() {
     <?php $this->options->PjaxCallBack() ?>
     NProgress.done();
-    window.refreshFn(), 
+    
     document.querySelectorAll("script[data-pjax]").forEach(e => {
         const t = document.createElement("script"),
         o = e.text || e.textContent || e.innerHTML || "";
