@@ -7,6 +7,7 @@
     */  
 $this->need('page_header.php'); 
 ?>
+<script type="text/javascript" src="<?php $this->options->themeUrl('js/prism.js?v1.0'); ?>"></script>
 <main class="layout" id="content-inner">
 <div id="page">
 <div id="article-container">
