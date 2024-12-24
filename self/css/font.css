@@ -17,7 +17,7 @@
   @font-face {
     font-family: "JetBrainsMono";
     font-display: swap;
-    src: url('/self/fonts/JetBrainsMono-Medium.woff2') format("truetype");
+    src: url('/usr/themes/butterfly/css/JetBrainsMono-Medium.woff2') format("truetype");
   }
   .iconfont {
     font-family: "iconfont" !important;
