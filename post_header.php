@@ -2,7 +2,7 @@
 <?php  $this->need('header_com.php'); $post_info = get_post_details($this);?>
 <body style="zoom: 1;">
     <div id="web_bg"></div>
-<script type="text/javascript" src="<?php $this->options->themeUrl('js/prism.js?v1.0'); ?>"></script>
+
 <div class="page" id="body-wrap">
     <?php if (is_array($this->options->beautifyBlock) && in_array('PostShowTopimg',$this->options->beautifyBlock)): ?>
      <header id="page-header" class="post-bg" style="background-image: url(<?php GetRandomThumbnailPost($this); ?>)">

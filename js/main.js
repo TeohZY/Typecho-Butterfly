@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
    * 只適用於Hexo默認的代碼渲染
    */
   const addHighlightTool = () => {
-
+    "object" == typeof Prism && Prism.highlightAll();
     const highLight = GLOBAL_CONFIG.highlight
     if (!highLight) return
     

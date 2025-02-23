@@ -262,7 +262,7 @@
           }),
           "object" == typeof _hmt && _hmt.push(["_trackPageview", window.location.pathname]),
           "function" == typeof loadMeting && document.getElementsByClassName("aplayer").length && loadMeting(),
-          "object" == typeof Prism && Prism.highlightAll(), "object" == typeof preloader && preloader.endLoading()
+           "object" == typeof preloader && preloader.endLoading()
 
           window.refreshFn();
       })),
