@@ -10,21 +10,45 @@
   /*********阿里云图标*********/
   @font-face {
     font-family: "iconfont"; /* Project id 3833199 */
-    src: url('//at.alicdn.com/t/c/font_3833199_wwvexf7ki2.woff2?t=1671511231533') format('woff2'),
-         url('//at.alicdn.com/t/c/font_3833199_wwvexf7ki2.woff?t=1671511231533') format('woff'),
-         url('//at.alicdn.com/t/c/font_3833199_wwvexf7ki2.ttf?t=1671511231533') format('truetype');
+    src: url('//at.alicdn.com/t/c/font_3833199_iy24ays8flq.woff2?t=1742633280783') format('woff2'),
+         url('//at.alicdn.com/t/c/font_3833199_iy24ays8flq.woff?t=1742633280783') format('woff'),
+         url('//at.alicdn.com/t/c/font_3833199_iy24ays8flq.ttf?t=1742633280783') format('truetype');
   }
-  @font-face {
-    font-family: "JetBrainsMono";
-    font-display: swap;
-    src: url('/usr/themes/butterfly/css/JetBrainsMono-Medium.woff2') format("truetype");
-  }
+  
   .iconfont {
     font-family: "iconfont" !important;
     font-size: 16px;
     font-style: normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+  
+  .icon-icons01:before {
+    content: "\e698";
+  }
+  
+  .icon-shejiaotubiao-46:before {
+    content: "\e64b";
+  }
+  
+  .icon-weibo:before {
+    content: "\e6b2";
+  }
+  
+  .icon-weixin:before {
+    content: "\e6b3";
+  }
+  
+  .icon-QQ:before {
+    content: "\e882";
+  }
+  
+  .icon-email:before {
+    content: "\e653";
+  }
+  
+  .icon-github:before {
+    content: "\e689";
   }
   
   .icon-dongtai1:before {
@@ -82,6 +106,7 @@
   .icon-shouye:before {
     content: "\100a6";
   }
+  
   
   
   /*********阿里云图标over***************/

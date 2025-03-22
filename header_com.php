@@ -67,7 +67,7 @@
   <link href="https://at.alicdn.com/t/font_3159629_5bvsat8p5l.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://lib.baomitu.com/font-awesome/6.5.1/css/all.min.css">
   <!--其余静态文件-->
-  <link rel="stylesheet" href="<?php cdnBaseUrl() ?>/css/OwO.min.css">
+  <link rel="stylesheet" href="<?php $this->options->themeUrl('/css/OwO.min.css') ?>">
   <?php if (!empty($this->options->beautifyBlock) && in_array('showSnackbar', $this->options->beautifyBlock)) : ?>
   <link rel="stylesheet" href="<?php $this->options->themeUrl('/css/snackbar.min.css') ?>" media="print"
     onload="this.media='all'">

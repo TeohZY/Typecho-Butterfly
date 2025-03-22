@@ -19,8 +19,18 @@ class VditorEditor
         echo "<script src='" . Helper::options()->themeUrl . '/lib/Vditor/js/index.main.js' . "'></script>";
 
         // 渲染 Vditor 编辑器
-       
         echo '<div id="vditor"></div>';
+        echo '<style>#wmd-button-bar, #text { display: none; }</style>';
+        echo '<script>
+            // 获取所有 id 为 "text" 的元素
+            let textElement = document.getElementById("text");
+            
+            // 创建一个新元素，并设置 d 属性
+            let newElement = document.getElementById("vditor");
+            
+            // 将新元素替换原来的 text 元素
+            textElement.parentNode.appendChild(newElement, textElement);
+        </script>';
         echo '<script>
             const vditor = new Vditor("vditor", {
                 height: 600,
@@ -39,17 +49,7 @@ class VditorEditor
                 },
             });
         </script>';
-echo '<style>#wmd-button-bar, #text { display: none; }</style>';
-echo '<script>
-    // 获取所有 id 为 "text" 的元素
-    let textElement = document.getElementById("text");
-    
-    // 创建一个新元素，并设置 d 属性
-    let newElement = document.getElementById("vditor");
-    
-    // 将新元素替换原来的 text 元素
-    textElement.parentNode.appendChild(newElement, textElement);
-</script>';
+
     }
 }
 

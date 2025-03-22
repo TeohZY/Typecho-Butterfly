@@ -6,30 +6,32 @@ h3::before,
 h4::before,
 h5::before,
 h6::before {
-    -webkit-animation: ccc 1.6s linear infinite;
-    animation: ccc 1.8s linear infinite;
+  -webkit-animation: ccc 1.6s linear infinite;
+  animation: ccc 1.8s linear infinite;
 }
 
 @-webkit-keyframes ccc {
-    0% {
-        -webkit-transform: rotate(0deg);
-        transform: rotate(0deg)
-    }
-    to {
-        -webkit-transform: rotate(-1turn);
-        transform: rotate(-1turn)
-    }
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg)
+  }
+
+  to {
+    -webkit-transform: rotate(-1turn);
+    transform: rotate(-1turn)
+  }
 }
 
 @keyframes ccc {
-    0% {
-        -webkit-transform: rotate(0deg);
-        transform: rotate(0deg)
-    }
-    to {
-        -webkit-transform: rotate(-1turn);
-        transform: rotate(-1turn)
-    }
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg)
+  }
+
+  to {
+    -webkit-transform: rotate(-1turn);
+    transform: rotate(-1turn)
+  }
 }
 
 
@@ -38,13 +40,13 @@ h6::before {
 /* 播放器收缩到侧边*/
 
 .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
-    left: -66px !important;
-    /* 默认情况下缩进左侧66px，只留一点箭头部分 */
+  left: -66px !important;
+  /* 默认情况下缩进左侧66px，只留一点箭头部分 */
 }
 
 .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
-    left: 0 !important;
-    /* 鼠标悬停是左侧缩进归零，完全显示按钮 */
+  left: 0 !important;
+  /* 鼠标悬停是左侧缩进归零，完全显示按钮 */
 }
 
 
@@ -56,28 +58,28 @@ h6::before {
 /* 滚动条 */
 
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+  width: 8px;
+  height: 8px;
 }
 
- ::-webkit-scrollbar-track {
-    background-color: rgba(73, 177, 245, 0.2);
-    border-radius: 2em;
+::-webkit-scrollbar-track {
+  background-color: rgba(73, 177, 245, 0.2);
+  border-radius: 2em;
 }
 
- ::-webkit-scrollbar-thumb {
-    background-color: #49b1f5;
-    background-image: -webkit-linear-gradient( 45deg, rgba(255, 255, 255, 0.4) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.4) 75%, transparent 75%, transparent);
-    border-radius: 2em;
+::-webkit-scrollbar-thumb {
+  background-color: #49b1f5;
+  background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.4) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.4) 75%, transparent 75%, transparent);
+  border-radius: 2em;
 }
 
- ::-webkit-scrollbar-corner {
-    background-color: transparent;
+::-webkit-scrollbar-corner {
+  background-color: transparent;
 }
 
- ::-moz-selection {
-    color: #fff;
-    background-color: #49b1f5;
+::-moz-selection {
+  color: #fff;
+  background-color: #49b1f5;
 }
 
 
@@ -100,24 +102,25 @@ h6::before {
 
 /*版权卡片美化*/
 #post .post-copyright {
-    position: relative;
-    margin: 2rem 0 0.5rem;
-    padding: 1.5rem 0.8rem;
-    border: 8px solid #f6f6f6;
-    /*卡片边框*/
-    border-radius: 20px;
-    /*边框圆角*/
+  position: relative;
+  margin: 2rem 0 0.5rem;
+  padding: 1.5rem 0.8rem;
+  border: 8px solid #f6f6f6;
+  /*卡片边框*/
+  border-radius: 20px;
+  /*边框圆角*/
 }
 
 #post .post-copyright:before {
-    position: absolute;
-    top: -1.9rem;
-    /*C位置*/
-    color: #49b1f540;
-    /*C颜色*/
-    font-size: 6rem;
-    /*C大小*/
+  position: absolute;
+  top: -1.9rem;
+  /*C位置*/
+  color: #49b1f540;
+  /*C颜色*/
+  font-size: 6rem;
+  /*C大小*/
 }
+
 /*************over*******/
 
 
@@ -127,12 +130,12 @@ h6::before {
 /*文章相关推荐卡片美化 目录圆角*/
 
 .relatedPosts>.relatedPosts-list>div {
-    border-radius: 20px;
+  border-radius: 20px;
 }
 
 #aside-content #card-toc .toc-content .toc-link.active {
-    background: #669cbe;
-    border-radius: 5px;
+  background: #669cbe;
+  border-radius: 5px;
 }
 
 
@@ -140,79 +143,79 @@ h6::before {
 
 /*********link********/
 #article-container .tag-Link {
-    background: #f1f3f8;
-    border-radius: 8px!important;
-    display: flex;
-    border: 0px solid #e3e8f7;
-    flex-direction: column;
-    padding: 0.5rem 1rem;
-    border-width: 0px!important;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-  }
-  
-  #article-container .tag-Link:hover {
-    border: 0px solid #202020 !important;
-    background: #202020 !important;
-  }
-  
+  background: #f1f3f8;
+  border-radius: 8px !important;
+  display: flex;
+  border: 0px solid #e3e8f7;
+  flex-direction: column;
+  padding: 0.5rem 1rem;
+  border-width: 0px !important;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+#article-container .tag-Link:hover {
+  border: 0px solid #202020 !important;
+  background: #202020 !important;
+}
 
 
-  #article-container .tag-Link .tag-link-tips {
-    border-bottom: 1px solid #e3e8f7;
-    padding-bottom: 4px;
-    font-size: 0.6rem;
-    color: #999999;
-    font-weight: normal;
-  }
-  
-  #article-container .tag-Link:hover .tag-link-tips {
-    color: #fff;
-  }
-  
-  #article-container .tag-Link .tag-link-bottom {
-    display: flex;
-    margin-top: 0.5rem;
-    align-items: center;
-    justify-content: space-around;
-  }
-  
-  #article-container .tag-Link .tag-link-bottom .tag-link-left {
-    width: 60px;
-    min-width: 60px;
-    height: 60px;
-    background-size: cover!important;
-    border-radius: 60px;
-    background: #e7d8d8;
-    pointer-events: none;
-  }
-  
-  #article-container .tag-Link .tag-link-bottom .tag-link-right {
-    margin-left: 1rem;
-  }
-  
-  #article-container .tag-Link .tag-link-bottom .tag-link-right .tag-link-title {
-    font-size: 1rem;
-    line-height: 1.2;
-  }
-  
-  #article-container .tag-Link .tag-link-bottom .tag-link-right .tag-link-sitename {
-    font-size: 0.7rem;
-    color: #999999;
-    font-weight: normal;
-    margin-top: 4px;
-  }
-  
-  #article-container .tag-Link:hover .tag-link-bottom .tag-link-right .tag-link-sitename {
-    color: #fff;
-  }
-  
-  #article-container .tag-Link .tag-link-bottom i {
-    margin-left: auto;
-  }
-  
-  /**********link over********/
- 
+
+#article-container .tag-Link .tag-link-tips {
+  border-bottom: 1px solid #e3e8f7;
+  padding-bottom: 4px;
+  font-size: 0.6rem;
+  color: #999999;
+  font-weight: normal;
+}
+
+#article-container .tag-Link:hover .tag-link-tips {
+  color: #fff;
+}
+
+#article-container .tag-Link .tag-link-bottom {
+  display: flex;
+  margin-top: 0.5rem;
+  align-items: center;
+  justify-content: space-around;
+}
+
+#article-container .tag-Link .tag-link-bottom .tag-link-left {
+  width: 60px;
+  min-width: 60px;
+  height: 60px;
+  background-size: cover !important;
+  border-radius: 60px;
+  background: #e7d8d8;
+  pointer-events: none;
+}
+
+#article-container .tag-Link .tag-link-bottom .tag-link-right {
+  margin-left: 1rem;
+}
+
+#article-container .tag-Link .tag-link-bottom .tag-link-right .tag-link-title {
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+#article-container .tag-Link .tag-link-bottom .tag-link-right .tag-link-sitename {
+  font-size: 0.7rem;
+  color: #999999;
+  font-weight: normal;
+  margin-top: 4px;
+}
+
+#article-container .tag-Link:hover .tag-link-bottom .tag-link-right .tag-link-sitename {
+  color: #fff;
+}
+
+#article-container .tag-Link .tag-link-bottom i {
+  margin-left: auto;
+}
+
+/**********link over********/
+
 /*底部按钮*/
 /*底部切换按钮*/
 /* .layout>.recent-posts .pagination>* {
@@ -242,3 +245,31 @@ h6::before {
 /* .latestBB {
   display: none;
   } */
+
+
+#uploadImg {
+  padding: 8px 0;
+
+}
+#uploadImg .up-icon{
+  position: relative;
+  display: inline-block;
+  color: #888;
+  border-radius: 4px;
+  font-size: 13px;
+  padding: 2px 5px;
+  cursor: pointer;
+  height: 22px;
+  box-sizing: border-box;
+  z-index: 2;
+  line-height: 16px
+}
+#uploadImg :hover span {
+  display: inline-block;
+  -webkit-animation: a 5s infinite ease-in-out;
+  animation: a 5s infinite ease-in-out
+}
+
+#uploadImg span .iconfont {
+  font-size: 25px;
+}
