@@ -7,6 +7,7 @@ require_once('api/api.php');
 require_once('api/search.php');
 require_once('config/custom_config.php');
 require_once('lib/core.php');
+require_once('lib/Vditor/index.php');
 
 // 新文章缩略图
 function get_ArticleThumbnail($widget)
@@ -1073,18 +1074,6 @@ function get_last_update()
     }
 }
 
-// 自定义编辑器
-Typecho_Plugin::factory('admin/write-post.php')->bottom = array('editor', 'reset');
-Typecho_Plugin::factory('admin/write-page.php')->bottom = array('editor', 'reset');
-class editor
-{
-    public static function reset()
-    {
-        echo "<script src='" . Helper::options()->themeUrl . '/edit/extend.js?v1.7.6' . "'></script>";
-        echo "<link rel='stylesheet' href='" . Helper::options()->themeUrl . '/edit/edit.css?v1.6.3' . "'>";
-    }
-
-}
 /* 判断是否是移动端 */
 function isMobile()
 {
