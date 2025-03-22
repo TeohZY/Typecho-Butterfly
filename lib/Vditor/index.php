@@ -1,8 +1,4 @@
 <?php
-// 自定义编辑器
-Typecho_Plugin::factory('admin/write-post.php')->bottom = array('VditorEditor', 'render');
-Typecho_Plugin::factory('admin/write-page.php')->bottom = array('VditorEditor', 'render');
-// 修改编辑器
 Typecho_Plugin::factory('admin/write-post.php')->richEditor = array('VditorEditor', 'render');
 Typecho_Plugin::factory('admin/write-page.php')->richEditor = array('VditorEditor', 'render');
 
