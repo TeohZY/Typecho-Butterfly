@@ -22,30 +22,6 @@
 <?php endif; ?>
 <script><?php $this->options->CustomScript() ?></script>
  <?php $this->options->CustomBodyEnd() ?>
-<!--搜索  -->
-<div id="local-search">
-  <div class="search-dialog" style="">
-    <nav class="search-nav">
-      <span class="search-dialog-title">本地搜索</span>
-      <span id="loading-status"></span>
-      <button class="search-close-button">
-        <i class="fas fa-times"></i>
-      </button>
-    </nav>
-    <div class="search-wrap" style="display: block;">
-      <div id="local-search-input">
-        <form class="local-search-box" method="post" action="<?php $this->options->siteUrl(); ?>" role="search" id="search">
-          <label for="s" class="sr-only"><?php _e('搜索关键字'); ?></label>
-          <input type="text"  name="s"  placeholder="回车查询" required="required"></div>
-      </form>
-      <hr>
-      <div id="local-search-results"></div>
-    </div>
-  </div>
-  <div id="search-mask" style=""></div>
-</div>
-</div>
-<!--搜索end  -->
 <div class="js-pjax">
 <?php if ($this->options->NewTabLink == 'on'): ?>
 <script>

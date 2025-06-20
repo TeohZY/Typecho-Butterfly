@@ -4,7 +4,7 @@
 <?php $this->need('public/defend.php'); ?>
 <?php endif; ?>
 <!DOCTYPE HTML>
-<html data-theme="light" class="">
+<html lang="zh-CN" data-theme="light" class="">
 
 <head>
   <meta content="always" name="referrer">
@@ -509,7 +509,7 @@
   <script src="<?php $this->options->themeUrl('/js/instantpage.min.js'); ?>"> </script>
   <script src="<?php $this->options->themeUrl('/js/lazyload.iife.min.js'); ?>"> </script>
   <script src="<?php $this->options->themeUrl('/js/OwO.min.js'); ?>"> </script>
-
+  <script src="<?php $this->options->themeUrl('/js/local-search.js'); ?>"> </script>
 
   <!--[if lt IE 8]>
     <div class="browsehappy" role="dialog"><?php _e('当前网页 <strong>不支持</strong> 你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/">升级你的浏览器</a>'); ?>.</div>
@@ -554,3 +554,29 @@
     </div>
   </div>
   <!--移动导航栏-->
+  <!--搜索  -->
+  <div id="local-search">
+    <div class="search-dialog">
+      <nav class="search-nav">
+        <span class="search-dialog-title">本地搜索</span>
+        <span id="loading-status"></span>
+        <button class="search-close-button">
+          <i class="fas fa-times"></i>
+        </button>
+      </nav>
+      <div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i> <span>正在加载数据库</span></div>
+      <div class="search-wrap" style="display: block;">
+        <div id="local-search-input">
+          <form class="local-search-box" method="post" action="<?php $this->options->siteUrl(); ?>" role="search" id="search">
+            <label for="s" class="sr-only"><?php _e('搜索关键字'); ?></label>
+            <input type="text" name="s" placeholder="回车查询" required="required">
+        </div>
+        </form>
+        <hr>
+        <div id="local-search-results"></div>
+      </div>
+    </div>
+    <div id="search-mask"></div>
+  </div>
+  </div>
+  <!--搜索end  -->

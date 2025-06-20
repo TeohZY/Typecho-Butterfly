@@ -294,7 +294,7 @@ function customLink($text){
         // 从URL中解析出主机名用于构造favicon图标的URL
         $host = parse_url($url, PHP_URL_HOST);
         if ($host) {
-            $imgUrl = "https://api.iowen.cn/favicon/" . $host . ".png";
+            $imgUrl = "https://api.teohzy.com/favicon/" . $host . ".png";
         } else {
             // 处理无法解析主机名的情况
             $imgUrl = "placeholder_image_url"; // 替换为合适的占位图标URL

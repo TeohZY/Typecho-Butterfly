@@ -68,31 +68,7 @@
   <?php $this->options->CustomScript() ?>
 </script>
 <?php $this->options->CustomBodyEnd() ?>
-<!--搜索  -->
-<div id="local-search">
-  <div class="search-dialog">
-    <nav class="search-nav">
-      <span class="search-dialog-title">本地搜索</span>
-      <span id="loading-status"></span>
-      <button class="search-close-button">
-        <i class="fas fa-times"></i>
-      </button>
-    </nav>
-    <div class="search-wrap" style="display: block;">
-      <div id="local-search-input">
-        <form class="local-search-box" method="post" action="<?php $this->options->siteUrl(); ?>" role="search" id="search">
-          <label for="s" class="sr-only"><?php _e('搜索关键字'); ?></label>
-          <input type="text" name="s" placeholder="回车查询" required="required">
-      </div>
-      </form>
-      <hr>
-      <div id="local-search-results"></div>
-    </div>
-  </div>
-  <div id="search-mask"></div>
-</div>
-</div>
-<!--搜索end  -->
+
 <div class="js-pjax">
   <script data-pjax src="<?php $this->options->themeUrl('/js/smooth.min.js'); ?>"> </script>
   <?php if (is_array($this->options->beautifyBlock) && in_array('showNoAlertSearch', $this->options->beautifyBlock)) : ?>
@@ -118,7 +94,6 @@
     <script data-pjax src="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.js"></script>
     <link rel="stylesheet" href="https://cdn.cbd.int/hexo-butterfly-clock-anzhiyu/lib/clock.min.css">
   <?php endif ?>
-  <?php $this->header('commentReply=1&description=0&keywords=0&generator=0&template=0&pingback=0&xmlrpc=0&wlw=0&rss2=0&rss1=0&antiSpam=0&atom'); ?>
   <?php if ($this->options->NewTabLink == 'on') : ?>
     <script>
       document.addEventListener('DOMContentLoaded', function() {

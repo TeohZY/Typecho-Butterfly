@@ -14,6 +14,12 @@ function searchPost() {
 
     // 获取并过滤查询关键词
     $keywords = $request->get('keywords');
+    if(empty($keywords)) {
+        // 如果没有关键词，返回空的 XML
+        header('Content-Type: application/xml; charset=utf-8');
+        echo '<?xml version="1.0" encoding="UTF-8"?><search></search>';
+        exit;
+    }
     $keywords = strip_tags(trim($keywords));
 
     // 数据库查询

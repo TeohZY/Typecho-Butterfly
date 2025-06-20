@@ -2,7 +2,7 @@
 /**
  * 这是 Typecho 版本的 butterfly 主题
  * 主题为移植至Typecho，你可以替换原butterfly主题的index.css文件
- * 当前适配 hexo-butterfly 4.6.0
+ * 主题可可以部分内容可以直接使用原butterfly主题的配置文件，为了解析yaml文件需要安装php-yaml扩展
  * @package Typecho-Butterfly
  * @version 1.8.0
  */
