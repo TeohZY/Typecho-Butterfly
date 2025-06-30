@@ -112,11 +112,6 @@
     </script>
   <?php endif; ?>
   <?php if ($this->is('index')) : ?>
-    <style>
-      #page-header:not(.not-top-img):before {
-        background-color: rgba(0, 0, 0, 0);
-      }
-    </style>
     <!--打字-->
     <?php if (is_array($this->options->beautifyBlock) && in_array('ShowTopimg', $this->options->beautifyBlock)) : ?>
       <?php if (!empty($this->options->CustomSubtitle)) : ?>

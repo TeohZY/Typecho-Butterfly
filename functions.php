@@ -269,11 +269,23 @@ function ParseCode($text)
     $text = ArtPlayer($text);
     $text = PostImage($text);
     $text = customLink($text);
+    $text = add_hybrid_lazyload($text);
 
     // 在所有自定义解析完成后，还原保存的 <pre></pre> 区块内容。
     $text = str_replace($placeholders, $pre_blocks[0], $text);
     $text = codeHightLight($text);
     return $text;
+}
+function add_hybrid_lazyload($content) {
+    $content = preg_replace_callback(
+        '/<img(.*?)src=["\'](.*?)["\'](.*?)>/i',
+        function($matches) {
+            $lazySrc = GetLazyLoad();
+            return '<img' . $matches[1] . 'data-lazy-src="' . $matches[2] . '" src="' . $lazySrc . '" class="lazyload" loading="lazy"' . $matches[3] . '>';
+        },
+        $content
+    );
+    return $content;
 }
 // 自定义链接样式
 function customLink($text){
