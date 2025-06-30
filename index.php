@@ -4,7 +4,7 @@
  * 主题为移植至Typecho，你可以替换原butterfly主题的index.css文件
  * 主题可可以部分内容可以直接使用原butterfly主题的配置文件，为了解析yaml文件需要安装php-yaml扩展
  * @package Typecho-Butterfly
- * @version 1.8.0
+ * @version  1.0.1
  */
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 /** 文章置顶 */
