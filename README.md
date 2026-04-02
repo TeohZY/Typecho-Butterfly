@@ -1,76 +1,161 @@
-# Typecho-Butterfly
+# Typecho Butterfly 主题
 
+基于 [hexo-theme-butterfly](https://github.com/jerryc127/hexo-theme-butterfly) 移植的 Typecho 主题。
 
-这是 Typecho 版本的 butterfly 主题
-主题好看，但是由于经常换设备并且hexo操作还是不方便，某些功能受限于第三方
-所以就移植了  
+## 特性
 
-原主题：[hexo-butterfly](https://github.com/jerryc127/hexo-theme-butterfly)
+- 响应式设计，适配移动端
+- 支持暗色模式
+- 文章目录自动生成
+- 图片懒加载
+- 代码高亮 (PrismJS)
+- 评论支持 (Twikoo)
+- 本地搜索
+- Pjax 无刷新加载
+- 页面预加载
+- 自定义样式美化
 
-Demo：[WeHao‘s Blog](https://blog.haoi.net/)
+## 目录结构
 
-使用文档：[使用文档](https://blog.haoi.net/archives/typecho-butterfly.html)
+```
+.
+├── 404.php              # 404 页面
+├── archive.php          # 归档页
+├── archive_header.php   # 归档页头部
+├── articles.php         # 文章列表
+├── category-list.php    # 分类列表
+├── comments.php         # 评论模块
+├── footer.php          # 页脚
+├── functions.php       # 主题函数
+├── header.php          # 页头
+├── header_com.php      # 公共页头
+├── index.php           # 首页
+├── link.php            # 链接页面
+├── page.php            # 页面
+├── page_header.php     # 页面头部
+├── post.php            # 文章页
+├── post_header.php     # 文章头部
+├── post_sidebar.php    # 文章侧边栏
+├── sidebar.php         # 侧边栏
+├── tags.php            # 标签页
+│
+├── css/                # 主 CSS 目录
+├── js/                 # 主 JS 目录
+├── img/                 # 主图片目录
+│
+├── libs/               # 库和扩展
+│   ├── api.php         # API 路由处理
+│   ├── core.php        # 核心函数（菜单渲染等）
+│   ├── custom_config.php # 后台配置
+│   ├── search.php      # 搜索 API
+│   └── Vditor/         # Vditor 编辑器
+│
+├── widgets/            # 公共组件
+│   ├── nav.php         # 导航栏
+│   ├── noqq.php        # 防腾讯卫士
+│   ├── defend.php      # 密码保护
+│   └── rightside.php   # 右侧栏
+│
+└── assets/            # 静态资源
+    ├── css/            # 扩展样式
+    ├── fonts/         # 字体文件
+    ├── img/           # 图片资源
+    └── js/            # 扩展脚本
+```
 
-## 💻安装
+## 安装
 
+1. 下载主题文件到 Typecho 主题目录
+2. 确保目录名为 `Butterfly`
+3. 在后台启用主题
 
-## ✌️移植特色
- 1. 方便原hexo的博文转移，因为都是md文档
- 2. 原butterfly的用户可以直接使用原版butterfly主题的css文件，拥有原先同样的效果
- 3. 注意：移植并非为最新版butterfly,你的index.css可能会在本主题出现bug
- 4. 由于使用动态博客，大部分功能可以让程序去实现，不用借助第三方api(可在主题外观设置中自定义)
- 5. 在线编辑文档
- 6. 搜索、加密和置顶文章可以直接使用(相比hexo无需太多额外配置)
- 7. 相比hexo，程序安装更加方便，使用更加高效
- 8. 网站咨询显示同时在线人数(某些虚拟主机似乎无法使用)
- 9. 可在后台设置侧边栏信息以及侧边栏的隐藏和显示
- 10. 后续将开发更多功能
+## 配置
 
-## 🎉已实现的功能
+主题提供丰富的后台配置选项，包括：
 
-- [x] 支持评论区谷歌人机验证、hcaptcha人机验证
-- [x] 全站加密或禁止访问
-- [x] 一键开启魔改主题
-- [x] 单独设置文章过期提醒
-- [x] 文章加密（博客程序自带）
-- [x] 后台设置需要置顶文章
-- [x] 后台设置友链并可以使html自定义友链
-- [x] 文章内可设置回复可见
-- [x] 卡片化设计
-- [X] 支持二级目录
-- [x] 双栏设计
-- [x] 响应式主题
-- [x] 夜间模式
-- [x] Pjax
-- [x] 文章阅读模式
-- [x] 简体和繁体转换
-- [X] 电脑和手机都可查看TOC目录
-- [ ] 内置多种代码配色（darker/pale night/light/ocean/mac/mac light），可自定义代码配色
-- [X] 代码块显示代码语言/关闭或展开代码块/代码复制/代码自动换行
-- [ ] 可关闭文字复制/可开启内容复制增加版权信息）
-- [X] 本地搜索
-- [ ] Mathjax 和 Katex
-- [x] 内置404页面
-- [x] 显示字数统计
-- [x] 显示相关文章
-- [x] 过期文章提醒
-- [ ] 多种在线聊天（Chatra/Tidio/Daovoice/Gitter/Crisp）
-- [x] 谷歌广告/手动广告位置
-- [x] 修改网站配色
-- [ ] 打字特效 activate_power_mode
-- [ ] 多种背景特效（静止彩带/动态彩带/Canvas Nest）
-- [x] 多种鼠标点击特效（烟花/爱心）
-- [ ] 内置一种 Preloader 加载动画
-- [x] Fancybox大图模式
-- [ ] 照片墙
-- [x] 图片懒加载
-- [x] Snackbar弹窗
-- [ ] PWA
+### 基本设置
+- 站点图标
+- 首页图片
+- SEO 设置
+- 统计代码（百度/Google）
 
-详情看：
+### 外观设置
+- 暗色模式
+- 自定义颜色
+- 字体大小
+- 美化模块开关
 
-[博客说明](https://blog.haoi.net/archives/blogtheme.html)
+### 功能设置
+- 本地搜索
+- Pjax 加速
+- 新标签打开链接
+- 评论设置
 
+### 高级设置
+- 自定义 CSS/JS
+- 密码保护
+- 评论区验证码
 
-## 请作者喝瓶快乐水
+## 依赖
 
+### 前端依赖
+- jQuery
+- PrismJS (代码高亮)
+- Fancybox (图片灯箱)
+- LazyLoad (图片懒加载)
+- OwO (表情)
+- Vditor (编辑器)
+
+### 后端依赖
+- Typecho 1.2+
+- PHP 7.4+
+
+## 二次开发
+
+### 添加自定义样式
+
+在后台 `自定义 CSS` 框中添加：
+
+```css
+/* 示例 */
+.my-custom-class {
+    color: #fff;
+}
+```
+
+### 添加自定义脚本
+
+在后台 `自定义底部 JS` 框中添加：
+
+```javascript
+// 示例
+console.log('Hello Butterfly');
+```
+
+### 主题钩子
+
+可在后台配置以下钩子：
+- `CustomHead` - 头部自定义内容
+- `CustomCSS` - 自定义样式
+- `CustomScript` - 底部自定义脚本
+- `PjaxCallBack` - Pjax 回调函数
+
+## 安全
+
+本主题已修复以下安全问题：
+
+- [x] SQL 注入防护
+- [x] XSS 跨站脚本防护
+- [x] CSRF 令牌验证
+- [x] 密码保护机制 (Session + 哈希)
+
+## 许可证
+
+[MIT License](LICENSE)
+
+## 致谢
+
+- [hexo-theme-butterfly](https://github.com/jerryc127/hexo-theme-butterfly) - 主题原型
+- [PrismJS](https://prismjs.com/) - 代码高亮
+- [Fancybox](https://fancyapps.com/fancybox/) - 图片灯箱
+- [Twikoo](https://twikoo.js.org/) - 评论系统
