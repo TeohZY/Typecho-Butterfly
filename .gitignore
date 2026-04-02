@@ -1,0 +1,18 @@
+# Claude Code
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Log files
+*.log
+
+# Uploads (if any)
+usr/uploads/
