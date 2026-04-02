@@ -127,7 +127,7 @@
               })
             }
           }
-          "function" == typeof Typed ? subtitleType() : getScript("/usr/themes/butterfly/js/typed.min.js")
+          "function" == typeof Typed ? subtitleType() : getScript("<?php $this->options->themeUrl('/js/typed.min.js'); ?>")
             .then(subtitleType)
         </script>
       <?php else : ?>
@@ -150,7 +150,7 @@
                 })
             })
           }
-          "function" == typeof Typed ? subtitleType() : getScript("/usr/themes/butterfly/js/typed.min.js")
+          "function" == typeof Typed ? subtitleType() : getScript("<?php $this->options->themeUrl('/js/typed.min.js'); ?>")
             .then(subtitleType)
         </script>
       <?php endif ?>
@@ -189,12 +189,12 @@
   <?php endif ?>
 </div>
 <!--js-pjax end-->
-<?php require_once('public/rightside.php'); ?>
+<?php require_once('widgets/rightside.php'); ?>
 <!--pjax-->
 <?php if ($this->options->EnablePjax === 'on') : ?>
-  <link rel="stylesheet" href="<?php cdnBaseUrl() ?>/css/nprogress.css">
-  <script src="<?php cdnBaseUrl() ?>/js/pjax.min.js"></script>
-  <script src="<?php cdnBaseUrl() ?>/js/nprogress.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pjax@1.9.6/pjax.min.js"></script>
   <script>
     let intervalNum = 0;
     let pjaxSelectors = ["title", "#body-wrap", "#rightside-config-hide", "#rightside-config-show", ".js-pjax"];

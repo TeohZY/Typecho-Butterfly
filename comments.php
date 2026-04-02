@@ -29,7 +29,7 @@
                             <?php elseif ($this->user->group == 'subscriber') : ?> 关注者
                             <?php elseif ($this->user->group == 'visitor') : ?> 访问者
                             <?php endif ?>
-                        </a></a>.
+                        </a>.
                         <a href="<?php $this->options->logoutUrl(); ?>" title="退出"><i
                                 class="fas fa-sign-out-alt"></i></a>
                     </div>
@@ -58,6 +58,8 @@
                 <label for="textarea" class="required"></label>
                 <textarea placeholder="评论将在审核通过后显示，请耐心等待" rows="8" cols="50" name="text" id="textarea" class="textarea"
                     required><?php $this->remember('text'); ?></textarea>
+                <!-- 时间戳：用于检测机器人快速提交 -->
+                <input type="hidden" name="form_time" value="<?php echo time(); ?>">
                 <div class="comments-bottom-left">
                     <!-- <div title="uploadImg"  id="uploadImg">
                         <div class="up-icon">
@@ -75,12 +77,16 @@
                 <b class="submit"><i class="fas fa-key"></i></b>
             </div>
             <?php endif; ?>
+            <!-- 蜜罐反垃圾：人类用户看不到此字段，机器人会填写 -->
+            <div class="commentsFormArea" style="position:absolute;left:-9999px;" aria-hidden="true">
+                <input type="text" name="website" tabindex="-1" autocomplete="off" placeholder="如果看到此处请勿填写">
+            </div>
             <div class="commentsFormArea" style="text-align: right;">
                 <button class="submit" type="submit">
                     <?php _e('评论'); ?>
                 </button>
             </div>
-            <?php if(!empty($this->options->siteKey) && !empty($this->options->siteKey)){RecapOutPut($this->user->hasLogin()) ;?>
+            <?php if(!empty($this->options->siteKey) && !empty($this->options->secretKey)){RecapOutPut($this->user->hasLogin()) ;?>
             <script>
                 document.addEventListener('DOMContentLoaded', () => {
                     if (!document.querySelector('#comment_keys')) {
@@ -161,14 +167,17 @@
         <?php endif; ?>
     </div>
     <script>
-        var OwO_demo = new OwO({
-            logo: '<i class="iconfont icon-face"></i>',
-            container: document.getElementsByClassName('OwO')[0],
-            target: document.getElementsByClassName('textarea')[0],
-            api: "<?php $this->options->themeUrl('OwO.json'); ?>",
-            position: 'down',
-            width: '100%',
-            maxHeight: '350px'
+        document.addEventListener('DOMContentLoaded', function() {
+            var OwO_demo = new OwO({
+                logo: '<i class="iconfont icon-face"></i>',
+                container: document.getElementsByClassName('OwO')[0],
+                target: document.getElementsByClassName('textarea')[0],
+                api: "<?php $this->options->themeUrl('OwO.json'); ?>",
+                position: 'down',
+                width: '100%',
+                maxHeight: '350px'
+            });
+            window.OwO_demo = OwO_demo; // 暴露到全局供其他脚本使用
         });
     </script>
     <script>
@@ -178,7 +187,7 @@
 
         function parseOwOTags(commentContent) {
             try {
-                const owoData = OwO_demo.odata;
+                const owoData = window.OwO_demo ? window.OwO_demo.odata : null;
                 // 正则表达式匹配 {% icon QQ,QQ-OK %}
                 const regex = /{% icon ([\w\u4e00-\u9fa5]+),([\w\u4e00-\u9fa5-]+) %}/g;
 

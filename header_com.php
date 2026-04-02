@@ -1,7 +1,7 @@
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
-<?php $this->need('public/noqq.php'); ?>
+<?php $this->need('widgets/noqq.php'); ?>
 <?php if (!$this->user->hasLogin()) : ?>
-<?php $this->need('public/defend.php'); ?>
+<?php $this->need('widgets/defend.php'); ?>
 <?php endif; ?>
 <!DOCTYPE HTML>
 <html lang="zh-CN" data-theme="light" class="">
@@ -22,8 +22,8 @@
   ), '', ' | '); ?><?php $this->options->title(); ?>">
   <?php if ($this->isSingle()): ?>
   <meta property="og:description" content="<?php summaryContent($this); ?>">
-  <?php endif; ?>
   <meta property="og:image" content="<?php echo get_ArticleThumbnail($this); ?>">
+  <?php endif; ?>
   <meta property="og:url" content="<?php echo $this->permalink(); ?>">
 
   <title>
@@ -71,6 +71,8 @@
   <?php if (!empty($this->options->beautifyBlock) && in_array('showSnackbar', $this->options->beautifyBlock)) : ?>
   <link rel="stylesheet" href="<?php $this->options->themeUrl('/css/snackbar.min.css') ?>" media="print"
     onload="this.media='all'">
+    <!-- Pre-load clipboard before prism.js to fix the hardcoded path issue -->
+    <script src="<?php $this->options->themeUrl('js/clipboard.min.js'); ?>"></script>
     <script type="text/javascript" src="<?php $this->options->themeUrl('js/prism.js?v1.5.3'); ?>"></script>
   <script src="<?php $this->options->themeUrl('js/snackbar.min.js') ?>"></script>
   <?php endif; ?>
@@ -118,7 +120,7 @@
       root: "/",
       algolia: void 0,
       localSearch: {
-        path: "<?php Helper::options()->siteUrl(); ?>?action=search-post&",
+        path: "<?php Helper::options()->indexUrl(); ?>?action=search-post&",
         preload: !1,
         top_n_per_article: 1,
         unescape: !1,
@@ -128,7 +130,7 @@
         }
       },
       translate: {
-        defaultEncoding: "<? php $this-> options -> DefaultEncoding() ?>",
+        defaultEncoding: "<?php $this-> options -> DefaultEncoding() ?>",
         translateDelay: 0,
         msgToTraditionalChinese: "繁",
         msgToSimplifiedChinese: "简"
@@ -227,7 +229,7 @@
       isPost: !0,
       isHome: !0,
       isHighlightShrink: !0,
-      isToc: "<? php echo $this-> fields -> ShowToc === 'off' ? 0 : 1; ?>",
+      isToc: "<?php echo $this-> fields -> ShowToc === 'off' ? 0 : 1; ?>",
     }
   </script>
   <?php if ($this->is('post')) : ?>
@@ -236,7 +238,7 @@
       isPost: !0,
       isHome: !0,
       isHighlightShrink: !1,
-      isToc: "<? php echo $this-> fields -> ShowToc === 'off' ? 0 : 1; ?>",
+      isToc: "<?php echo $this-> fields -> ShowToc === 'off' ? 0 : 1; ?>",
     }
   </script>
   <?php else : ?>
@@ -245,7 +247,7 @@
       isPost: !1,
       isHome: !0,
       isHighlightShrink: !1,
-      isToc: "<? php echo $this-> fields -> ShowToc === 'off' ? 0 : 1; ?>",
+      isToc: "<?php echo $this-> fields -> ShowToc === 'off' ? 0 : 1; ?>",
     }
   </script>
   <?php endif; ?>
@@ -388,10 +390,10 @@
     }
   </style>
   <?php endif ?>
-  <link rel="stylesheet" href="<?php $this->options->themeUrl('/self/css/post.css') ?>">
+  <link rel="stylesheet" href="<?php $this->options->themeUrl('/assets/css/post.css') ?>">
   <link rel="stylesheet" href="<?php $this->options->themeUrl('/css/fancybox.min.css') ?>">
-  <link rel="stylesheet" href="<?php $this->options->themeUrl('/self/css/font.css') ?>">
-  <link rel="stylesheet" href="<?php $this->options->themeUrl('/self/css/custom.css') ?>">
+  <link rel="stylesheet" href="<?php $this->options->themeUrl('/assets/css/font.css') ?>">
+  <link rel="stylesheet" href="<?php $this->options->themeUrl('/assets/css/custom.css') ?>">
 
   <script>
       ((win) => {
@@ -497,19 +499,19 @@
       })(window);
 
   </script>
-  <script src="<?php $this->options->themeUrl('/js/fancybox.umd.min.js'); ?>"> </script>
+  <script src="<?php $this->options->themeUrl('/js/fancybox.umd.min.js'); ?>" defer></script>
 
 </head>
 
 <body>
-  <script src="<?php $this->options->themeUrl('/js/main.js?v1.7.3'); ?>"> </script>
-  <script src="<?php $this->options->themeUrl('/js/utils.js?v1.7.3'); ?>"> </script>
-  <script src="<?php $this->options->themeUrl('/js/tw_cn.js?v1.7.3'); ?>"> </script>
+  <script src="<?php $this->options->themeUrl('/js/lazyload.iife.min.js'); ?>"></script>
+  <script src="<?php $this->options->themeUrl('/js/utils.js?v1.7.3'); ?>"></script>
+  <script src="<?php $this->options->themeUrl('/js/main.js?v1.7.3'); ?>"></script>
+  <script src="<?php $this->options->themeUrl('/js/tw_cn.js?v1.7.3'); ?>"></script>
 
-  <script src="<?php $this->options->themeUrl('/js/instantpage.min.js'); ?>"> </script>
-  <script src="<?php $this->options->themeUrl('/js/lazyload.iife.min.js'); ?>"> </script>
-  <script src="<?php $this->options->themeUrl('/js/OwO.min.js'); ?>"> </script>
-  <script src="<?php $this->options->themeUrl('/js/local-search.js'); ?>"> </script>
+  <script src="<?php $this->options->themeUrl('/js/instantpage.min.js'); ?>" async></script>
+  <script src="<?php $this->options->themeUrl('/js/OwO.min.js'); ?>"></script>
+  <script src="<?php $this->options->themeUrl('/js/local-search.js'); ?>" defer></script>
 
   <!--[if lt IE 8]>
     <div class="browsehappy" role="dialog"><?php _e('当前网页 <strong>不支持</strong> 你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/">升级你的浏览器</a>'); ?>.</div>
@@ -564,16 +566,17 @@
           <i class="fas fa-times"></i>
         </button>
       </nav>
-      <div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i> <span>正在加载数据库</span></div>
+      <div class="is-center" id="loading-database" style="display:none;"><i class="fas fa-spinner fa-pulse"></i> <span>正在加载数据库</span></div>
       <div class="search-wrap" style="display: block;">
         <div id="local-search-input">
-          <form class="local-search-box" method="post" action="<?php $this->options->siteUrl(); ?>" role="search" id="search">
+          <form class="local-search-box" method="get" action="<?php $this->options->siteUrl(); ?>" role="search" id="search" onsubmit="return false">
             <label for="s" class="sr-only"><?php _e('搜索关键字'); ?></label>
-            <input type="text" name="s" placeholder="回车查询" required="required">
+            <input type="text" name="s" id="local-search-input-field" placeholder="回车查询" required="required">
+          </form>
         </div>
-        </form>
         <hr>
         <div id="local-search-results"></div>
+        <div id="local-search-stats-wrap"></div>
       </div>
     </div>
     <div id="search-mask"></div>

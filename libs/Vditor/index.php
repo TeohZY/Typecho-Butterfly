@@ -7,12 +7,20 @@ class VditorEditor
 
     public static function render()
     {
-        // 获取当前文章内容
-        $content = Typecho_Widget::widget('Widget_Abstract_Contents')->content;
+        // 获取当前文章内容（兼容 Typecho 1.3.0）
+        try {
+            $widget = Typecho_Widget::widget('Widget_Abstract_Contents');
+            $content = isset($widget->content) ? $widget->content : '';
+            if ($content === null) {
+                $content = '';
+            }
+        } catch (Throwable $e) {
+            $content = '';
+        }
 
         // 引入 Vditor 的 CSS 和 JS 文件
-        echo "<link rel='stylesheet' href='" . Helper::options()->themeUrl . '/lib/Vditor/css/index.css' . "' />";
-        echo "<script src='" . Helper::options()->themeUrl . '/lib/Vditor/js/index.main.js' . "'></script>";
+        echo "<link rel='stylesheet' href='" . Helper::options()->themeUrl . '/libs/Vditor/css/index.css' . "' />";
+        echo "<script src='" . Helper::options()->themeUrl . '/libs/Vditor/js/index.main.js' . "'></script>";
 
         // 渲染 Vditor 编辑器
         echo '<div id="vditor"></div>';
@@ -20,10 +28,10 @@ class VditorEditor
         echo '<script>
             // 获取所有 id 为 "text" 的元素
             let textElement = document.getElementById("text");
-            
+
             // 创建一个新元素，并设置 d 属性
             let newElement = document.getElementById("vditor");
-            
+
             // 将新元素替换原来的 text 元素
             textElement.parentNode.appendChild(newElement, textElement);
         </script>';
@@ -48,6 +56,3 @@ class VditorEditor
 
     }
 }
-
-
-?>

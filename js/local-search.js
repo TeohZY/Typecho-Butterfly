@@ -148,11 +148,13 @@ class LocalSearch {
 
       url = new URL(url, location.origin)
       url.searchParams.append('highlight', keywords.join(' '))
+      // 添加标题锚点，cl-2 是 butterfly 主题内容第一个标题的 ID
+      url.hash = '#cl-2'
 
       if (slicesOfTitle.length !== 0) {
-        resultItem += `<div class="local-search-hit-item"><a href="${url.href}"><span class="search-result-title">${this.highlightKeyword(title, slicesOfTitle[0])}</span>`
+        resultItem += '<div class="local-search-hit-item"><a href="' + url.href + '"><span class="search-result-title">' + this.highlightKeyword(title, slicesOfTitle[0]) + '</span>'
       } else {
-        resultItem += `<div class="local-search-hit-item"><a href="${url.href}"><span class="search-result-title">${title}</span>`
+        resultItem += '<div class="local-search-hit-item"><a href="' + url.href + '"><span class="search-result-title">' + title + '</span>'
       }
 
       slicesOfContent.forEach(slice => {
@@ -172,25 +174,40 @@ class LocalSearch {
 
   fetchData (keyword) {
     const isXml = !this.path.endsWith('json');
-    const url = this.path + `keyword=${encodeURIComponent(keyword?keyword:'')}`;
+    const url = this.path + 'keywords=' + encodeURIComponent(keyword);
+    var self = this;
     fetch(url)
-      .then(response => response.text())
-      .then(res => {
-        // 获取数据，处理数据
-        this.isfetched = true;
-        this.datas = isXml
-          ? [...new DOMParser().parseFromString(res, 'text/xml').querySelectorAll('entry')].map(element => ({
-              title: element.querySelector('title').textContent,
-              content: element.querySelector('content').textContent,
-              url: element.querySelector('url').textContent
-            }))
-          : JSON.parse(res);
-        this.datas = this.datas.filter(data => data.title).map(data => {
+      .then(function(response) {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.text();
+      })
+      .then(function(res) {
+        if (isXml) {
+          var parser = new DOMParser();
+          var xmlDoc = parser.parseFromString(res, 'text/xml');
+          var entries = xmlDoc.querySelectorAll('entry');
+          self.datas = [].slice.call(entries).map(function(element) {
+            return {
+              title: element.querySelector('title') ? element.querySelector('title').textContent : '',
+              content: element.querySelector('content') ? element.querySelector('content').textContent : '',
+              url: element.querySelector('url') ? element.querySelector('url').textContent : ''
+            };
+          });
+        } else {
+          self.datas = JSON.parse(res);
+        }
+        self.datas = self.datas.filter(function(data) { return data.title; }).map(function(data) {
           data.title = data.title.trim();
           data.content = data.content ? data.content.trim().replace(/<[^>]+>/g, '') : '';
           data.url = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
           return data;
         });
+        window.dispatchEvent(new Event('search:loaded'));
+      })
+      .catch(function(error) {
+        self.datas = [];
         window.dispatchEvent(new Event('search:loaded'));
       });
   }
@@ -243,50 +260,68 @@ window.addEventListener('load', () => {
     unescape
   })
 
-  const input = document.querySelector('#local-search-input input')
+  const input = document.getElementById('local-search-input-field')
   const statsItem = document.getElementById('local-search-stats-wrap')
   const $loadingStatus = document.getElementById('loading-status')
   const isXml = !path.endsWith('json')
 
   const inputEventFunction = () => {
-    if (!localSearch.isfetched) return
-    let searchText = input.value.trim().toLowerCase()
-    isXml && (searchText = searchText.replace(/</g, '&lt;').replace(/>/g, '&gt;'))
-    if (searchText !== '') $loadingStatus.innerHTML = '<i class="fas fa-spinner fa-pulse"></i>'
-    const keywords = searchText.split(/[-\s]+/)
-    const container = document.getElementById('local-search-results')
-    let resultItems = []
-    if (searchText.length > 0) {
-    // Perform local searching
-      resultItems = localSearch.getResultItems(keywords)
-    }
-    if (keywords.length === 1 && keywords[0] === '') {
-      container.textContent = ''
-      statsItem.textContent = ''
-    } else if (resultItems.length === 0) {
-      container.textContent = ''
-      const statsDiv = document.createElement('div')
-      statsDiv.className = 'search-result-stats'
-      statsDiv.textContent = languages.hits_empty.replace(/\$\{query}/, searchText)
-      statsItem.innerHTML = statsDiv.outerHTML
-    } else {
-      resultItems.sort((left, right) => {
-        if (left.includedCount !== right.includedCount) {
-          return right.includedCount - left.includedCount
-        } else if (left.hitCount !== right.hitCount) {
-          return right.hitCount - left.hitCount
-        }
-        return right.id - left.id
-      })
-
-      const stats = languages.hits_stats.replace(/\$\{hits}/, resultItems.length)
-
-      container.innerHTML = `<ol class="search-result-list">${resultItems.map(result => result.item).join('')}</ol>`
-      statsItem.innerHTML = `<hr><div class="search-result-stats">${stats}</div>`
-      window.pjax && window.pjax.refresh(container)
+    if (!input) {
+      return;
     }
 
-    $loadingStatus.textContent = ''
+    let searchText = input.value.trim();
+
+    // If search text is empty, clear results
+    if (searchText === '') {
+      document.getElementById('local-search-results').textContent = '';
+      statsItem.textContent = '';
+      return;
+    }
+
+    // 显示加载状态
+    $loadingStatus.innerHTML = '<i class="fas fa-spinner fa-pulse"></i>'
+    var $loadDataItem = document.getElementById('loading-database');
+    if ($loadDataItem) {
+      $loadDataItem.style.display = 'none'; // 确保隐藏
+    }
+
+    // 直接发送搜索请求
+    localSearch.fetchData(searchText);
+
+    // 监听搜索完成事件
+    var handleSearchLoaded = function() {
+      window.removeEventListener('search:loaded', handleSearchLoaded);
+
+      var keywords = searchText.toLowerCase().split(/[-\s]+/);
+      var container = document.getElementById('local-search-results');
+      var resultItems = localSearch.getResultItems(keywords);
+
+      if (resultItems.length === 0) {
+        container.textContent = '';
+        var statsDiv = document.createElement('div');
+        statsDiv.className = 'search-result-stats';
+        statsDiv.textContent = languages.hits_empty.replace(/\$\{query}/, searchText);
+        statsItem.innerHTML = statsDiv.outerHTML;
+      } else {
+        resultItems.sort(function(left, right) {
+          if (left.includedCount !== right.includedCount) {
+            return right.includedCount - left.includedCount;
+          } else if (left.hitCount !== right.hitCount) {
+            return right.hitCount - left.hitCount;
+          }
+          return right.id - left.id;
+        });
+
+        var stats = languages.hits_stats.replace(/\$\{hits}/, resultItems.length);
+        container.innerHTML = '<ol class="search-result-list">' + resultItems.map(function(result) { return result.item; }).join('') + '</ol>';
+        statsItem.innerHTML = '<hr><div class="search-result-stats">' + stats + '</div>';
+      }
+
+      $loadingStatus.textContent = '';
+    };
+
+    window.addEventListener('search:loaded', handleSearchLoaded);
   }
 
   let loadFlag = false
@@ -305,9 +340,8 @@ window.addEventListener('load', () => {
     btf.animateIn($searchMask, 'to_show 0.5s')
     btf.animateIn($searchDialog, 'titleScale 0.5s')
     setTimeout(() => { input.focus() }, 300)
-    
+
     if (!loadFlag) {
-      !localSearch.isfetched && localSearch.fetchData('')
       input.addEventListener('input', inputEventFunction)
       loadFlag = true
     }
@@ -337,16 +371,11 @@ window.addEventListener('load', () => {
   const searchFnOnce = () => {
     document.querySelector('#local-search .search-close-button').addEventListener('click', closeSearch)
     $searchMask.addEventListener('click', closeSearch)
-    if (GLOBAL_CONFIG.localSearch.preload) {
-      localSearch.fetchData('')
-    }
     localSearch.highlightSearchWords(document.getElementById('article-container'))
   }
 
   window.addEventListener('search:loaded', () => {
-    const $loadDataItem = document.getElementById('loading-database')
-    $loadDataItem.nextElementSibling.style.display = 'block'
-    $loadDataItem.remove()
+    // loading-database is now handled in inputEventFunction
   })
 
   searchClickFn()

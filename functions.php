@@ -3,34 +3,59 @@ use Typecho\Plugin;
 if (!defined('__TYPECHO_ROOT_DIR__'))
     exit;
 
-require_once('api/api.php');
-require_once('api/search.php');
-require_once('config/custom_config.php');
-require_once('lib/core.php');
-require_once('lib/Vditor/index.php');
+require_once('libs/api.php');
+require_once('libs/search.php');
+require_once('libs/custom_config.php');
+require_once('libs/core.php');
+require_once('libs/Vditor/index.php');
+
+/**
+ * XSS 过滤函数
+ * 移除危险的 HTML 标签和属性，防止 XSS 攻击
+ */
+function xss_clean($html) {
+    // 允许的 HTML 标签白名单
+    $allowed_tags = '<h1><h2><h3><h4><h5><h6><p><br><hr><ul><ol><li><blockquote><pre><code><span><div><img><a><strong><em><del><sup><sub>';
+
+    // 先转义所有 HTML
+    $html = htmlspecialchars($html, ENT_QUOTES, 'UTF-8');
+
+    // 还原代码块中的内容（因为代码块内容需要保持原样）
+    // 匹配 ```code``` 格式
+    $html = preg_replace_callback('/`{3}(\w*)(.*?)`{3}/s', function($matches) {
+        $lang = htmlspecialchars($matches[1], ENT_QUOTES, 'UTF-8');
+        $code = $matches[2];
+        return '<pre><code class="lang-' . $lang . '">' . $code . '</code></pre>';
+    }, $html);
+
+    // 匹配 `code` 格式
+    $html = preg_replace_callback('/`([^`]+)`/', function($matches) {
+        return '<code>' . $matches[1] . '</code>';
+    }, $html);
+
+    return $html;
+}
 
 // 新文章缩略图
 function get_ArticleThumbnail($widget)
 {
-    // 当文章无图片时的随机缩略图
-//   $rand = mt_rand(1, 26); // 随机 1-9 张缩略图
-//   // 缩略图加速
-//   $rand_url;
-//   if(!empty(Helper::options()->articleImgSpeed)){
-//     $rand_url = Helper::options()->articleImgSpeed;
-//   }else {
-//     $rand_url = $widget->widget('Widget_Options')->themeUrl . '/images/articles/';
-//   }
-//   $random =  $rand_url . $rand . '.jpg'; // 随机缩略图路径
-//   $random =  'https://static01.imgkr.com/temp/517e5d14c312427dbf93304563869279.png';
-//   $attach = $widget->attachments(1)->attachment;
-    $random = '/usr/themes/butterfly/img/DefualtThumbnail.jpg';
+    $random = Helper::options()->themeUrl . '/img/DefualtThumbnail.jpg';
     $pattern = '/\<img.*?src\=\"(.*?)\"[^>]*>/i';
 
+    // 兼容 Typecho 1.3.0：使用安全方式获取 content
+    try {
+        $content = @$widget->content;
+        if ($content === null || $content === false) {
+            $content = '';
+        }
+    } catch (Throwable $e) {
+        $content = '';
+    }
+
     //如果有自定义缩略图
-    if ($widget->fields->thumb) {
+    if (!empty($widget->fields->thumb)) {
         return $widget->fields->thumb;
-    } else if (preg_match_all($pattern, $widget->content, $thumbUrl) && strlen($thumbUrl[1][0]) > 7) {
+    } else if (!empty($content) && preg_match_all($pattern, $content, $thumbUrl) && strlen($thumbUrl[1][0]) > 7) {
         return $thumbUrl[1][0];
     } else {
         return $random;
@@ -41,7 +66,7 @@ function get_ArticleThumbnail($widget)
 function GetRandomThumbnail($widget)
 {
     // $random = 'https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg';
-    $random = '/usr/themes/butterfly/img/DefualtThumbnail.jpg';
+    $random = Helper::options()->themeUrl . '/img/DefualtThumbnail.jpg';
     if (Helper::options()->futureRandom) {
         $moszu = explode("\r\n", Helper::options()->futureRandom);
         $random = $moszu[array_rand($moszu, 1)] . "?futureRandom=" . mt_rand(0, 1000000);
@@ -49,15 +74,17 @@ function GetRandomThumbnail($widget)
     $pattern = '/\<img.*?src\=\"(.*?)\"[^>]*>/i';
     $patternMD = '/\!\[.*?\]\((http(s)?:\/\/.*?(jpg|jpeg|gif|png|webp))/i';
     $patternMDfoot = '/\[.*?\]:\s*(http(s)?:\/\/.*?(jpg|jpeg|gif|png|webp))/i';
-    $t = preg_match_all($pattern, $widget->content, $thumbUrl);
+    // 兼容 Typecho 1.3.0：确保 content 存在
+    $content = isset($widget->content) ? $widget->content : '';
+    $t = preg_match_all($pattern, $content, $thumbUrl);
     $img = $random;
-    if ($widget->fields->thumb) {
+    if (!empty($widget->fields->thumb)) {
         $img = $widget->fields->thumb;
     } elseif ($t) {
         $img = $thumbUrl[1][0];
-    } elseif (preg_match_all($patternMD, $widget->content, $thumbUrl)) {
+    } elseif (preg_match_all($patternMD, $content, $thumbUrl)) {
         $img = $thumbUrl[1][0];
-    } elseif (preg_match_all($patternMDfoot, $widget->content, $thumbUrl)) {
+    } elseif (preg_match_all($patternMDfoot, $content, $thumbUrl)) {
         $img = $thumbUrl[1][0];
     }
     echo $img;
@@ -785,9 +812,14 @@ function commentRank($widget, $email = NULL)
     }
     $string_arr = explode("\r\n", $txt);
     $long = count($string_arr);
+    $mailList = [];
+    $authList = [];
     for ($i = 0; $i < $long; $i++) {
-        $mailList[] = explode("||", $string_arr[$i])[0];
-        $authList[] = explode("||", $string_arr[$i])[1];
+        $parts = explode("||", $string_arr[$i]);
+        if (count($parts) >= 2) {
+            $mailList[] = $parts[0];
+            $authList[] = $parts[1];
+        }
     }
     $all = array_combine($mailList, $authList);
 
@@ -818,7 +850,7 @@ function get_comment_at($coid)
             if (@$prow['status'] == "waiting") {
                 echo '<span class="commentReview">（评论审核中）</span>';
             }
-            echo '<a onclick="b(this);return false;" href="#comment-' . $parent . '">@' . $author . '</a>';
+            echo '<a onclick="b(this);return false;" href="#comment-' . $parent . '">@' . htmlspecialchars($author, ENT_QUOTES, 'UTF-8') . '</a>';
         } else { //父评论作者不存在或者父评论没有审核通过
             if (@$prow['status'] == "waiting") {
                 echo '<span class="commentReview">（评论审核中）</span>';
@@ -945,7 +977,9 @@ function printTag($that)
 //当前人数
 function onlinePeople()
 {
-    $online_log = "usr/themes/butterfly/online.dat"; //保存人数的文件到根目录,
+    // 使用动态路径，不要硬编码主题名
+    $themeDir = defined('__TYPECHO_ROOT_DIR__') ? __TYPECHO_ROOT_DIR__ . '/usr/themes/' . basename(dirname(__DIR__)) : 'usr/themes/butterfly';
+    $online_log = $themeDir . "/online.dat"; //保存人数的文件到根目录,
     $timeout = 30; //30秒内没动作者,认为掉线
     if (!file_exists($online_log)) {
         fopen($online_log, "w");
@@ -1139,35 +1173,29 @@ function RecapOutPut($login)
 
 function comments_filter($comment)
 {
-    if (isset($_REQUEST['text']) != null) {
-        if ($_POST['g-recaptcha-response'] == null) {
+    if (!empty($_REQUEST['text'])) {
+        if (empty($_POST['g-recaptcha-response'])) {
             throw new Typecho_Widget_Exception(_t('人机验证失败,确认你加载了谷歌人机验证并通过验证'));
         } else {
             $siteKey = Helper::options()->siteKey;
             $secretKey = Helper::options()->secretKey;
-            function getCaptcha($recaptcha_response, $secretKey)
-            {
-                $response = file_get_contents("https://recaptcha.net/recaptcha/api/siteverify?secret=" . $secretKey . "&response=" . $recaptcha_response);
-                $response = json_decode($response);
-                return $response;
-            }
-            $resp = getCaptcha($_POST['g-recaptcha-response'], $secretKey);
+            $recaptcha_response = $_POST['g-recaptcha-response'];
 
-            if ($resp->success == true) {
-                return $comments;
+            $response = file_get_contents("https://recaptcha.net/recaptcha/api/siteverify?secret=" . $secretKey . "&response=" . $recaptcha_response);
+            $resp = json_decode($response);
+
+            if (!empty($resp->success)) {
+                return $comment;
             } else {
-                switch ($resp->error - codes) {
-                    case '{[0] => "timeout-or-duplicate"}':
-                        throw new Typecho_Widget_Exception(_t('验证时间超过2分钟或连续重复发言！'));
-                        break;
-                    case '{[0] => "invalid-input-secret"}':
-                        throw new Typecho_Widget_Exception(_t('博主填了无效的siteKey或者secretKey...'));
-                        break;
-                    case '{[0] => "bad-request"}':
-                        throw new Typecho_Widget_Exception(_t('请求错误！请检查网络'));
-                        break;
-                    default:
-                        throw new Typecho_Widget_Exception(_t('很遗憾，您被当成了机器人...'));
+                $errorCodes = !empty($resp->{'error-codes'}) ? $resp->{'error-codes'} : [];
+                if (in_array('timeout-or-duplicate', $errorCodes)) {
+                    throw new Typecho_Widget_Exception(_t('验证时间超过2分钟或连续重复发言！'));
+                } elseif (in_array('invalid-input-secret', $errorCodes)) {
+                    throw new Typecho_Widget_Exception(_t('博主填了无效的siteKey或者secretKey...'));
+                } elseif (in_array('bad-request', $errorCodes)) {
+                    throw new Typecho_Widget_Exception(_t('请求错误！请检查网络'));
+                } else {
+                    throw new Typecho_Widget_Exception(_t('很遗憾，您被当成了机器人...'));
                 }
             }
         }
@@ -1178,36 +1206,58 @@ function comments_filter($comment)
 
 function hcaptcha_filter($comment)
 {
-    if (isset($_REQUEST['text']) != null) {
-        if ($_POST['h-captcha-response'] == null) {
+    if (!empty($_REQUEST['text'])) {
+        if (empty($_POST['h-captcha-response'])) {
             throw new Typecho_Widget_Exception(_t('人机验证失败,确认你加载了hcaptcha人机验证并通过验证'));
         } else {
-            if (isset($_POST['h-captcha-response']) && !empty($_POST['h-captcha-response'])) {
-                $secret = Helper::options()->hcaptchaAPIKey;
-                $verifyResponse = file_get_contents('https://hcaptcha.com/siteverify?secret=' . $secret . '&response=' . $_POST['h-captcha-response'] . '&remoteip=' . $_SERVER['REMOTE_ADDR']);
-                $responseData = json_decode($verifyResponse);
-                if ($responseData->success === true || $responseData->success === 1) {
-                    return $comments;
+            $secret = Helper::options()->hcaptchaAPIKey;
+            $verifyResponse = file_get_contents('https://hcaptcha.com/siteverify?secret=' . $secret . '&response=' . $_POST['h-captcha-response'] . '&remoteip=' . $_SERVER['REMOTE_ADDR']);
+            $responseData = json_decode($verifyResponse);
+            if (!empty($responseData->success)) {
+                return $comment;
+            } else {
+                $errorCodes = !empty($responseData->{'error-codes'}) ? $responseData->{'error-codes'} : [];
+                if (in_array('timeout-or-duplicate', $errorCodes)) {
+                    throw new Typecho_Widget_Exception(_t('验证时间超过2分钟或连续重复发言！'));
+                } elseif (in_array('invalid-input-secret', $errorCodes)) {
+                    throw new Typecho_Widget_Exception(_t('网站管理员填了无效的siteKey或者secretKey...'));
+                } elseif (in_array('bad-request', $errorCodes)) {
+                    throw new Typecho_Widget_Exception(_t('请求错误！请检查网络'));
                 } else {
-                    switch ($responseData->error - codes) {
-                        case '{[0] => "timeout-or-duplicate"}':
-                            throw new Typecho_Widget_Exception(_t('验证时间超过2分钟或连续重复发言！'));
-                            break;
-                        case '{[0] => "invalid-input-secret"}':
-                            throw new Typecho_Widget_Exception(_t('网站管理员填了无效的siteKey或者secretKey...'));
-                            break;
-                        case '{[0] => "bad-request"}':
-                            throw new Typecho_Widget_Exception(_t('请求错误！请检查网络'));
-                            break;
-                        default:
-                            throw new Typecho_Widget_Exception(_t('很遗憾，您被当成了机器人...'));
-                    }
+                    throw new Typecho_Widget_Exception(_t('很遗憾，您被当成了机器人...'));
                 }
             }
         }
     }
     return $comment;
 }
+
+/**
+ * 蜜罐 + 时间戳反垃圾过滤器
+ * 无需用户操作，完全无感知
+ */
+function antiSpam_filter($comment)
+{
+    // 1. 蜜罐检测：如果隐藏字段被填写，说明是机器人
+    if (!empty($_POST['website'])) {
+        throw new Typecho_Widget_Exception(_t('垃圾评论'));
+    }
+
+    // 2. 时间戳检测：表单加载时间与提交时间间隔太短可能是机器人
+    if (isset($_POST['form_time']) && is_numeric($_POST['form_time'])) {
+        $formTime = intval($_POST['form_time']);
+        $diff = time() - $formTime;
+        // 如果提交时间小于3秒，可能是机器人（人类打字需要时间）
+        if ($diff < 3) {
+            throw new Typecho_Widget_Exception(_t('评论提交过快'));
+        }
+    }
+
+    return $comment;
+}
+
+// 注册反垃圾过滤器（Typecho 内置反垃圾机制）
+Typecho_Plugin::factory('Widget_Feedback')->filter = 'antiSpam_filter';
 
 // 微博热搜
 function weibohot()
@@ -1295,7 +1345,7 @@ function cdnBaseUrl(){
         echo $CDNURL;
     }
     else{
-        echo Helper::options()->themeUrl . '/static';
+        echo Helper::options()->themeUrl;
     }
 }
 

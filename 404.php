@@ -4,10 +4,10 @@
 <div id="web_bg"></div>
 <div class="error404" id="body-wrap">
      <header class="not-top-img" id="page-header">
-     <?php  $this->need('public/nav.php'); ?>
+     <?php  $this->need('widgets/nav.php'); ?>
 </header>
     <div id="error-wrap"><div class="error-content"><div class="error-img"><img src="https://i.loli.net/2020/05/19/aKOcLiyPl2JQdFD.png" alt="Page not found" class="entered"></div><div class="error-info"><h1 class="error_title">404</h1><div class="error_subtitle">頁面沒有找到</div></div></div></div></div>
-    <?php require_once('public/rightside.php');?>
+    <?php require_once('widgets/rightside.php');?>
 <?php if ($this->options->showFramework == 'off'): ?>
 <style>.framework-info{display:none}</style>
 <?php endif; ?>

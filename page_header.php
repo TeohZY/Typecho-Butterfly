@@ -20,5 +20,5 @@
 <?php else: ?>        
 <header class="not-top-img" id="page-header">        
 <?php endif; ?>
-<?php  $this->need('public/nav.php'); ?>
+<?php  $this->need('widgets/nav.php'); ?>
 </header>
