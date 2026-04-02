@@ -65,9 +65,9 @@
 
 ## 安装
 
-1. 下载主题文件到 Typecho 主题目录
-2. 确保目录名为 `Butterfly`
-3. 在后台启用主题
+1. 下载主题文件到 Typecho 的 `usr/themes/` 目录下
+2. 目录名可以自定义（如 `Butterfly`、`butterfly` 等）
+3. 在后台 -> 外观 中启用主题
 
 ## 配置
 
