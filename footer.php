@@ -194,57 +194,62 @@
 <?php if ($this->options->EnablePjax === 'on') : ?>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css">
   <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/pjax@1.9.6/pjax.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script>
   <script>
-    let intervalNum = 0;
-    let pjaxSelectors = ["title", "#body-wrap", "#rightside-config-hide", "#rightside-config-show", ".js-pjax"];
-    var pjax = new Pjax({
-      elements: 'a:not([target="_blank"])',
-      selectors: pjaxSelectors,
-      cacheBust: !1,
-      analytics: !1,
-      scrollRestoration: !1
-    });
-    document.addEventListener("pjax:send", (function() {
-        if (window.removeEventListener("scroll", window.tocScrollFn), "object" == typeof preloader && preloader.initLoading(), window.aplayers)
-          for (let e = 0; e < window.aplayers.length; e++) window.aplayers[e].options.fixed || window.aplayers[e].destroy();
-        "object" == typeof typed && typed.destroy();
-        const e = document.body.classList;
-        e.contains("read-mode") && e.remove("read-mode")
-        NProgress.start();
-        intervalNum = 0
-      })),
-      document.addEventListener("pjax:complete", (function() {
-        <?php if ($this->options->hcaptchaSecretKey !== "" && $this->options->hcaptchaAPIKey !== "") : ?>
-          hcaptcha.render('h-captcha', {
-            sitekey: '<?php $this->options->hcaptchaSecretKey() ?>'
-          });
-        <?php endif ?>
-        <?php $this->options->PjaxCallBack() ?>
-        NProgress.done();
-          document.querySelectorAll("script[data-pjax]").forEach(e => {
-            const t = document.createElement("script"),
-              o = e.text || e.textContent || e.innerHTML || "";
-            Array.from(e.attributes).forEach(e => t.setAttribute(e.name, e.value)), t.appendChild(document.createTextNode(o)), e.parentNode.replaceChild(t, e)
-          }),
-          GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update(), "function" == typeof chatBtnFn && chatBtnFn(), "function" == typeof panguInit && panguInit(), "function" == typeof gtag && gtag("config", "", {
-            page_path: window.location.pathname
-          }),
-          "object" == typeof _hmt && _hmt.push(["_trackPageview", window.location.pathname]),
-          "function" == typeof loadMeting && document.getElementsByClassName("aplayer").length && loadMeting(),
-           "object" == typeof preloader && preloader.endLoading()
+    if (!window._pjaxInitialized) {
+      window._pjaxInitialized = true;
+      var intervalNum = 0;
+      var pjaxSelectors = ["title", "#body-wrap", "#rightside-config-hide", "#rightside-config-show", ".js-pjax"];
+      var pjax = new Pjax({
+        elements: 'a:not([target="_blank"])',
+        selectors: pjaxSelectors,
+        cacheBust: !1,
+        analytics: !1,
+        scrollRestoration: !1
+      });
+      document.addEventListener("pjax:send", (function() {
+          if (window.removeEventListener("scroll", window.tocScrollFn), "object" == typeof preloader && preloader.initLoading(), window.aplayers)
+            for (var e = 0; e < window.aplayers.length; e++) window.aplayers[e].options.fixed || window.aplayers[e].destroy();
+          "object" == typeof typed && typed.destroy();
+          var e = document.body.classList;
+          e.contains("read-mode") && e.remove("read-mode")
+          NProgress.start();
+          intervalNum = 0
+        })),
+        document.addEventListener("pjax:complete", (function() {
+          <?php if ($this->options->hcaptchaSecretKey !== "" && $this->options->hcaptchaAPIKey !== "") : ?>
+            if (document.getElementById('h-captcha')) {
+              hcaptcha.render('h-captcha', {
+                sitekey: '<?php $this->options->hcaptchaSecretKey() ?>'
+              });
+            }
+          <?php endif ?>
+          <?php $this->options->PjaxCallBack() ?>
+          NProgress.done();
+            document.querySelectorAll("script[data-pjax]").forEach(function(e) {
+              var t = document.createElement("script"),
+                o = e.text || e.textContent || e.innerHTML || "";
+              Array.from(e.attributes).forEach(function(a) { t.setAttribute(a.name, a.value); });
+              t.appendChild(document.createTextNode(o)), e.parentNode.replaceChild(t, e)
+            }),
+            GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update(), "function" == typeof chatBtnFn && chatBtnFn(), "function" == typeof panguInit && panguInit(), "function" == typeof gtag && gtag("config", "", {
+              page_path: window.location.pathname
+            }),
+            "object" == typeof _hmt && _hmt.push(["_trackPageview", window.location.pathname]),
+            "function" == typeof loadMeting && document.getElementsByClassName("aplayer").length && loadMeting(),
+             "object" == typeof preloader && preloader.endLoading()
 
-          window.refreshFn();
-      })),
-      document.addEventListener("pjax:error", e => {
-        // 404 === e.request.status && pjax.loadUrl("/404");
-        if (e.request.status === 404) {
-          window.location = "/404";
-        }
-        if (e.request.status === 403) {
-          window.location = e.request.responseURL
-        }
-      })
+            window.refreshFn();
+        })),
+        document.addEventListener("pjax:error", function(e) {
+          if (e.request.status === 404) {
+            window.location = "/404";
+          }
+          if (e.request.status === 403) {
+            window.location = e.request.responseURL
+          }
+        })
+    }
   </script>
 <?php endif ?>
 <!--pjax end-->

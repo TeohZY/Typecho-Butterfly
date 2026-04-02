@@ -504,6 +504,7 @@
 </head>
 
 <body>
+  <script src="<?php $this->options->themeUrl('/js/jquery.min.js'); ?>"></script>
   <script src="<?php $this->options->themeUrl('/js/lazyload.iife.min.js'); ?>"></script>
   <script src="<?php $this->options->themeUrl('/js/utils.js?v1.7.3'); ?>"></script>
   <script src="<?php $this->options->themeUrl('/js/main.js?v1.7.3'); ?>"></script>
