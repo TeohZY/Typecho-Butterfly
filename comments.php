@@ -61,14 +61,6 @@
                 <!-- 时间戳：用于检测机器人快速提交 -->
                 <input type="hidden" name="form_time" value="<?php echo time(); ?>">
                 <div class="comments-bottom-left">
-                    <!-- <div title="uploadImg"  id="uploadImg">
-                        <div class="up-icon">
-                            <span >
-                                <i class="iconfont icon-icons01"></i>
-                            </span>
-                        </div>
-
-                    </div> -->
                     <div title="OwO" class="OwO"></div>
                 </div>
             </div>
@@ -183,6 +175,7 @@
     <script>
         document.addEventListener('pjax:complete', function () {
             initializeCommentForm();
+            initCommentImages();
         });
 
         function parseOwOTags(commentContent) {
@@ -250,9 +243,34 @@
             }
         }
 
+        // 初始化评论图片灯箱
+        function initCommentImages() {
+            const commentImages = document.querySelectorAll('#comments .comment-content img');
+            if (commentImages.length && typeof Fancybox !== 'undefined') {
+                commentImages.forEach(img => {
+                    if (img.parentNode.tagName !== 'A') {
+                        const dataSrc = img.dataset.lazySrc || img.src;
+                        const dataCaption = img.title || img.alt || '';
+                        btf.wrap(img, 'a', {
+                            href: dataSrc,
+                            'data-fancybox': 'comments',
+                            'data-caption': dataCaption
+                        });
+                    }
+                });
+                Fancybox.bind('#comments .comment-content img', {
+                    Hash: false,
+                    Thumbs: { showOnStart: false },
+                    Images: { Panzoom: { maxScale: 4 } },
+                    Carousel: { transition: 'slide' }
+                });
+            }
+        }
+
         // 初始化评论表单逻辑
         document.addEventListener('DOMContentLoaded', function () {
             initializeCommentForm();
+            initCommentImages();
         });
 
     </script>

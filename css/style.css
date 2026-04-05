@@ -3,83 +3,191 @@
 */
 :root{
   --btn-comm-bg: #fff;
+  --comment-card-bg: #ffffff;
+  --comment-card-border: #e8e8e8;
+  --comment-child-bg: #f9f9f9;
 }
 [data-theme=dark]{
   --btn-comm-bg: #1f1f1f;
+  --comment-card-bg: #1f1f1f;
+  --comment-card-border: #333;
+  --comment-child-bg: #252525;
 }
+
+/* 评论列表 */
+.comment-list {
+  padding-left: 0;
+  margin: 0;
+}
+
+.comment-list > li {
+  list-style: none;
+  margin-bottom: 16px;
+}
+
+/* 评论卡片 */
+.comment-body {
+  background: var(--comment-card-bg);
+  border: 1px solid var(--comment-card-border);
+  border-radius: 12px;
+  padding: 16px;
+  transition: box-shadow 0.2s ease;
+}
+
+.comment-body:hover {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* 子评论 */
+.comment-children {
+  padding-left: 24px;
+  margin-top: 12px;
+  border-left: 2px solid var(--comment-card-border);
+}
+
+.comment-children .comment-body {
+  background: var(--comment-child-bg);
+}
+
+/* 博主/认证标签 */
+.vtag,
 .vmaster,
 .vvisitor,
 .vauth {
-  background: #ffa51e;
-  font-size: 12px;
+  display: inline-block;
+  font-size: 11px;
   color: white;
-  padding: 1px 5px;
+  padding: 2px 6px;
   border-radius: 4px;
-  line-height: 16px;
+  line-height: 14px;
   white-space: nowrap;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.vmaster {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
 }
 
 .vvisitor {
-  background: #828282 !important;
+  background: #8b8b8b;
 }
 
 .vauth {
-  background: #00a2d8 !important;
+  background: linear-gradient(135deg, #667eea, #764ba2);
 }
 
+/* 头像 */
 .vimg {
-  float: left;
-  margin: 8px 10px 0px 0px;
-  width: 45px;
-  height: 45px;
-  transition: filter 375ms ease-in 0.2s, transform 0.3s;
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  object-fit: cover;
+  margin: 0 12px 0 0 !important;
+  float: none !important;
+  display: inline-block;
+  vertical-align: middle;
 }
 
-.vimg:hover {
-  -webkit-transform: rotate(360deg);
-  -moz-transform: rotate(360deg);
-  -o-transform: rotate(360deg);
-  -ms-transform: rotate(360deg);
-  transform: rotate(360deg);
-}
-.vhead {
-  line-height: 1.5;
+.comment-author {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
 }
 
+/* 昵称 */
 .vnick,
 .vnick a {
-  display: inline-block;
-  margin-right: 0.5em;
-  font-weight: bold;
-  font-size: 0.875em;
-  line-height: 1;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-highlight-color, #1abc9c);
   text-decoration: none;
-  cursor: pointer;
-  color: #1abc9c;
   font-style: normal;
-  line-height: 1.5;
 }
 
+.vnick:hover,
+.vnick a:hover {
+  opacity: 0.8;
+}
+
+/* 用户信息行 */
 .vuser {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
 }
 
+/* 时间 + 回复 */
+.vhead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.vtime {
+  font-size: 12px;
+  color: #999;
+}
+
+/* 回复按钮 */
 .comment-reply {
-  /* display: none; */
-  float: right;
-  background-color: var(--btn-bg);
-  border-radius: 4px;
-  color: var(--btn-color);
-  width: 40px;
-  text-align: center;
+  font-size: 12px;
+  margin-left: auto;
 }
-.comment-reply:hover {
-  background-color: var(--btn-hover-color);
-}
+
 .comment-reply a {
-  color: var(--btn-color);
+  color: #888;
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: var(--bg-color);
+  border: 1px solid var(--comment-card-border);
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
+
+.comment-reply a:hover {
+  background: var(--text-highlight-color, #1abc9c);
+  color: #fff;
+  border-color: var(--text-highlight-color, #1abc9c);
+}
+
+/* 评论内容 */
+.comment-content {
+  margin-left: 48px;
+  line-height: 1.7;
+}
+
+.comment-content p {
+  margin: 0 0 8px 0;
+  word-break: break-all;
+}
+
+.comment-content img {
+  display: block;
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 8px;
+  margin: 8px 0;
+  object-fit: cover;
+}
+
+/* 评论 UA */
+.comment-ua {
+  font-size: 12px;
+  color: #bbb;
+  margin-left: 48px;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 评论框表单 */
 .commentsFormArea {
   margin-top: 10px;
 }
@@ -87,77 +195,145 @@
 .comments-bottom-left{
   display: flex;
 }
+
 #cancel-comment-reply-link {
-  position: absolute;
-  margin-top: 5px;
-  right: 5px;
+  margin-top: 12px;
+  display: inline-block;
 }
 
 .cancel-comment-reply {
   position: relative;
   text-align: right;
+  margin-bottom: 8px;
 }
+
 #post-comment {
   padding-left: 5px;
 }
-.comment-list {
-  padding-left: 0px;
-}
+
 .comment-children {
-  padding-left: 30px;
-  margin-top: 10px;
+  margin-top: 12px;
 }
-.comment-content {
-  margin-left: 56px;
-}
-.comment-content p {
-  word-break: break-all;
-}
-.comment-content img {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
-.comment-list li {
-  list-style: none;
-  margin-bottom: 20px;
-}
+
 .comment-body > div > p {
   color: var(--font-color);
-  padding-left: 50px;
+  margin-left: 48px;
+  padding: 0;
 }
+
 .commentReview{
   color: #e17979;
-  font-weight: bold;
+  font-size: 12px;
 }
-/* .comment-children:hover > ol > li > div > .vhead > .comment-reply {
-  display: block;
-} */
 
+/* 仅作者可见 */
 .comment-self {
   position: relative;
-  padding: 20px;
-  background-color: #fdf3e7;
-  overflow: hidden;
-  color: #333;
-  font-weight: bold;
+  padding: 16px;
+  background: linear-gradient(135deg, #fef3e2, #fce8d5);
+  border-radius: 8px;
+  color: #b8860b;
+  font-size: 13px;
   text-align: center;
+  margin-top: 8px;
 }
 
-.comment-self::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 200%;
-  height: 200%;
-  background: repeating-linear-gradient(
-      135deg,
-      rgba(255, 165, 0, 0.5),
-      rgba(255, 165, 0, 0.5) 20px,
-      rgba(255, 255, 0, 0.5) 20px,
-      rgba(255, 255, 0, 0.5) 40px
-  );
+/* ========== 评论表单样式 ========== */
+.commments-area {
+  background: var(--comment-card-bg);
+  border: 1px solid var(--comment-card-border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.commments-info {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.commments-info input.text {
+  flex: 1;
+  min-width: 120px;
+  padding: 10px 14px;
+  border: 1px solid var(--comment-card-border);
+  border-radius: 8px;
+  background: var(--bg-color);
+  color: var(--font-color);
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.commments-info input.text:focus {
+  outline: none;
+  border-color: var(--text-highlight-color, #1abc9c);
+  box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1);
+}
+
+.commments-area textarea.textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 14px;
+  border: 1px solid var(--comment-card-border);
+  border-radius: 8px;
+  background: var(--bg-color);
+  color: var(--font-color);
+  font-size: 14px;
+  line-height: 1.6;
+  resize: vertical;
+  transition: all 0.2s;
+  background-image: none !important;
+}
+
+.commments-area textarea.textarea:focus {
+  outline: none;
+  border-color: var(--text-highlight-color, #1abc9c);
+  box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.1);
+}
+
+.commments-area .submit {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #1abc9c, #16a085);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.commments-area .submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(26, 188, 156, 0.3);
+}
+
+.commments-area .submit:active {
+  transform: translateY(0);
+}
+
+/* 评论登录框 */
+#comment_login input.text {
+  padding: 10px 14px;
+  border: 1px solid var(--comment-card-border);
+  border-radius: 8px;
+  background: var(--bg-color);
+  color: var(--font-color);
+  font-size: 14px;
+  margin-right: 8px;
+}
+
+#comment_login .submit {
+  padding: 10px 20px;
+  background: var(--text-highlight-color, #1abc9c);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
   animation: scroll-stripes 4s linear infinite, breathe 4s ease-in-out infinite;
   opacity: 0.7;
 }
@@ -563,6 +739,7 @@
   transform-origin: 0 0;
   margin-top: 10px;
 }
+
 .OwO-logo {
   border: none !important;
   background: none !important;
