@@ -1,7 +1,63 @@
 <?php
+function parseMenuConfig($menuYaml)
+{
+    if (function_exists('yaml_parse')) {
+        $parsed = @yaml_parse($menuYaml);
+        if (is_array($parsed)) {
+            return $parsed;
+        }
+    }
+
+    $lines = preg_split("/\r\n|\n|\r/", trim($menuYaml));
+    $root = [];
+    $stack = [
+        [
+            'indent' => -1,
+            'items' => &$root,
+        ]
+    ];
+
+    foreach ($lines as $rawLine) {
+        if (trim($rawLine) === '') {
+            continue;
+        }
+
+        $indent = strlen($rawLine) - strlen(ltrim($rawLine, " "));
+        $line = trim($rawLine);
+        $isParent = substr($line, -1) === ':';
+
+        while (count($stack) > 1 && $indent <= $stack[count($stack) - 1]['indent']) {
+            array_pop($stack);
+        }
+
+        $currentIndex = count($stack) - 1;
+        $current = &$stack[$currentIndex]['items'];
+
+        if ($isParent) {
+            $label = rtrim(substr($line, 0, -1));
+            $current[$label] = [];
+            $stack[] = [
+                'indent' => $indent,
+                'items' => &$current[$label],
+            ];
+            continue;
+        }
+
+        $parts = explode(':', $line, 2);
+        if (count($parts) !== 2) {
+            continue;
+        }
+
+        $label = trim($parts[0]);
+        $value = trim($parts[1]);
+        $current[$label] = $value;
+    }
+
+    return $root;
+}
+
 function renderMenu($menuYaml) {
-    // 解析 YAML 数据
-    $menuItems = yaml_parse($menuYaml);
+    $menuItems = parseMenuConfig($menuYaml);
 
     // 如果解析失败或数据不是数组，直接返回
     if (!is_array($menuItems)) {

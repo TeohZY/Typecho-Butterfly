@@ -106,12 +106,51 @@
         <?php printTag($this); ?>
       </div>
       <div class="post_share">
-        <div class="social-share share-component" data-image="https://tva4.sinaimg.cn/large/007X0Rdygy1ghm2u8yvhdj30sg0g0gp1.jpg" data-sites="facebook,twitter,wechat,weibo,qq">
-          <link rel="stylesheet" href="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/social-share.js/1.0.16/css/share.min.css" media="all" onload="this.media='all'">
-          <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/social-share.js/1.0.16/js/social-share.min.js" defer=""></script>
-        </div>
+        <button class="social-share-native" type="button" data-share-url="<?php $this->permalink(); ?>" data-share-title="<?php $this->title(); ?>">
+          <i class="fas fa-share-alt"></i>
+          <span>分享</span>
+        </button>
       </div>
     </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var shareButton = document.querySelector('.social-share-native');
+        if (!shareButton) {
+          return;
+        }
+
+        shareButton.addEventListener('click', async function() {
+          var url = shareButton.getAttribute('data-share-url');
+          var title = shareButton.getAttribute('data-share-title');
+
+          if (navigator.share) {
+            try {
+              await navigator.share({ title: title, url: url });
+              return;
+            } catch (error) {
+              if (error && error.name === 'AbortError') {
+                return;
+              }
+            }
+          }
+
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            try {
+              await navigator.clipboard.writeText(url);
+              if (window.btf && GLOBAL_CONFIG.Snackbar !== undefined) {
+                btf.snackbarShow('链接已复制');
+              } else {
+                alert('链接已复制');
+              }
+              return;
+            } catch (error) {
+            }
+          }
+
+          window.prompt('复制此链接进行分享：', url);
+        });
+      });
+    </script>
     <?php if ($this->fields->ShowReward === 'show' || $this->options->ShowGlobalReward === 'show') : ?>
       <div class="post-reward">
         <div class="reward-button button--animated">

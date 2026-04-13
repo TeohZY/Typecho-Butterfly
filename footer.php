@@ -73,9 +73,6 @@
   <script data-pjax src="<?php $this->options->themeUrl('/js/smooth.min.js'); ?>"> </script>
   <?php if (is_array($this->options->beautifyBlock) && in_array('showNoAlertSearch', $this->options->beautifyBlock)) : ?>
   <?php endif ?>
-  <?php if ($this->options->hcaptchaSecretKey !== "" && $this->options->hcaptchaAPIKey !== "") : ?>
-    <script src="https://hcaptcha.com/1/api.js" async defer></script>
-  <?php endif ?>
 
   <?php if (!empty($this->options->beautifyBlock) && in_array('showButterflyClock', $this->options->beautifyBlock)) : ?>
     <script data-pjax>
@@ -192,9 +189,9 @@
 <?php require_once('widgets/rightside.php'); ?>
 <!--pjax-->
 <?php if ($this->options->EnablePjax === 'on') : ?>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script>
+  <link rel="stylesheet" href="<?php $this->options->themeUrl('assets/vendor/nprogress/nprogress.min.css'); ?>">
+  <script src="<?php $this->options->themeUrl('assets/vendor/nprogress/nprogress.min.js'); ?>"></script>
+  <script src="<?php $this->options->themeUrl('assets/vendor/pjax/pjax.min.js'); ?>"></script>
   <script>
     if (!window._pjaxInitialized) {
       window._pjaxInitialized = true;
@@ -217,13 +214,6 @@
           intervalNum = 0
         })),
         document.addEventListener("pjax:complete", (function() {
-          <?php if ($this->options->hcaptchaSecretKey !== "" && $this->options->hcaptchaAPIKey !== "") : ?>
-            if (document.getElementById('h-captcha')) {
-              hcaptcha.render('h-captcha', {
-                sitekey: '<?php $this->options->hcaptchaSecretKey() ?>'
-              });
-            }
-          <?php endif ?>
           <?php $this->options->PjaxCallBack() ?>
           NProgress.done();
             document.querySelectorAll("script[data-pjax]").forEach(function(e) {

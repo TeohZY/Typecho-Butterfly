@@ -4388,6 +4388,27 @@ html {
     font-size: 1.2em;
     line-height: 1.85em;
   }
+  #post .tag_share .post_share .social-share-native {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--light-grey);
+    border-radius: 20px;
+    background: var(--card-bg);
+    color: var(--font-color);
+    cursor: pointer;
+    font-size: 0.9em;
+    line-height: 1;
+    padding: 8px 14px;
+    transition: all 0.3s ease;
+  }
+  #post .tag_share .post_share .social-share-native:hover {
+    border-color: var(--theme-color);
+    color: var(--theme-color);
+  }
+  #post .tag_share .post_share .social-share-native i {
+    font-size: 1em;
+  }
   #post .post-copyright {
     position: relative;
     margin: 40px 0 10px;

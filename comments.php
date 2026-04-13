@@ -92,21 +92,6 @@
                 });
             </script>
             <?php } ?>
-            <?php if ($this->options->hcaptchaSecretKey !== "" && $this->options->hcaptchaAPIKey !== "") {
-                    RecapOutPut($this->user->hasLogin()); ?>
-            <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                    if (!document.querySelector('#comment_keys')) {
-                        document.querySelectorAll('.h-recaptcha').forEach(element => {
-                            Object.assign(element.style, {
-                                position: 'relative',
-                                top: '-40px'
-                            });
-                        });
-                    }
-                });
-            </script>
-            <?php } ?>
         </form>
         <?php if (!$this->user->hasLogin() && $this->options->EnableCommentsLogin === 'on') : ?>
         <div id="comment_login">

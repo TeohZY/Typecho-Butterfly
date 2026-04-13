@@ -83,19 +83,9 @@ new Typed("#subtitle",{
 </div>
 <!--pjax-->
 <?php if($this->options->EnablePjax === 'on') : ?>
-<?php if($this->options->StaticFile == 'CDN' && $this->options->CDNURL == ''): ?>
-<link rel="stylesheet" href="https://<?php $this->options->jsdelivrLink() ?>/gh/rstacruz/nprogress@master/nprogress.css">
-<script src="https://<?php $this->options->jsdelivrLink() ?>/gh/rstacruz/nprogress@master/nprogress.js"></script>
-<script src="https://<?php $this->options->jsdelivrLink() ?>/npm/pjax/pjax.min.js"></script>
-<?php elseif($this->options->StaticFile == 'CDN' && $this->options->CDNURL !== ''): ?>
-<link rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.css">
-<script src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.js"></script>
-<script src="<?php $this->options->CDNURL() ?>/js/pjax.min.js"></script>
-<?php else: ?>
-<link rel="stylesheet" href="<?php $this->options->themeUrl('static/css/nprogress.css'); ?>">
-<script src="<?php $this->options->themeUrl('static/js/nprogress.js'); ?>"></script>
-<script src="<?php $this->options->themeUrl('static/js/pjax.min.js'); ?>"></script>
-<?php endif; ?>
+<link rel="stylesheet" href="<?php $this->options->themeUrl('assets/vendor/nprogress/nprogress.min.css'); ?>">
+<script src="<?php $this->options->themeUrl('assets/vendor/nprogress/nprogress.min.js'); ?>"></script>
+<script src="<?php $this->options->themeUrl('assets/vendor/pjax/pjax.min.js'); ?>"></script>
 <script>
 let pjaxSelectors = ["title", "#body-wrap", "#rightside-config-hide", "#rightside-config-show", ".js-pjax"];
 var pjax = new Pjax({

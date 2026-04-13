@@ -687,23 +687,6 @@ function themeConfig($form)
     $form->addInput($siteKey);
     $form->addInput($secretKey);
 
-
-    $hcaptchaSecretKey = new Typecho_Widget_Helper_Form_Element_Text(
-        'hcaptchaSecretKey',
-        NULL,
-        null,
-        '<hr> 评论区hcaptch人机验证 <br> 密钥(sietkey)- 使用它作为 secret 来检查用户令牌:',
-        '<a href="https://dashboard.hcaptcha.com/welcome">点击获取密钥</a>'
-    );
-
-    $hcaptchaAPIKey = new Typecho_Widget_Helper_Form_Element_Text('hcaptchaAPIKey', NULL, null, _t('API 密钥:'), _t('填写两处密钥评论区自动开启hcaptch人机验证'));
-
-    $form->addInput($hcaptchaSecretKey);
-    $form->addInput($hcaptchaAPIKey);
-
-
-
-
     $db = Typecho_Db::get();
     $sjdq = $db->fetchRow($db->select()->from('table.options')->where('name = ?', 'theme:butterfly'));
     $ysj = $sjdq['value'] ?? null;
@@ -889,9 +872,6 @@ function themeInit($archive)
     $loginStatus = $archive->widget('Widget_User')->hasLogin();
     if (!empty(Helper::options()->siteKey) && !empty(Helper::options()->secretKey) && !$loginStatus) {
         comments_filter($archive);
-    }
-    if (Helper::options()->hcaptchaSecretKey !== "" && Helper::options()->hcaptchaAPIKey !== "" && !$loginStatus) {
-        hcaptcha_filter($archive);
     }
     if ($archive->is('index')) {
         // echo '<script src="'..'"></script>';        
