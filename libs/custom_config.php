@@ -192,6 +192,24 @@ function themeConfig($form)
     $categorylink = new Typecho_Widget_Helper_Form_Element_Text('categorylink', NULL, _t('#null'), _t('侧栏分类链接'), _t('需在独立页面创建并手动填入链接'));
     $form->addInput($categorylink);
 
+    $momentsCategorySlug = new Typecho_Widget_Helper_Form_Element_Text(
+        'momentsCategorySlug',
+        NULL,
+        _t('moments'),
+        _t('朋友圈动态分类 slug'),
+        _t('朋友圈页面会读取这个分类下的文章作为动态列表，例如 moments')
+    );
+    $form->addInput($momentsCategorySlug);
+
+    $momentsPageSize = new Typecho_Widget_Helper_Form_Element_Text(
+        'momentsPageSize',
+        NULL,
+        _t('10'),
+        _t('朋友圈动态显示条数'),
+        _t('建议 6-20，页面会按最新文章倒序显示')
+    );
+    $form->addInput($momentsPageSize);
+
     $CloseComments = new Typecho_Widget_Helper_Form_Element_Select(
         'CloseComments',
         array(
