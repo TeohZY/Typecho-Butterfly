@@ -5,13 +5,23 @@
  *
  * @package custom
  */
-$momentCategory = getMomentCategory();
 $moments = fetchMomentsList();
 $momentCount = count($moments);
 $todayStart = strtotime(date('Y-m-d 00:00:00'));
 $yesterdayStart = $todayStart - 86400;
-$heroImage = !empty($moments) ? getMomentImages($moments[0]['text'], 1) : [];
-$heroCover = !empty($heroImage) ? $heroImage[0] : $this->options->logoUrl;
+$momentsPlugin = null;
+if (class_exists('ButterflyMoments_Plugin')) {
+    try {
+        $momentsPlugin = Helper::options()->plugin('ButterflyMoments');
+    } catch (Throwable $e) {
+        $momentsPlugin = null;
+    }
+}
+$heroImage = !empty($moments) ? getMomentImages($moments[0]['images'], 1) : [];
+$configuredCover = $momentsPlugin ? trim((string) $momentsPlugin->coverImage) : '';
+$configuredSignature = $momentsPlugin ? trim((string) $momentsPlugin->signature) : '';
+$heroCover = $configuredCover !== '' ? $configuredCover : (!empty($heroImage) ? $heroImage[0] : $this->options->logoUrl);
+$heroSignature = $configuredSignature !== '' ? $configuredSignature : '独立于文章系统的短内容时间流，适合发日常、碎片想法、图片和轻互动。';
 $this->need('page_header.php');
 ?>
 <style>
@@ -42,38 +52,19 @@ $this->need('page_header.php');
                 <div class="moments-profile-text">
                     <p class="moments-profile-label">Moments</p>
                     <h2>朋友圈</h2>
-                    <p>
-                        <?php if ($momentCategory): ?>
-                            读取分类“<?php echo htmlspecialchars($momentCategory['name'], ENT_QUOTES, 'UTF-8'); ?>”中的最新动态，像看朋友圈一样看博客更新。
-                        <?php else: ?>
-                            还没有找到朋友圈分类，先在后台创建并配置分类 slug。
-                        <?php endif; ?>
-                    </p>
-                </div>
-                <div class="moments-profile-card">
-                    <strong><?php $this->options->title(); ?></strong>
-                    <span><?php echo $momentCount; ?> 条动态</span>
-                </div>
-                <div class="moments-profile-avatar">
-                    <img data-lazy-src="<?php $this->options->logoUrl() ?>" src="<?php echo GetLazyLoad(); ?>" alt="avatar">
+                    <p><?php echo htmlspecialchars($heroSignature, ENT_QUOTES, 'UTF-8'); ?></p>
                 </div>
             </div>
         </header>
 
         <section class="moments-toolbar">
-            <div class="moments-toolbar-copy">
-                <strong>动态发布方式</strong>
-                <p>
-                    发布普通文章并归类到
-                    <code><?php echo htmlspecialchars(getMomentCategorySlug(), ENT_QUOTES, 'UTF-8'); ?></code>
-                    分类，这个页面会自动按时间流展示。
-                </p>
-            </div>
             <div class="moments-toolbar-actions">
+                <span class="moments-toolbar-stat"><strong><?php echo $momentCount; ?></strong><small>动态</small></span>
+                <span class="moments-toolbar-stat"><strong><?php echo (int) getMomentPageSize(); ?></strong><small>展示</small></span>
                 <span class="moments-chip"><i class="far fa-clock"></i>时间轴</span>
                 <span class="moments-chip"><i class="far fa-images"></i>图片宫格</span>
                 <?php if ($this->user->hasLogin()): ?>
-                    <a class="moments-publish-btn" href="<?php $this->options->adminUrl(); ?>write-post.php" target="_blank" rel="noopener noreferrer">发布动态</a>
+                    <a class="moments-publish-btn" href="<?php echo htmlspecialchars(hasMomentsAdminPanel() ? $this->options->adminUrl('extending.php?panel=ButterflyMoments/write.php', true) : $this->options->adminUrl('plugins.php', true), ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener noreferrer"><?php echo hasMomentsAdminPanel() ? '发布动态' : '启用插件'; ?></a>
                 <?php else: ?>
                     <a class="moments-publish-btn secondary" href="<?php $this->options->adminUrl('login.php'); ?>" target="_blank" rel="noopener noreferrer">登录后发布</a>
                 <?php endif; ?>
@@ -81,18 +72,9 @@ $this->need('page_header.php');
         </section>
 
         <section class="moments-status-bar">
-            <div class="moments-status-item">
-                <span>动态数</span>
-                <strong><?php echo $momentCount; ?></strong>
-            </div>
-            <div class="moments-status-item">
-                <span>当前分类</span>
-                <strong><?php echo $momentCategory ? htmlspecialchars($momentCategory['name'], ENT_QUOTES, 'UTF-8') : '未配置'; ?></strong>
-            </div>
-            <div class="moments-status-item">
-                <span>展示条数</span>
-                <strong><?php echo (int) getMomentPageSize(); ?></strong>
-            </div>
+            <span class="moments-status-item"><i class="far fa-calendar"></i><?php echo date('Y年m月d日'); ?></span>
+            <span class="moments-status-item"><i class="far fa-layer-group"></i>独立 Moments</span>
+            <span class="moments-status-item"><i class="far fa-stream"></i>按时间倒序</span>
         </section>
 
         <?php if (trim((string) $this->content) !== ''): ?>
@@ -106,9 +88,10 @@ $this->need('page_header.php');
                 <?php $currentGroupLabel = ''; ?>
                 <?php foreach ($moments as $moment): ?>
                     <?php
-                    $images = getMomentImages($moment['text']);
+                    $images = getMomentImages($moment['images']);
                     $imageCount = count($images);
-                    $monthDay = date('m/d', $moment['created']);
+                    $dayNum = date('d', $moment['created']);
+                    $monthLabel = date('m月', $moment['created']);
                     $year = date('Y', $moment['created']);
                     if ($moment['created'] >= $todayStart) {
                         $groupLabel = '今天';
@@ -128,8 +111,8 @@ $this->need('page_header.php');
                     <?php endif; ?>
                     <article class="moments-entry<?php echo $imageCount === 0 ? ' moments-entry-text-only' : ''; ?>">
                         <aside class="moments-date">
-                            <strong><?php echo $monthDay; ?></strong>
-                            <span><?php echo $year; ?></span>
+                            <strong><?php echo $dayNum; ?></strong>
+                            <span><?php echo $monthLabel . ' · ' . $year; ?></span>
                         </aside>
 
                         <div class="moments-entry-main">
@@ -153,14 +136,8 @@ $this->need('page_header.php');
                                     </div>
                                 </div>
 
-                                <?php if (!empty($moment['title'])): ?>
-                                    <a class="moments-card-title" href="<?php echo htmlspecialchars(getMomentPermalink($moment), ENT_QUOTES, 'UTF-8'); ?>">
-                                        <?php echo htmlspecialchars($moment['title'], ENT_QUOTES, 'UTF-8'); ?>
-                                    </a>
-                                <?php endif; ?>
-
                                 <div class="moments-card-text">
-                                    <?php echo getMomentPreviewText($moment['text'], 260); ?>
+                                    <?php echo getMomentPreviewText($moment['content'], 260); ?>
                                 </div>
 
                                 <?php if (!empty($images)): ?>
@@ -176,11 +153,11 @@ $this->need('page_header.php');
                                 <div class="moments-card-footer">
                                     <div class="moments-card-actions">
                                         <span><i class="far fa-heart"></i>赞</span>
-                                        <a href="<?php echo htmlspecialchars(getMomentPermalink($moment), ENT_QUOTES, 'UTF-8'); ?>"><i class="far fa-comment-dots"></i>评论</a>
+                                        <a href="<?php echo htmlspecialchars(getMomentPermalink($moment), ENT_QUOTES, 'UTF-8'); ?>"><i class="far fa-comment-dots"></i>查看</a>
                                     </div>
                                     <div class="moments-card-meta-strip">
-                                        <span><i class="far fa-comment-dots"></i><?php echo (int) $moment['commentsNum']; ?></span>
-                                        <span><i class="far fa-eye"></i><?php echo (int) $moment['views']; ?></span>
+                                        <span><i class="far fa-heart"></i><?php echo (int) $moment['like_count']; ?></span>
+                                        <span><i class="far fa-comment-dots"></i><?php echo (int) $moment['comment_count']; ?></span>
                                         <a href="<?php echo htmlspecialchars(getMomentPermalink($moment), ENT_QUOTES, 'UTF-8'); ?>">查看详情</a>
                                     </div>
                                 </div>
@@ -192,22 +169,13 @@ $this->need('page_header.php');
                 <div class="moments-empty">
                     <h3>还没有动态</h3>
                     <p>
-                        先创建 slug 为 <code><?php echo htmlspecialchars(getMomentCategorySlug(), ENT_QUOTES, 'UTF-8'); ?></code> 的分类，
-                        再把短内容发布到这个分类中，这里就会生成真正的朋友圈时间流。
+                        先创建一个使用“朋友圈发布”模板的独立页面，
+                        再从发布页发第一条动态，这里就会生成真正的朋友圈时间流。
                     </p>
                 </div>
             <?php endif; ?>
         </div>
     </section>
-    <details class="moments-comments-wrap">
-        <summary>
-            <span>页面留言</span>
-            <small>展开后可对这个朋友圈页面留言</small>
-        </summary>
-        <div class="moments-comments-inner">
-            <?php $this->need('comments.php'); ?>
-        </div>
-    </details>
 </div>
 </main>
 <?php $this->need('footer.php'); ?>

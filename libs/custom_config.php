@@ -192,23 +192,23 @@ function themeConfig($form)
     $categorylink = new Typecho_Widget_Helper_Form_Element_Text('categorylink', NULL, _t('#null'), _t('侧栏分类链接'), _t('需在独立页面创建并手动填入链接'));
     $form->addInput($categorylink);
 
-    $momentsCategorySlug = new Typecho_Widget_Helper_Form_Element_Text(
-        'momentsCategorySlug',
-        NULL,
-        _t('moments'),
-        _t('朋友圈动态分类 slug'),
-        _t('朋友圈页面会读取这个分类下的文章作为动态列表，例如 moments')
-    );
-    $form->addInput($momentsCategorySlug);
-
     $momentsPageSize = new Typecho_Widget_Helper_Form_Element_Text(
         'momentsPageSize',
         NULL,
         _t('10'),
         _t('朋友圈动态显示条数'),
-        _t('建议 6-20，页面会按最新文章倒序显示')
+        _t('建议 6-20，页面会按最新动态倒序显示')
     );
     $form->addInput($momentsPageSize);
+
+    $momentsPageUrl = new Typecho_Widget_Helper_Form_Element_Text(
+        'momentsPageUrl',
+        NULL,
+        _t(''),
+        _t('朋友圈页面地址'),
+        _t('可留空，留空时默认使用 /moments.html')
+    );
+    $form->addInput($momentsPageUrl);
 
     $CloseComments = new Typecho_Widget_Helper_Form_Element_Select(
         'CloseComments',
@@ -878,6 +878,7 @@ function themeInit($archive)
     if (!array_key_exists('views', $db->fetchRow($db->select()->from('table.contents')))) {
         $db->query('ALTER TABLE ' . $db->getPrefix() . 'contents ADD COLUMN views INT DEFAULT 0;');
     }
+    ensureMomentsSchema();
     //初始化完成
 
     if (Helper::options()->EnablePjax == "on") {

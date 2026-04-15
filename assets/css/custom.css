@@ -281,19 +281,19 @@ h6::before {
 .moments-shell {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 1rem;
 }
 
 .moments-hero {
   overflow: hidden;
-  border-radius: 30px;
+  border-radius: 28px;
   background: linear-gradient(180deg, #efe9df 0%, #d7e6dd 100%);
   box-shadow: 0 30px 70px rgba(46, 61, 66, 0.12);
 }
 
 .moments-cover {
   position: relative;
-  min-height: 300px;
+  min-height: 248px;
   background-color: #ced9d2;
   background-position: center;
   background-repeat: no-repeat;
@@ -308,12 +308,11 @@ h6::before {
 }
 
 .moments-profile {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  align-items: end;
+  display: flex;
+  align-items: flex-end;
   gap: 1rem;
-  padding: 0 1.8rem 1.8rem;
-  margin-top: -4.4rem;
+  padding: 0 1.5rem 1.45rem;
+  margin-top: -3.7rem;
   position: relative;
   z-index: 1;
 }
@@ -332,51 +331,15 @@ h6::before {
 
 .moments-profile-text h2 {
   margin: 0;
-  font-size: 2.4rem;
+  font-size: 2.15rem;
   line-height: 1.05;
   color: #fff;
 }
 
 .moments-profile-text p {
-  margin: 0.65rem 0 0;
+  margin: 0.5rem 0 0;
   max-width: 34rem;
   color: rgba(255, 255, 255, 0.84);
-}
-
-.moments-profile-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.22rem;
-  padding: 0.9rem 1rem;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(14px);
-  color: #fff;
-}
-
-.moments-profile-card strong {
-  font-size: 1rem;
-}
-
-.moments-profile-card span {
-  font-size: 0.84rem;
-  color: rgba(255, 255, 255, 0.82);
-}
-
-.moments-profile-avatar {
-  width: 110px;
-  height: 110px;
-  border: 4px solid rgba(255, 255, 255, 0.94);
-  border-radius: 28px;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 18px 40px rgba(15, 26, 30, 0.22);
-}
-
-.moments-profile-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 .moments-toolbar,
@@ -389,27 +352,11 @@ h6::before {
 }
 
 .moments-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1.15rem 1.25rem;
-  border-radius: 24px;
+  padding: 0.78rem 0.9rem;
+  border-radius: 22px;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(244, 248, 245, 0.92));
 }
 
-.moments-toolbar-copy strong {
-  display: block;
-  color: #243438;
-  font-size: 1.05rem;
-}
-
-.moments-toolbar-copy p {
-  margin: 0.45rem 0 0;
-  color: rgba(36, 52, 56, 0.74);
-}
-
-.moments-toolbar-copy code,
 .moments-empty code {
   padding: 0.18rem 0.5rem;
   border-radius: 999px;
@@ -421,27 +368,47 @@ h6::before {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 0.7rem;
+}
+
+.moments-toolbar-stat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  padding: 0.46rem 0.72rem;
+  border-radius: 999px;
+  background: rgba(40, 58, 54, 0.06);
+  color: #39504b;
+}
+
+.moments-toolbar-stat strong {
+  font-size: 1rem;
+  color: #223438;
+}
+
+.moments-toolbar-stat small {
+  font-size: 0.76rem;
+  color: rgba(57, 80, 75, 0.74);
 }
 
 .moments-chip {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.6rem 0.9rem;
+  padding: 0.52rem 0.82rem;
   border-radius: 999px;
   background: rgba(40, 58, 54, 0.06);
   color: #4b5f5d;
-  font-size: 0.9rem;
+  font-size: 0.86rem;
 }
 
 .moments-publish-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 112px;
-  padding: 0.82rem 1.35rem;
+  min-width: 106px;
+  padding: 0.72rem 1.1rem;
   border-radius: 999px;
   background: linear-gradient(135deg, #2f6d50, #4e8f70);
   color: #fff !important;
@@ -455,31 +422,30 @@ h6::before {
 }
 
 .moments-status-bar {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.8rem;
-  padding: 1rem;
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.92);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .moments-status-item {
-  padding: 0.9rem 1rem;
-  border-radius: 18px;
-  background: rgba(66, 98, 89, 0.06);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.58rem 0.82rem;
+  border: 1px solid rgba(90, 109, 117, 0.1);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  color: rgba(60, 79, 85, 0.78);
+  box-shadow: 0 12px 28px rgba(46, 61, 66, 0.06);
 }
 
-.moments-status-item span {
-  display: block;
-  color: rgba(60, 79, 85, 0.72);
-  font-size: 0.84rem;
-}
-
-.moments-status-item strong {
-  display: block;
-  margin-top: 0.35rem;
-  color: #203136;
-  font-size: 1.25rem;
+.moments-status-item i {
+  color: #4d7d62;
 }
 
 .moments-page-intro {
@@ -496,8 +462,9 @@ h6::before {
 
 .moments-group-label {
   position: relative;
-  padding-left: 6rem;
-  margin-top: 0.2rem;
+  padding-left: 5.6rem;
+  margin-top: 0.1rem;
+  z-index: 1;
 }
 
 .moments-group-label span {
@@ -506,7 +473,9 @@ h6::before {
   min-height: 32px;
   padding: 0 0.9rem;
   border-radius: 999px;
-  background: rgba(79, 140, 110, 0.12);
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(79, 140, 110, 0.14);
+  box-shadow: 0 10px 24px rgba(46, 61, 66, 0.06);
   color: #2f684e;
   font-size: 0.84rem;
   font-weight: 700;
@@ -517,7 +486,7 @@ h6::before {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 108px;
+  left: 82px;
   width: 2px;
   background: linear-gradient(180deg, rgba(112, 142, 130, 0.28), rgba(112, 142, 130, 0.06));
   content: "";
@@ -525,27 +494,31 @@ h6::before {
 
 .moments-entry {
   display: grid;
-  grid-template-columns: 84px minmax(0, 1fr);
-  gap: 1.5rem;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 1.45rem;
 }
 
 .moments-date {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  padding-top: 0.5rem;
-  color: rgba(76, 94, 100, 0.82);
+  padding-top: 0.32rem;
+  color: rgba(76, 94, 100, 0.72);
 }
 
 .moments-date strong {
-  color: #24353a;
-  font-size: 1.05rem;
+  color: #1f3135;
+  font-size: 1.5rem;
   font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
 }
 
 .moments-date span {
-  margin-top: 0.16rem;
-  font-size: 0.82rem;
+  margin-top: 0.26rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .moments-entry-main {
@@ -555,7 +528,7 @@ h6::before {
 .moments-entry-dot {
   position: absolute;
   top: 1.25rem;
-  left: -29px;
+  left: -24px;
   width: 14px;
   height: 14px;
   border: 3px solid #f0f6f2;
@@ -565,8 +538,8 @@ h6::before {
 }
 
 .moments-card {
-  padding: 1.25rem;
-  border-radius: 26px;
+  padding: 1.1rem;
+  border-radius: 24px;
   background: rgba(255, 255, 255, 0.96);
 }
 
@@ -729,19 +702,19 @@ h6::before {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.75rem;
-  margin-top: 1rem;
-  color: rgba(76, 96, 102, 0.88);
-  font-size: 0.92rem;
+  gap: 0.55rem;
+  margin-top: 0.85rem;
+  color: rgba(76, 96, 102, 0.72);
+  font-size: 0.88rem;
 }
 
 .moments-card-actions {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.28rem;
-  border-radius: 999px;
-  background: rgba(58, 73, 79, 0.92);
+  gap: 0.5rem;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
 }
 
 .moments-card-actions span,
@@ -755,67 +728,39 @@ h6::before {
 
 .moments-card-actions span,
 .moments-card-actions a {
-  min-height: 34px;
-  padding: 0 0.9rem;
-  border-radius: 999px;
-  color: #fff !important;
+  min-height: auto;
+  padding: 0;
+  border-radius: 0;
+  color: #5a7075 !important;
   text-decoration: none !important;
+  font-size: 0.84rem;
 }
 
 .moments-card-actions a:hover,
 .moments-card-actions span:hover {
-  background: rgba(255, 255, 255, 0.08);
+  color: #315f4a !important;
 }
 
 .moments-card-meta-strip {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.9rem 1.25rem;
+  gap: 0.75rem 1rem;
   align-items: center;
   width: 100%;
-  padding-top: 0.95rem;
+  padding-top: 0.75rem;
   border-top: 1px solid rgba(84, 104, 110, 0.1);
+}
+
+.moments-card-meta-strip span {
+  color: rgba(76, 96, 102, 0.72);
+  font-size: 0.84rem;
 }
 
 .moments-card-meta-strip a {
   color: #315f4a !important;
   text-decoration: none !important;
   font-weight: 600;
-}
-
-.moments-comments-wrap {
-  margin-top: 1.4rem;
-  border: 1px solid rgba(90, 109, 117, 0.1);
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 18px 42px rgba(46, 61, 66, 0.08);
-  overflow: hidden;
-}
-
-.moments-comments-wrap summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1rem 1.2rem;
-  cursor: pointer;
-  list-style: none;
-  color: #24353a;
-  font-weight: 700;
-}
-
-.moments-comments-wrap summary::-webkit-details-marker {
-  display: none;
-}
-
-.moments-comments-wrap summary small {
-  color: rgba(76, 96, 102, 0.78);
-  font-weight: 500;
-}
-
-.moments-comments-inner {
-  padding: 0 1.2rem 1.2rem;
-  border-top: 1px solid rgba(84, 104, 110, 0.08);
+  font-size: 0.84rem;
 }
 
 .moments-empty {
@@ -839,18 +784,12 @@ h6::before {
 [data-theme='dark'] .moments-status-bar,
 [data-theme='dark'] .moments-page-intro,
 [data-theme='dark'] .moments-card,
-[data-theme='dark'] .moments-empty,
-[data-theme='dark'] .moments-comments-wrap {
+[data-theme='dark'] .moments-empty {
   background: rgba(22, 28, 32, 0.94);
   border-color: rgba(255, 255, 255, 0.06);
 }
 
-[data-theme='dark'] .moments-profile-card {
-  background: rgba(255, 255, 255, 0.14);
-}
-
-[data-theme='dark'] .moments-toolbar-copy strong,
-[data-theme='dark'] .moments-status-item strong,
+[data-theme='dark'] .moments-toolbar-stat strong,
 [data-theme='dark'] .moments-card-text,
 [data-theme='dark'] .moments-empty,
 [data-theme='dark'] .moments-card-author,
@@ -860,9 +799,9 @@ h6::before {
   color: #e8f3ee !important;
 }
 
-[data-theme='dark'] .moments-toolbar-copy p,
+[data-theme='dark'] .moments-toolbar-stat small,
 [data-theme='dark'] .moments-chip,
-[data-theme='dark'] .moments-status-item span,
+[data-theme='dark'] .moments-status-item,
 [data-theme='dark'] .moments-card-time,
 [data-theme='dark'] .moments-card-footer,
 [data-theme='dark'] .moments-date {
@@ -870,11 +809,15 @@ h6::before {
 }
 
 [data-theme='dark'] .moments-chip,
-[data-theme='dark'] .moments-status-item {
+[data-theme='dark'] .moments-toolbar-stat {
   background: rgba(255, 255, 255, 0.05);
 }
 
-[data-theme='dark'] .moments-toolbar-copy code,
+[data-theme='dark'] .moments-status-item {
+  background: rgba(22, 28, 32, 0.94);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
 [data-theme='dark'] .moments-empty code {
   background: rgba(145, 201, 173, 0.14);
   color: #9fd8bc;
@@ -889,16 +832,9 @@ h6::before {
   color: rgba(180, 230, 207, 0.78) !important;
 }
 
-[data-theme='dark'] .moments-comments-wrap summary {
-  color: #e8f3ee;
-}
-
-[data-theme='dark'] .moments-comments-wrap summary small {
-  color: rgba(232, 243, 238, 0.72);
-}
-
 [data-theme='dark'] .moments-group-label span {
-  background: rgba(145, 201, 173, 0.16);
+  background: rgba(22, 28, 32, 0.94);
+  border-color: rgba(145, 201, 173, 0.16);
   color: #b4e6cf;
 }
 
@@ -915,63 +851,44 @@ h6::before {
 }
 
 [data-theme='dark'] .moments-card-actions {
-  background: rgba(10, 14, 16, 0.92);
+  background: transparent;
 }
 
 [data-theme='dark'] .moments-card-meta-strip {
   border-top-color: rgba(255, 255, 255, 0.08);
 }
 
-[data-theme='dark'] .moments-comments-inner {
-  border-top-color: rgba(255, 255, 255, 0.08);
-}
-
 @media screen and (max-width: 900px) {
   .moments-profile {
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
-
-  .moments-profile-card {
-    grid-column: 1 / span 1;
-    justify-self: start;
+    align-items: flex-start;
   }
 }
 
 @media screen and (max-width: 768px) {
   .moments-profile {
-    grid-template-columns: 1fr;
-    margin-top: -3.2rem;
-  }
-
-  .moments-profile-avatar {
-    width: 92px;
-    height: 92px;
+    margin-top: -3rem;
   }
 
   .moments-profile-text h2 {
-    font-size: 1.8rem;
+    font-size: 1.68rem;
   }
 
   .moments-toolbar,
   .moments-status-bar {
-    display: block;
+    display: flex;
+    flex-wrap: wrap;
   }
 
   .moments-toolbar-actions {
     justify-content: flex-start;
-    margin-top: 0.9rem;
-  }
-
-  .moments-status-bar {
-    grid-template-columns: 1fr;
   }
 
   .moments-timeline::before {
-    left: 24px;
+    left: 18px;
   }
 
   .moments-group-label {
-    padding-left: 3rem;
+    padding-left: 3.2rem;
   }
 
   .moments-entry {
@@ -985,7 +902,7 @@ h6::before {
   }
 
   .moments-entry-dot {
-    left: 17px;
+    left: 11px;
   }
 
   .moments-card {

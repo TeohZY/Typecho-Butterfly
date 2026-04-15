@@ -9,8 +9,83 @@ require_once('libs/custom_config.php');
 require_once('libs/core.php');
 require_once('libs/content_helpers.php');
 require_once('libs/comment_helpers.php');
+require_once('libs/moments_helpers.php');
 require_once('libs/site_helpers.php');
 require_once('libs/Vditor/index.php');
+
+Typecho_Plugin::factory('admin/menu.php')->navBar_5 = 'renderMomentsAdminNav';
+Typecho_Plugin::factory('admin/header.php')->header_5 = 'injectMomentsAdminNavStyles';
+
+function hasMomentsAdminPanel()
+{
+    $panelTable = Helper::options()->panelTable;
+    $files = empty($panelTable['file']) ? [] : $panelTable['file'];
+
+    return in_array(urlencode('ButterflyMoments/manage.php'), $files, true)
+        && in_array(urlencode('ButterflyMoments/write.php'), $files, true);
+}
+
+function renderMomentsAdminNav()
+{
+    $user = Typecho_Widget::widget('Widget_User');
+    if (!$user->hasLogin()) {
+        return;
+    }
+
+    if (hasMomentsAdminPanel()) {
+        $momentUrl = Helper::options()->adminUrl('extending.php?panel=ButterflyMoments/manage.php', true);
+        $publishUrl = Helper::options()->adminUrl('extending.php?panel=ButterflyMoments/write.php', true);
+    } else {
+        $momentUrl = getMomentPageUrl();
+        $publishUrl = Helper::options()->adminUrl('plugins.php', true);
+    }
+
+    $momentUrl = htmlspecialchars($momentUrl, ENT_QUOTES, 'UTF-8');
+    $publishUrl = htmlspecialchars($publishUrl, ENT_QUOTES, 'UTF-8');
+
+    echo '<a href="' . $momentUrl . '" class="moments-admin-link">朋友圈</a>';
+    echo '<a href="' . $publishUrl . '" class="moments-admin-link moments-admin-link-primary">发动态</a>';
+}
+
+function injectMomentsAdminNavStyles($header)
+{
+    if (!defined('__TYPECHO_ADMIN__')) {
+        return $header;
+    }
+
+    $style = '<style>
+        .typecho-head-nav menu .operate .moments-admin-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+            padding: 0 12px;
+            height: 28px;
+            border-radius: 999px;
+            background: #e9efe8;
+            color: #355245;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .typecho-head-nav menu .operate .moments-admin-link:hover {
+            background: #dce8da;
+            color: #274035;
+        }
+
+        .typecho-head-nav menu .operate .moments-admin-link-primary {
+            background: #467b96;
+            color: #fff;
+        }
+
+        .typecho-head-nav menu .operate .moments-admin-link-primary:hover {
+            background: #3c6a81;
+            color: #fff;
+        }
+    </style>';
+
+    return $header . $style;
+}
 
 /**
  * XSS 过滤函数
