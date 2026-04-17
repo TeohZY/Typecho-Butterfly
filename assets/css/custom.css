@@ -719,6 +719,7 @@ h6::before {
 
 .moments-card-actions span,
 .moments-card-actions a,
+.moments-like-btn,
 .moments-card-meta-strip span,
 .moments-card-meta-strip a {
   display: inline-flex;
@@ -727,7 +728,8 @@ h6::before {
 }
 
 .moments-card-actions span,
-.moments-card-actions a {
+.moments-card-actions a,
+.moments-like-btn {
   min-height: auto;
   padding: 0;
   border-radius: 0;
@@ -736,8 +738,26 @@ h6::before {
   font-size: 0.84rem;
 }
 
+.moments-like-btn {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.moments-comment-toggle {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  color: rgba(76, 96, 102, 0.72);
+}
+
 .moments-card-actions a:hover,
-.moments-card-actions span:hover {
+.moments-card-actions span:hover,
+.moments-like-btn:hover,
+.moments-like-btn.is-liked,
+.moments-comment-toggle:hover,
+.moments-comment-toggle.is-open {
   color: #315f4a !important;
 }
 
@@ -755,6 +775,119 @@ h6::before {
   color: rgba(76, 96, 102, 0.72);
   font-size: 0.84rem;
 }
+
+.moments-comments {
+  width: 100%;
+  margin-top: 0.2rem;
+  padding-top: 0.85rem;
+  border-top: 1px dashed rgba(84, 104, 110, 0.16);
+}
+
+.moments-comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.moments-comment-item {
+  padding: 0.8rem 0.95rem;
+  border-radius: 16px;
+  background: rgba(245, 248, 247, 0.94);
+}
+
+.moments-comment-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-bottom: 0.35rem;
+}
+
+.moments-comment-head strong {
+  color: #315f4a;
+  font-size: 0.9rem;
+}
+
+.moments-comment-head span {
+  color: rgba(76, 96, 102, 0.68);
+  font-size: 0.78rem;
+}
+
+.moments-comment-body,
+.moments-comment-empty {
+  color: #31474f;
+  font-size: 0.88rem;
+  line-height: 1.75;
+}
+
+.moments-comment-empty {
+  padding: 0.2rem 0.1rem;
+  color: rgba(76, 96, 102, 0.72);
+}
+
+.moments-comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin-top: 0.9rem;
+}
+
+.moments-comment-form-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.moments-comment-form input,
+.moments-comment-form textarea {
+  width: 100%;
+  border: 1px solid rgba(84, 104, 110, 0.14);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.96);
+  color: #31474f;
+  padding: 0.8rem 0.95rem;
+  font-size: 0.88rem;
+  outline: none;
+}
+
+.moments-comment-form textarea {
+  min-height: 86px;
+  resize: vertical;
+}
+
+.moments-comment-form input:focus,
+.moments-comment-form textarea:focus {
+  border-color: rgba(74, 126, 101, 0.35);
+  box-shadow: 0 0 0 3px rgba(74, 126, 101, 0.08);
+}
+
+.moments-comment-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.moments-comment-form-tip {
+  color: rgba(76, 96, 102, 0.68);
+  font-size: 0.78rem;
+}
+
+.moments-comment-form button {
+  border: 0;
+  border-radius: 999px;
+  background: #315f4a;
+  color: #fff;
+  padding: 0.68rem 1.15rem;
+  font-size: 0.84rem;
+  cursor: pointer;
+}
+
+.moments-comment-form button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
 
 .moments-card-meta-strip a {
   color: #315f4a !important;
@@ -858,6 +991,34 @@ h6::before {
   border-top-color: rgba(255, 255, 255, 0.08);
 }
 
+[data-theme='dark'] .moments-comment-item {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+[data-theme='dark'] .moments-comment-head strong,
+[data-theme='dark'] .moments-comment-body,
+[data-theme='dark'] .moments-comment-form input,
+[data-theme='dark'] .moments-comment-form textarea {
+  color: #e8f3ee;
+}
+
+[data-theme='dark'] .moments-comment-head span,
+[data-theme='dark'] .moments-comment-empty,
+[data-theme='dark'] .moments-comment-form-tip,
+[data-theme='dark'] .moments-comment-toggle {
+  color: rgba(232, 243, 238, 0.72);
+}
+
+[data-theme='dark'] .moments-comments {
+  border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] .moments-comment-form input,
+[data-theme='dark'] .moments-comment-form textarea {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
 @media screen and (max-width: 900px) {
   .moments-profile {
     align-items: flex-start;
@@ -912,6 +1073,15 @@ h6::before {
   .moments-card-actions {
     width: 100%;
     justify-content: center;
+  }
+
+  .moments-comment-form-meta {
+    grid-template-columns: 1fr;
+  }
+
+  .moments-comment-form-actions {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .moments-gallery-count-2,

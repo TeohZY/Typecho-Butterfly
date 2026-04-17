@@ -94,6 +94,144 @@ function getMomentPageSize()
     return min($size, 30);
 }
 
+function getMomentLikeActionUrl()
+{
+    return Typecho_Common::url('/action/moments-like', Helper::options()->index);
+}
+
+function getMomentCommentActionUrl()
+{
+    return Typecho_Common::url('/action/moments-comment', Helper::options()->index);
+}
+
+function hasMomentLiked($momentId, $userId = 0, $ip = '')
+{
+    $momentId = (int) $momentId;
+    if ($momentId < 1) {
+        return false;
+    }
+
+    $db = Typecho_Db::get();
+    $likesTable = getMomentLikesTableName();
+    $select = $db->select('id')->from($likesTable)->where('moment_id = ?', $momentId)->limit(1);
+
+    if ($userId > 0) {
+        $select->where('user_id = ?', (int) $userId);
+    } else {
+        $ip = trim((string) $ip);
+        if ($ip === '') {
+            return false;
+        }
+        $select->where('ip = ?', $ip);
+    }
+
+    return (bool) $db->fetchRow($select);
+}
+
+function fetchMomentCommentsMap(array $momentIds, $limitPerMoment = 20)
+{
+    $momentIds = array_values(array_unique(array_filter(array_map('intval', $momentIds))));
+    if (empty($momentIds)) {
+        return [];
+    }
+
+    $db = Typecho_Db::get();
+    $commentsTable = getMomentCommentsTableName();
+    $rows = $db->fetchAll(
+        $db->select(
+            "{$commentsTable}.id",
+            "{$commentsTable}.moment_id",
+            "{$commentsTable}.author_id",
+            "{$commentsTable}.author_name",
+            "{$commentsTable}.author_mail",
+            "{$commentsTable}.content",
+            "{$commentsTable}.created"
+        )
+            ->from($commentsTable)
+            ->where("{$commentsTable}.moment_id IN ?", $momentIds)
+            ->where("{$commentsTable}.status = ?", 'approved')
+            ->order("{$commentsTable}.created", Typecho_Db::SORT_ASC)
+    );
+
+    $result = [];
+    foreach ($rows as $row) {
+        $momentId = (int) $row['moment_id'];
+        if (!isset($result[$momentId])) {
+            $result[$momentId] = [];
+        }
+
+        if (count($result[$momentId]) >= (int) $limitPerMoment) {
+            continue;
+        }
+
+        $result[$momentId][] = $row;
+    }
+
+    return $result;
+}
+
+function createMomentComment($momentId, $authorId, $authorName, $authorMail, $content)
+{
+    $momentId = (int) $momentId;
+    $authorId = (int) $authorId;
+    $authorName = trim((string) $authorName);
+    $authorMail = trim((string) $authorMail);
+    $content = trim((string) $content);
+
+    if ($momentId < 1 || $authorName === '' || $content === '') {
+        return null;
+    }
+
+    $db = Typecho_Db::get();
+    $momentsTable = getMomentsTableName();
+    $commentsTable = getMomentCommentsTableName();
+    $moment = $db->fetchRow(
+        $db->select('id')->from($momentsTable)->where('id = ?', $momentId)->where('status = ?', 'publish')->limit(1)
+    );
+
+    if (empty($moment)) {
+        return null;
+    }
+
+    $now = time();
+    $commentId = (int) $db->query(
+        $db->insert($commentsTable)->rows([
+            'moment_id' => $momentId,
+            'author_id' => $authorId > 0 ? $authorId : null,
+            'author_name' => $authorName,
+            'author_mail' => $authorMail !== '' ? $authorMail : null,
+            'content' => $content,
+            'status' => 'approved',
+            'created' => $now,
+        ])
+    );
+    $commentCount = (int) $db->fetchObject(
+        $db->select(['COUNT(id)' => 'num'])->from($commentsTable)->where('moment_id = ?', $momentId)->where('status = ?', 'approved')
+    )->num;
+
+    $db->query(
+        $db->update($momentsTable)->rows([
+            'comment_count' => $commentCount,
+            'modified' => $now,
+        ])->where('id = ?', $momentId)
+    );
+
+    return $db->fetchRow(
+        $db->select(
+            "{$commentsTable}.id",
+            "{$commentsTable}.moment_id",
+            "{$commentsTable}.author_id",
+            "{$commentsTable}.author_name",
+            "{$commentsTable}.author_mail",
+            "{$commentsTable}.content",
+            "{$commentsTable}.created"
+        )
+            ->from($commentsTable)
+            ->where("{$commentsTable}.id = ?", $commentId)
+            ->limit(1)
+    );
+}
+
 function fetchMomentsList($limit = null)
 {
     $db = Typecho_Db::get();

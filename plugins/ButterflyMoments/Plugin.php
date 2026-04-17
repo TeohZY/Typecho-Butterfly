@@ -11,6 +11,20 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
     exit;
 }
 
+if (class_exists('Helper')) {
+    try {
+        $actionTable = Helper::options()->actionTable;
+        $actionTable = empty($actionTable) ? [] : $actionTable;
+        if (!isset($actionTable['moments-like'])) {
+            Helper::addAction('moments-like', 'ButterflyMoments_LikeAction');
+        }
+        if (!isset($actionTable['moments-comment'])) {
+            Helper::addAction('moments-comment', 'ButterflyMoments_CommentAction');
+        }
+    } catch (Throwable $e) {
+    }
+}
+
 class ButterflyMoments_Plugin implements Typecho_Plugin_Interface
 {
     private static function defaultConfig()
@@ -55,6 +69,9 @@ class ButterflyMoments_Plugin implements Typecho_Plugin_Interface
             true
         );
 
+        Helper::addAction('moments-like', 'ButterflyMoments_LikeAction');
+        Helper::addAction('moments-comment', 'ButterflyMoments_CommentAction');
+
         return _t('朋友圈后台面板已启用');
     }
 
@@ -62,6 +79,8 @@ class ButterflyMoments_Plugin implements Typecho_Plugin_Interface
     {
         Helper::removePanel(3, 'ButterflyMoments/manage.php');
         Helper::removePanel(3, 'ButterflyMoments/write.php');
+        Helper::removeAction('moments-like');
+        Helper::removeAction('moments-comment');
 
         return _t('朋友圈后台面板已禁用');
     }
