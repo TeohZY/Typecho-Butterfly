@@ -64,6 +64,8 @@ function butterflyMomentsEnsureSchema()
             `author_name` varchar(255) NOT NULL,
             `author_mail` varchar(255) NULL,
             `ip` varchar(64) NULL,
+            `parent_id` int unsigned NOT NULL DEFAULT 0,
+            `reply_author_name` varchar(255) NULL,
             `content` text NOT NULL,
             `status` varchar(16) NOT NULL DEFAULT 'approved',
             `created` int unsigned NOT NULL,
@@ -74,6 +76,16 @@ function butterflyMomentsEnsureSchema()
 
     try {
         $db->query("ALTER TABLE `{$commentsTable}` ADD COLUMN `ip` varchar(64) NULL AFTER `author_mail`");
+    } catch (Throwable $e) {
+    }
+
+    try {
+        $db->query("ALTER TABLE `{$commentsTable}` ADD COLUMN `parent_id` int unsigned NOT NULL DEFAULT 0 AFTER `ip`");
+    } catch (Throwable $e) {
+    }
+
+    try {
+        $db->query("ALTER TABLE `{$commentsTable}` ADD COLUMN `reply_author_name` varchar(255) NULL AFTER `parent_id`");
     } catch (Throwable $e) {
     }
 }
@@ -130,6 +142,8 @@ function butterflyMomentsFetchComments($limit = 100, $status = 'all', $momentId 
         "{$commentsTable}.author_id",
         "{$commentsTable}.author_name",
         "{$commentsTable}.author_mail",
+        "{$commentsTable}.parent_id",
+        "{$commentsTable}.reply_author_name",
         "{$commentsTable}.content",
         "{$commentsTable}.status",
         "{$commentsTable}.created",
@@ -480,7 +494,7 @@ function butterflyMomentsToggleLike($momentId, $userId = 0, $ip = '')
     ];
 }
 
-function butterflyMomentsCreateComment($momentId, $authorId, $authorName, $authorMail, $content, $status = 'approved', $ip = '')
+function butterflyMomentsCreateComment($momentId, $authorId, $authorName, $authorMail, $content, $status = 'approved', $ip = '', $parentId = 0, $replyAuthorName = '')
 {
     $db = Typecho_Db::get();
     $momentsTable = butterflyMomentsTableName();
@@ -492,6 +506,8 @@ function butterflyMomentsCreateComment($momentId, $authorId, $authorName, $autho
     $content = trim((string) $content);
     $status = $status === 'pending' ? 'pending' : 'approved';
     $ip = trim((string) $ip);
+    $parentId = (int) $parentId;
+    $replyAuthorName = trim((string) $replyAuthorName);
 
     if ($momentId < 1 || $authorName === '' || $content === '') {
         return null;
@@ -513,6 +529,8 @@ function butterflyMomentsCreateComment($momentId, $authorId, $authorName, $autho
             'author_name' => $authorName,
             'author_mail' => $authorMail !== '' ? $authorMail : null,
             'ip' => $ip !== '' ? $ip : null,
+            'parent_id' => max(0, $parentId),
+            'reply_author_name' => $replyAuthorName !== '' ? $replyAuthorName : null,
             'content' => $content,
             'status' => $status,
             'created' => $now,
@@ -535,6 +553,8 @@ function butterflyMomentsCreateComment($momentId, $authorId, $authorName, $autho
         'author_id' => $authorId,
         'author_name' => $authorName,
         'author_mail' => $authorMail,
+        'parent_id' => max(0, $parentId),
+        'reply_author_name' => $replyAuthorName,
         'content' => $content,
         'created' => $now,
         'comment_count' => $commentCount,

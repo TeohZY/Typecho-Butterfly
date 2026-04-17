@@ -65,6 +65,8 @@ function ensureMomentsSchema()
             `author_id` int unsigned NULL,
             `author_name` varchar(255) NOT NULL,
             `author_mail` varchar(255) NULL,
+            `parent_id` int unsigned NOT NULL DEFAULT 0,
+            `reply_author_name` varchar(255) NULL,
             `content` text NOT NULL,
             `status` varchar(16) NOT NULL DEFAULT 'approved',
             `created` int unsigned NOT NULL,
@@ -72,6 +74,16 @@ function ensureMomentsSchema()
             KEY `idx_moment_status` (`moment_id`, `status`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     ");
+
+    try {
+        $db->query("ALTER TABLE `{$commentsTable}` ADD COLUMN `parent_id` int unsigned NOT NULL DEFAULT 0 AFTER `author_mail`");
+    } catch (Throwable $e) {
+    }
+
+    try {
+        $db->query("ALTER TABLE `{$commentsTable}` ADD COLUMN `reply_author_name` varchar(255) NULL AFTER `parent_id`");
+    } catch (Throwable $e) {
+    }
 }
 
 function getMomentPageUrl()
@@ -144,6 +156,8 @@ function fetchMomentCommentsMap(array $momentIds, $limitPerMoment = 20)
             "{$commentsTable}.author_id",
             "{$commentsTable}.author_name",
             "{$commentsTable}.author_mail",
+            "{$commentsTable}.parent_id",
+            "{$commentsTable}.reply_author_name",
             "{$commentsTable}.content",
             "{$commentsTable}.created"
         )
@@ -170,13 +184,15 @@ function fetchMomentCommentsMap(array $momentIds, $limitPerMoment = 20)
     return $result;
 }
 
-function createMomentComment($momentId, $authorId, $authorName, $authorMail, $content)
+function createMomentComment($momentId, $authorId, $authorName, $authorMail, $content, $parentId = 0, $replyAuthorName = '')
 {
     $momentId = (int) $momentId;
     $authorId = (int) $authorId;
     $authorName = trim((string) $authorName);
     $authorMail = trim((string) $authorMail);
     $content = trim((string) $content);
+    $parentId = (int) $parentId;
+    $replyAuthorName = trim((string) $replyAuthorName);
 
     if ($momentId < 1 || $authorName === '' || $content === '') {
         return null;
@@ -200,6 +216,8 @@ function createMomentComment($momentId, $authorId, $authorName, $authorMail, $co
             'author_id' => $authorId > 0 ? $authorId : null,
             'author_name' => $authorName,
             'author_mail' => $authorMail !== '' ? $authorMail : null,
+            'parent_id' => max(0, $parentId),
+            'reply_author_name' => $replyAuthorName !== '' ? $replyAuthorName : null,
             'content' => $content,
             'status' => 'approved',
             'created' => $now,
@@ -223,6 +241,8 @@ function createMomentComment($momentId, $authorId, $authorName, $authorMail, $co
             "{$commentsTable}.author_id",
             "{$commentsTable}.author_name",
             "{$commentsTable}.author_mail",
+            "{$commentsTable}.parent_id",
+            "{$commentsTable}.reply_author_name",
             "{$commentsTable}.content",
             "{$commentsTable}.created"
         )

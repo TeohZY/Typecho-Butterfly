@@ -30,18 +30,69 @@ $commentUserMail = $this->user->hasLogin() ? trim((string) $this->user->mail) : 
 $this->need('page_header.php');
 ?>
 <style>
-  #page-header,
-  #aside-content {
+  #aside-content,
+  #page-site-info {
     display: none !important;
   }
 
+  #page-header {
+    min-height: 0 !important;
+    height: auto !important;
+    background: transparent !important;
+  }
+
+  #page-header #nav {
+    background: rgba(255, 255, 255, 0.92) !important;
+    backdrop-filter: saturate(180%) blur(16px);
+    -webkit-backdrop-filter: saturate(180%) blur(16px);
+    box-shadow: 0 10px 30px rgba(46, 61, 66, 0.08);
+  }
+
+  #page-header #nav a,
+  #page-header #nav #site-name,
+  #page-header #nav #toggle-menu,
+  #page-header #nav .site-page,
+  #page-header #nav .menus_items .menus_item a,
+  #page-header #nav #search-button,
+  #page-header #nav #nav-right .nav-button {
+    color: var(--font-color) !important;
+    text-shadow: none !important;
+  }
+
+  #page-header #nav ::placeholder,
+  #page-header #nav input {
+    color: var(--font-color) !important;
+    text-shadow: none !important;
+  }
+
+  [data-theme='dark'] #page-header #nav {
+    background: rgba(22, 28, 32, 0.88) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  [data-theme='dark'] #page-header #nav a,
+  [data-theme='dark'] #page-header #nav #site-name,
+  [data-theme='dark'] #page-header #nav #toggle-menu,
+  [data-theme='dark'] #page-header #nav .site-page,
+  [data-theme='dark'] #page-header #nav .menus_items .menus_item a,
+  [data-theme='dark'] #page-header #nav #search-button,
+  [data-theme='dark'] #page-header #nav #nav-right .nav-button,
+  [data-theme='dark'] #page-header #nav ::placeholder,
+  [data-theme='dark'] #page-header #nav input {
+    color: #e8f3ee !important;
+  }
+
   #content-inner.layout {
-    max-width: min(980px, calc(100% - 24px));
+    max-width: min(1160px, calc(100% - 32px));
+    width: min(1160px, calc(100% - 32px));
+    margin: 0 auto;
     padding-top: 24px;
   }
 
   .page-moments {
     width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
   }
 
   .page-moments #comments {
@@ -64,22 +115,13 @@ $this->need('page_header.php');
 
         <section class="moments-toolbar">
             <div class="moments-toolbar-actions">
-                <span class="moments-toolbar-stat"><strong><?php echo $momentCount; ?></strong><small>动态</small></span>
-                <span class="moments-toolbar-stat"><strong><?php echo (int) getMomentPageSize(); ?></strong><small>展示</small></span>
-                <span class="moments-chip"><i class="far fa-clock"></i>时间轴</span>
-                <span class="moments-chip"><i class="far fa-images"></i>图片宫格</span>
+                <span class="moments-toolbar-stat"><strong><?php echo $momentCount; ?></strong><small>条动态</small></span>
                 <?php if ($this->user->hasLogin()): ?>
                     <a class="moments-publish-btn" href="<?php echo htmlspecialchars(hasMomentsAdminPanel() ? $this->options->adminUrl('extending.php?panel=ButterflyMoments/write.php', true) : $this->options->adminUrl('plugins.php', true), ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener noreferrer"><?php echo hasMomentsAdminPanel() ? '发布动态' : '启用插件'; ?></a>
                 <?php else: ?>
                     <a class="moments-publish-btn secondary" href="<?php $this->options->adminUrl('login.php'); ?>" target="_blank" rel="noopener noreferrer">登录后发布</a>
                 <?php endif; ?>
             </div>
-        </section>
-
-        <section class="moments-status-bar">
-            <span class="moments-status-item"><i class="far fa-calendar"></i><?php echo date('Y年m月d日'); ?></span>
-            <span class="moments-status-item"><i class="far fa-layer-group"></i>独立 Moments</span>
-            <span class="moments-status-item"><i class="far fa-stream"></i>按时间倒序</span>
         </section>
 
         <?php if (trim((string) $this->content) !== ''): ?>
@@ -158,34 +200,23 @@ $this->need('page_header.php');
 
                                 <div class="moments-card-footer">
                                     <div class="moments-card-meta-strip">
-                                        <button type="button" class="moments-like-btn<?php echo $liked ? ' is-liked' : ''; ?>" data-id="<?php echo (int) $moment['id']; ?>" data-url="<?php echo htmlspecialchars($likeActionUrl, ENT_QUOTES, 'UTF-8'); ?>">
-                                            <i class="far fa-heart"></i>
-                                            <span class="moments-like-label"><?php echo $liked ? ('已赞 · ' . (int) $moment['like_count']) : ((int) $moment['like_count'] . ' 赞'); ?></span>
-                                        </button>
-                                        <button type="button" class="moments-comment-toggle" data-id="<?php echo (int) $moment['id']; ?>">
+                                        <div class="moments-card-meta-main">
+                                            <button type="button" class="moments-like-btn<?php echo $liked ? ' is-liked' : ''; ?>" data-id="<?php echo (int) $moment['id']; ?>" data-url="<?php echo htmlspecialchars($likeActionUrl, ENT_QUOTES, 'UTF-8'); ?>">
+                                                <i class="far fa-heart"></i>
+                                                <span class="moments-like-label"><?php echo $liked ? ('已赞 · ' . (int) $moment['like_count']) : ((int) $moment['like_count'] . ' 赞'); ?></span>
+                                            </button>
+                                            <span class="moments-comment-count-text"><i class="far fa-comment-dots"></i><span class="moments-comment-count"><?php echo (int) $moment['comment_count']; ?> 条评论</span></span>
+                                        </div>
+                                        <button type="button" class="moments-comment-toggle" data-id="<?php echo (int) $moment['id']; ?>" aria-expanded="false">
                                             <i class="far fa-comment-dots"></i>
-                                            <span class="moments-comment-count"><?php echo (int) $moment['comment_count']; ?> 条评论</span>
+                                            <span class="moments-comment-toggle-label">评论</span>
                                         </button>
                                     </div>
 
-                                    <div class="moments-comments" id="moment-comments-<?php echo (int) $moment['id']; ?>" hidden>
-                                        <div class="moments-comments-list">
-                                            <?php if (!empty($commentMap[(int) $moment['id']])): ?>
-                                                <?php foreach ($commentMap[(int) $moment['id']] as $comment): ?>
-                                                    <div class="moments-comment-item">
-                                                        <div class="moments-comment-head">
-                                                            <strong><?php echo htmlspecialchars($comment['author_name'], ENT_QUOTES, 'UTF-8'); ?></strong>
-                                                            <span><?php echo date('m月d日 H:i', (int) $comment['created']); ?></span>
-                                                        </div>
-                                                        <div class="moments-comment-body"><?php echo nl2br(htmlspecialchars($comment['content'], ENT_QUOTES, 'UTF-8')); ?></div>
-                                                    </div>
-                                                <?php endforeach; ?>
-                                            <?php else: ?>
-                                                <div class="moments-comment-empty">还没有评论</div>
-                                            <?php endif; ?>
-                                        </div>
-
-                                        <form class="moments-comment-form" data-id="<?php echo (int) $moment['id']; ?>" data-url="<?php echo htmlspecialchars($commentActionUrl, ENT_QUOTES, 'UTF-8'); ?>">
+                                    <div class="moments-comments" id="moment-comments-<?php echo (int) $moment['id']; ?>">
+                                        <form class="moments-comment-form moments-comment-form-main" data-id="<?php echo (int) $moment['id']; ?>" data-url="<?php echo htmlspecialchars($commentActionUrl, ENT_QUOTES, 'UTF-8'); ?>" hidden>
+                                            <input type="hidden" name="parent_id" value="0">
+                                            <input type="hidden" name="reply_author_name" value="">
                                             <?php if (!$this->user->hasLogin()): ?>
                                                 <div class="moments-comment-form-meta">
                                                     <input type="text" name="author_name" placeholder="昵称" maxlength="40" required>
@@ -198,6 +229,45 @@ $this->need('page_header.php');
                                                 <button type="submit">发布评论</button>
                                             </div>
                                         </form>
+
+                                        <div class="moments-comments-list">
+                                            <?php if (!empty($commentMap[(int) $moment['id']])): ?>
+                                                <?php foreach ($commentMap[(int) $moment['id']] as $comment): ?>
+                                                    <div class="moments-comment-item" id="moment-comment-<?php echo (int) $comment['id']; ?>">
+                                                        <div class="moments-comment-head">
+                                                            <div class="moments-comment-author-line">
+                                                                <strong><?php echo htmlspecialchars($comment['author_name'], ENT_QUOTES, 'UTF-8'); ?></strong>
+                                                                <?php if (!empty($comment['reply_author_name'])): ?>
+                                                                    <span class="moments-comment-reply-target">回复 @<?php echo htmlspecialchars($comment['reply_author_name'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                                                <?php endif; ?>
+                                                            </div>
+                                                            <div class="moments-comment-head-actions">
+                                                                <span><?php echo date('m月d日 H:i', (int) $comment['created']); ?></span>
+                                                                <button type="button" class="moments-comment-reply" data-moment-id="<?php echo (int) $moment['id']; ?>" data-comment-id="<?php echo (int) $comment['id']; ?>" data-author="<?php echo htmlspecialchars($comment['author_name'], ENT_QUOTES, 'UTF-8'); ?>">回复</button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="moments-comment-body"><?php echo nl2br(htmlspecialchars($comment['content'], ENT_QUOTES, 'UTF-8')); ?></div>
+                                                        <form class="moments-comment-form moments-comment-reply-form" data-id="<?php echo (int) $moment['id']; ?>" data-url="<?php echo htmlspecialchars($commentActionUrl, ENT_QUOTES, 'UTF-8'); ?>" hidden>
+                                                            <input type="hidden" name="parent_id" value="<?php echo (int) $comment['id']; ?>">
+                                                            <input type="hidden" name="reply_author_name" value="<?php echo htmlspecialchars($comment['author_name'], ENT_QUOTES, 'UTF-8'); ?>">
+                                                            <?php if (!$this->user->hasLogin()): ?>
+                                                                <div class="moments-comment-form-meta">
+                                                                    <input type="text" name="author_name" placeholder="昵称" maxlength="40" required>
+                                                                    <input type="email" name="author_mail" placeholder="邮箱（可选）" maxlength="120">
+                                                                </div>
+                                                            <?php endif; ?>
+                                                            <textarea name="content" rows="2" placeholder="回复 @<?php echo htmlspecialchars($comment['author_name'], ENT_QUOTES, 'UTF-8'); ?>" required></textarea>
+                                                            <div class="moments-comment-form-actions">
+                                                                <span class="moments-comment-form-tip">回复 @<?php echo htmlspecialchars($comment['author_name'], ENT_QUOTES, 'UTF-8'); ?></span>
+                                                                <button type="submit">发送回复</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            <?php else: ?>
+                                                <div class="moments-comment-empty">还没有评论</div>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -221,16 +291,33 @@ $this->need('page_header.php');
   (function () {
     function renderCommentItem(comment) {
       return '<div class="moments-comment-item">'
-        + '<div class="moments-comment-head"><strong>' + comment.author_name + '</strong><span>' + comment.created_label + '</span></div>'
+        + '<div class="moments-comment-head">'
+        + '<div class="moments-comment-author-line"><strong>' + comment.author_name + '</strong>'
+        + (comment.reply_author_name ? '<span class="moments-comment-reply-target">回复 @' + comment.reply_author_name + '</span>' : '')
+        + '</div>'
+        + '<div class="moments-comment-head-actions"><span>' + comment.created_label + '</span>'
+        + '<button type="button" class="moments-comment-reply" data-moment-id="' + comment.moment_id + '" data-comment-id="' + comment.id + '" data-author="' + comment.author_name + '">回复</button></div>'
+        + '</div>'
         + '<div class="moments-comment-body">' + comment.content + '</div>'
+        + '<form class="moments-comment-form moments-comment-reply-form" data-id="' + comment.moment_id + '" data-url="<?php echo htmlspecialchars($commentActionUrl, ENT_QUOTES, 'UTF-8'); ?>" hidden>'
+        + '<input type="hidden" name="parent_id" value="' + comment.id + '">'
+        + '<input type="hidden" name="reply_author_name" value="' + comment.author_name + '">'
+        + <?php echo json_encode(!$this->user->hasLogin() ? '<div class="moments-comment-form-meta"><input type="text" name="author_name" placeholder="昵称" maxlength="40" required><input type="email" name="author_mail" placeholder="邮箱（可选）" maxlength="120"></div>' : ''); ?>
+        + '<textarea name="content" rows="2" placeholder="回复 @' + comment.author_name + '" required></textarea>'
+        + '<div class="moments-comment-form-actions"><span class="moments-comment-form-tip">回复 @' + comment.author_name + '</span><button type="submit">发送回复</button></div>'
+        + '</form>'
         + '</div>';
     }
 
     function setCommentCount(momentId, count) {
-      var node = document.querySelector('.moments-comment-toggle[data-id="' + momentId + '"] .moments-comment-count');
-      if (node) {
-        node.textContent = count + ' 条评论';
-      }
+      document.querySelectorAll('.moments-card-footer').forEach(function (wrap) {
+        var button = wrap.querySelector('.moments-comment-toggle');
+        if (button && button.getAttribute('data-id') === String(momentId)) {
+          wrap.querySelectorAll('.moments-comment-count').forEach(function (node) {
+            node.textContent = count + ' 条评论';
+          });
+        }
+      });
     }
 
     document.addEventListener('click', function (event) {
@@ -280,11 +367,65 @@ $this->need('page_header.php');
         return;
       }
 
-      var hidden = panel.hasAttribute('hidden');
+      var formWrap = panel.querySelector('.moments-comment-form-main');
+      if (!formWrap) {
+        return;
+      }
+
+      var hidden = formWrap.hasAttribute('hidden');
       if (hidden) {
-        panel.removeAttribute('hidden');
+        formWrap.removeAttribute('hidden');
+        toggle.classList.add('is-open');
+        toggle.setAttribute('aria-expanded', 'true');
+        var label = toggle.querySelector('.moments-comment-toggle-label');
+        if (label) label.textContent = '取消';
+        var form = formWrap.querySelector('textarea');
+        if (form) {
+          form.focus();
+        }
       } else {
-        panel.setAttribute('hidden', 'hidden');
+        formWrap.setAttribute('hidden', 'hidden');
+        toggle.classList.remove('is-open');
+        toggle.setAttribute('aria-expanded', 'false');
+        var closeLabel = toggle.querySelector('.moments-comment-toggle-label');
+        if (closeLabel) closeLabel.textContent = '评论';
+      }
+    });
+
+    document.addEventListener('click', function (event) {
+      var replyButton = event.target.closest('.moments-comment-reply');
+      if (!replyButton) {
+        return;
+      }
+
+      var item = replyButton.closest('.moments-comment-item');
+      var form = item ? item.querySelector('.moments-comment-reply-form') : null;
+      if (!form) {
+        return;
+      }
+
+      var hidden = form.hasAttribute('hidden');
+      item.closest('.moments-comments-list').querySelectorAll('.moments-comment-reply-form').forEach(function (node) {
+        if (node !== form) {
+          node.setAttribute('hidden', 'hidden');
+        }
+      });
+      item.closest('.moments-comments-list').querySelectorAll('.moments-comment-reply').forEach(function (node) {
+        if (node !== replyButton) {
+          node.textContent = '回复';
+        }
+      });
+
+      if (hidden) {
+        form.removeAttribute('hidden');
+        replyButton.textContent = '取消';
+        var textarea = form.querySelector('textarea[name="content"]');
+        if (textarea) {
+          textarea.focus();
+        }
+      } else {
+        form.setAttribute('hidden', 'hidden');
+        replyButton.textContent = '回复';
       }
     });
 
@@ -300,7 +441,8 @@ $this->need('page_header.php');
       var actionUrl = form.getAttribute('data-url');
       var textarea = form.querySelector('textarea[name="content"]');
       var submitButton = form.querySelector('button[type="submit"]');
-      var list = form.parentNode.querySelector('.moments-comments-list');
+      var commentsRoot = form.closest('.moments-comments');
+      var list = commentsRoot.querySelector('.moments-comments-list');
       var nameInput = form.querySelector('input[name="author_name"]');
       var mailInput = form.querySelector('input[name="author_mail"]');
       var payload = [
@@ -314,6 +456,15 @@ $this->need('page_header.php');
 
       if (mailInput) {
         payload.push('author_mail=' + encodeURIComponent(mailInput.value));
+      }
+
+      var parentInput = form.querySelector('input[name="parent_id"]');
+      var replyAuthorInput = form.querySelector('input[name="reply_author_name"]');
+      if (parentInput) {
+        payload.push('parent_id=' + encodeURIComponent(parentInput.value || '0'));
+      }
+      if (replyAuthorInput) {
+        payload.push('reply_author_name=' + encodeURIComponent(replyAuthorInput.value || ''));
       }
 
       submitButton.disabled = true;
@@ -348,6 +499,25 @@ $this->need('page_header.php');
 
         if (textarea) {
           textarea.value = '';
+        }
+        if (form.classList.contains('moments-comment-form-main')) {
+          form.setAttribute('hidden', 'hidden');
+          var mainToggle = commentsRoot.closest('.moments-card-footer').querySelector('.moments-comment-toggle');
+          if (mainToggle) {
+            mainToggle.classList.remove('is-open');
+            mainToggle.setAttribute('aria-expanded', 'false');
+            var toggleLabel = mainToggle.querySelector('.moments-comment-toggle-label');
+            if (toggleLabel) {
+              toggleLabel.textContent = '评论';
+            }
+          }
+        }
+        if (form.classList.contains('moments-comment-reply-form')) {
+          form.setAttribute('hidden', 'hidden');
+          var replyButton = form.closest('.moments-comment-item').querySelector('.moments-comment-reply');
+          if (replyButton) {
+            replyButton.textContent = '回复';
+          }
         }
 
         if (nameInput && !<?php echo $this->user->hasLogin() ? 'true' : 'false'; ?>) {

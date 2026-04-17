@@ -25,6 +25,8 @@ class ButterflyMoments_CommentAction extends \Widget\Base implements \Widget\Act
 
         butterflyMomentsEnsureSchema();
         $momentId = $this->request->filter('int')->get('moment_id');
+        $parentId = $this->request->filter('int')->get('parent_id');
+        $replyAuthorName = trim((string) $this->request->get('reply_author_name'));
         $content = trim((string) $this->request->get('content'));
         $authorName = '';
         $authorMail = '';
@@ -71,7 +73,9 @@ class ButterflyMoments_CommentAction extends \Widget\Base implements \Widget\Act
             $authorMail,
             $content,
             $isGuest ? 'pending' : 'approved',
-            $clientIp
+            $clientIp,
+            $parentId,
+            $replyAuthorName
         );
         if (empty($result)) {
             $this->response->throwJson(['success' => 0, 'message' => '动态不存在'], 404);
@@ -86,6 +90,8 @@ class ButterflyMoments_CommentAction extends \Widget\Base implements \Widget\Act
                 'moment_id' => (int) $result['moment_id'],
                 'author_name' => $result['author_name'],
                 'author_mail' => $result['author_mail'],
+                'parent_id' => (int) $result['parent_id'],
+                'reply_author_name' => $result['reply_author_name'],
                 'content' => nl2br(htmlspecialchars($result['content'], ENT_QUOTES, 'UTF-8')),
                 'created_label' => date('m月d日 H:i', (int) $result['created']),
             ],

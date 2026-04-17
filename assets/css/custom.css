@@ -343,7 +343,6 @@ h6::before {
 }
 
 .moments-toolbar,
-.moments-status-bar,
 .moments-page-intro,
 .moments-card,
 .moments-empty {
@@ -419,33 +418,6 @@ h6::before {
 .moments-publish-btn.secondary {
   background: linear-gradient(135deg, #657882, #8a9ba3);
   box-shadow: 0 12px 24px rgba(91, 109, 119, 0.2);
-}
-
-.moments-status-bar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-}
-
-.moments-status-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.58rem 0.82rem;
-  border: 1px solid rgba(90, 109, 117, 0.1);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.88);
-  color: rgba(60, 79, 85, 0.78);
-  box-shadow: 0 12px 28px rgba(46, 61, 66, 0.06);
-}
-
-.moments-status-item i {
-  color: #4d7d62;
 }
 
 .moments-page-intro {
@@ -528,7 +500,7 @@ h6::before {
 .moments-entry-dot {
   position: absolute;
   top: 1.25rem;
-  left: -24px;
+  left: -20px;
   width: 14px;
   height: 14px;
   border: 3px solid #f0f6f2;
@@ -720,7 +692,7 @@ h6::before {
 .moments-card-actions span,
 .moments-card-actions a,
 .moments-like-btn,
-.moments-card-meta-strip span,
+.moments-card-meta-main span,
 .moments-card-meta-strip a {
   display: inline-flex;
   align-items: center;
@@ -744,12 +716,21 @@ h6::before {
   cursor: pointer;
 }
 
+.moments-card-meta-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+}
+
 .moments-comment-toggle {
   border: 0;
-  padding: 0;
-  background: transparent;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(49, 95, 74, 0.08);
   cursor: pointer;
-  color: rgba(76, 96, 102, 0.72);
+  color: #315f4a;
+  margin-left: auto;
 }
 
 .moments-card-actions a:hover,
@@ -763,73 +744,120 @@ h6::before {
 
 .moments-card-meta-strip {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 0.75rem 1rem;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
   padding-top: 0.75rem;
   border-top: 1px solid rgba(84, 104, 110, 0.1);
 }
 
-.moments-card-meta-strip span {
+.moments-card-meta-main span {
   color: rgba(76, 96, 102, 0.72);
   font-size: 0.84rem;
 }
 
 .moments-comments {
   width: 100%;
-  margin-top: 0.2rem;
-  padding-top: 0.85rem;
+  margin-top: 0.05rem;
+  padding-top: 0.55rem;
   border-top: 1px dashed rgba(84, 104, 110, 0.16);
+}
+
+.moments-comment-form-main {
+  margin-top: 0;
+  margin-bottom: 0.55rem;
+  padding: 0.65rem 0.72rem;
+  border: 1px solid rgba(84, 104, 110, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.82);
 }
 
 .moments-comments-list {
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
+  gap: 0;
+  width: 100%;
 }
 
 .moments-comment-item {
-  padding: 0.8rem 0.95rem;
-  border-radius: 16px;
-  background: rgba(245, 248, 247, 0.94);
+  width: 100%;
+  max-width: none;
+  padding: 0.58rem 0;
+  border-bottom: 1px solid rgba(84, 104, 110, 0.1);
+  background: transparent;
+}
+
+.moments-comment-reply-form {
+  margin-top: 0.4rem;
+  padding-top: 0.42rem;
+  border-top: 1px dashed rgba(84, 104, 110, 0.08);
 }
 
 .moments-comment-head {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 0.8rem;
-  margin-bottom: 0.35rem;
+  gap: 0.55rem;
+  margin-bottom: 0.12rem;
+}
+
+.moments-comment-author-line {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.moments-comment-head-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  flex-shrink: 0;
 }
 
 .moments-comment-head strong {
   color: #315f4a;
-  font-size: 0.9rem;
+  font-size: 0.78rem;
 }
 
-.moments-comment-head span {
+.moments-comment-head span,
+.moments-comment-reply-target {
   color: rgba(76, 96, 102, 0.68);
-  font-size: 0.78rem;
+  font-size: 0.68rem;
+}
+
+.moments-comment-reply {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #467b63;
+  font-size: 0.68rem;
+  cursor: pointer;
 }
 
 .moments-comment-body,
 .moments-comment-empty {
   color: #31474f;
-  font-size: 0.88rem;
-  line-height: 1.75;
+  font-size: 0.78rem;
+  line-height: 1.5;
 }
 
 .moments-comment-empty {
-  padding: 0.2rem 0.1rem;
+  padding: 0.3rem 0;
   color: rgba(76, 96, 102, 0.72);
 }
 
 .moments-comment-form {
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
-  margin-top: 0.9rem;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.moments-comment-form[hidden] {
+  display: none !important;
 }
 
 .moments-comment-form-meta {
@@ -842,16 +870,16 @@ h6::before {
 .moments-comment-form textarea {
   width: 100%;
   border: 1px solid rgba(84, 104, 110, 0.14);
-  border-radius: 14px;
+  border-radius: 12px;
   background: rgba(255, 255, 255, 0.96);
   color: #31474f;
-  padding: 0.8rem 0.95rem;
-  font-size: 0.88rem;
+  padding: 0.65rem 0.78rem;
+  font-size: 0.82rem;
   outline: none;
 }
 
 .moments-comment-form textarea {
-  min-height: 86px;
+  min-height: 60px;
   resize: vertical;
 }
 
@@ -865,12 +893,12 @@ h6::before {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.8rem;
+  gap: 0.6rem;
 }
 
 .moments-comment-form-tip {
   color: rgba(76, 96, 102, 0.68);
-  font-size: 0.78rem;
+  font-size: 0.72rem;
 }
 
 .moments-comment-form button {
@@ -878,8 +906,8 @@ h6::before {
   border-radius: 999px;
   background: #315f4a;
   color: #fff;
-  padding: 0.68rem 1.15rem;
-  font-size: 0.84rem;
+  padding: 0.56rem 0.92rem;
+  font-size: 0.78rem;
   cursor: pointer;
 }
 
@@ -914,7 +942,6 @@ h6::before {
 }
 
 [data-theme='dark'] .moments-toolbar,
-[data-theme='dark'] .moments-status-bar,
 [data-theme='dark'] .moments-page-intro,
 [data-theme='dark'] .moments-card,
 [data-theme='dark'] .moments-empty {
@@ -934,7 +961,6 @@ h6::before {
 
 [data-theme='dark'] .moments-toolbar-stat small,
 [data-theme='dark'] .moments-chip,
-[data-theme='dark'] .moments-status-item,
 [data-theme='dark'] .moments-card-time,
 [data-theme='dark'] .moments-card-footer,
 [data-theme='dark'] .moments-date {
@@ -944,11 +970,6 @@ h6::before {
 [data-theme='dark'] .moments-chip,
 [data-theme='dark'] .moments-toolbar-stat {
   background: rgba(255, 255, 255, 0.05);
-}
-
-[data-theme='dark'] .moments-status-item {
-  background: rgba(22, 28, 32, 0.94);
-  border-color: rgba(255, 255, 255, 0.06);
 }
 
 [data-theme='dark'] .moments-empty code {
@@ -991,8 +1012,14 @@ h6::before {
   border-top-color: rgba(255, 255, 255, 0.08);
 }
 
+[data-theme='dark'] .moments-comment-toggle {
+  background: rgba(145, 201, 173, 0.12);
+  color: #b4e6cf;
+}
+
 [data-theme='dark'] .moments-comment-item {
-  background: rgba(255, 255, 255, 0.04);
+  background: transparent;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
 [data-theme='dark'] .moments-comment-head strong,
@@ -1005,8 +1032,13 @@ h6::before {
 [data-theme='dark'] .moments-comment-head span,
 [data-theme='dark'] .moments-comment-empty,
 [data-theme='dark'] .moments-comment-form-tip,
-[data-theme='dark'] .moments-comment-toggle {
+[data-theme='dark'] .moments-comment-toggle,
+[data-theme='dark'] .moments-comment-reply-target {
   color: rgba(232, 243, 238, 0.72);
+}
+
+[data-theme='dark'] .moments-comment-reply {
+  color: #b4e6cf;
 }
 
 [data-theme='dark'] .moments-comments {
@@ -1015,6 +1047,11 @@ h6::before {
 
 [data-theme='dark'] .moments-comment-form input,
 [data-theme='dark'] .moments-comment-form textarea {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] .moments-comment-form-main {
   background: rgba(255, 255, 255, 0.03);
   border-color: rgba(255, 255, 255, 0.08);
 }
@@ -1034,8 +1071,7 @@ h6::before {
     font-size: 1.68rem;
   }
 
-  .moments-toolbar,
-  .moments-status-bar {
+  .moments-toolbar {
     display: flex;
     flex-wrap: wrap;
   }
@@ -1073,6 +1109,18 @@ h6::before {
   .moments-card-actions {
     width: 100%;
     justify-content: center;
+  }
+
+  .moments-card-meta-strip {
+    flex-wrap: wrap;
+  }
+
+  .moments-comment-toggle {
+    margin-left: 0;
+  }
+
+  .moments-comment-item {
+    max-width: none;
   }
 
   .moments-comment-form-meta {
